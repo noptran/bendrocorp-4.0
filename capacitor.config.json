@@ -1,0 +1,13 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "bendrocorp-4.0",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

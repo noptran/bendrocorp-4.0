@@ -1,0 +1,7 @@
+{
+  "name": "bendrocorp-4.0",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
