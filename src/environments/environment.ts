@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseUrlRoot: 'https://api.bendrocorp.com/',
+  baseUrl: 'https://api.bendrocorp.com/api',
+  wssUri: 'wss://api.bendrocorp.com/cable'
 };
 
 /*
