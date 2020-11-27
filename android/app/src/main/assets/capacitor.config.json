@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "bendrocorp-4.0",
+  "appId": "com.bendrocorp.app",
+  "appName": "[BendroCorp",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

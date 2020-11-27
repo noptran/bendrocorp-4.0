@@ -1,0 +1,51 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>BendroCorp Login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-row>
+    <ion-col size-md="3" size-sm="0" size-xs="0">
+      <!-- empty left column -->
+    </ion-col>
+    <ion-col size-md="6" size-sm="12" size-xs="12">
+      <ion-card>
+        <!-- <img src="./madison.jpg" /> -->
+        <div class="auth-top">
+          <img src="../../assets/bendrocorp-final.png" style="max-height: 90%; margin: 8px auto 8px auto;" alt="">
+        </div>
+        <ion-card-header>
+          <ion-card-title>BendroCorp Login</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div>
+            <ion-list lines="full" class="ion-no-margin">
+              <ion-item>
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input placeholder="Enter your email" type="email"></ion-input>
+              </ion-item>
+        
+              <ion-item>
+                <ion-label position="stacked">Password</ion-label>
+                <ion-input placeholder="Enter your password" type="password"></ion-input>
+              </ion-item>
+        
+              <ion-item>
+                <ion-label position="stacked">2FA</ion-label>
+                <ion-input placeholder="2FA code (if applicable)" type="number"></ion-input>
+              </ion-item>
+            </ion-list>
+        
+            <section>
+              <ion-button expand="block" color="primary" (click)="login()">Login</ion-button>
+            </section>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-md="3" size-sm="0" size-xs="0">
+      <!-- empty right column -->
+    </ion-col>
+  </ion-row>
+</ion-content>

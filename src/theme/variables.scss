@@ -1,8 +1,38 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+/** Add our font **/
+@font-face {
+  font-family:"Univia Pro";
+  font-weight:100;
+  src:url('/assets/fonts/univia-pro-100.woff2') format('woff2')
+}
+@font-face {
+  font-family:"Univia Pro";
+  font-weight:normal; // 400
+  src:url('/assets/fonts/univia-pro-400.woff2') format('woff2')
+}
+@font-face {
+  font-family:"Univia Pro";
+  font-weight:bold; // 700
+  src:url('/assets/fonts/univia-pro-700.woff2') format('woff2')
+}
+@font-face {
+  font-family:"Univia Pro";
+  font-weight:bolder; // 700
+  src:url('/assets/fonts/univia-pro-700.woff2') format('woff2')
+}
+// @font-face{
+//   font-family:"Univia Pro";
+//   font-weight:bold; // 800
+//   src:url('/assets/fonts/univia-pro-800.woff2') format('woff2')
+// }
+
 /** Ionic CSS Variables **/
 :root {
+  // Font
+  --ion-font-family: 'Univia Pro';
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -193,6 +223,7 @@
    */
 
   .md body {
+    --ion-background: url('../assets/app-background.png');
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18,18,18;
 

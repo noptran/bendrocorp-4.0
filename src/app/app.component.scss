@@ -1,4 +1,9 @@
-ion-menu ion-content {
+ion-router-outlet {
+  background: url('../assets/app-background.png') !important;
+  background-size: cover !important;
+}
+
+ion-menu {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 
