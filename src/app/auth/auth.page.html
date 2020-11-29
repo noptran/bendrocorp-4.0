@@ -23,22 +23,22 @@
             <ion-list lines="full" class="ion-no-margin">
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
-                <ion-input placeholder="Enter your email" type="email"></ion-input>
+                <ion-input [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input placeholder="Enter your password" type="password"></ion-input>
+                <ion-input [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">2FA</ion-label>
-                <ion-input placeholder="2FA code (if applicable)" type="number"></ion-input>
+                <ion-input [(ngModel)]="login.code" placeholder="2FA code (if applicable)" type="number"></ion-input>
               </ion-item>
             </ion-list>
         
             <section>
-              <ion-button expand="block" color="primary" (click)="login()">Login</ion-button>
+              <ion-button expand="block" color="primary" (click)="doLogin()">Login</ion-button>
             </section>
           </div>
         </ion-card-content>

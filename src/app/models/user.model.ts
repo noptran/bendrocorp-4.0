@@ -1,3 +1,5 @@
+import { Character } from './character.model';
+
 export class UserSessionResponse
 {
     id?: number;
@@ -9,6 +11,13 @@ export class UserSessionResponse
     roles?: number[];
     tfa_enabled?: boolean;
     job_title?: string;
+}
+
+export class LoginRequest
+{
+  email: string;
+  password: string;
+  code?: number;
 }
 
 // deprecated?

@@ -74,7 +74,7 @@ export class AuthService {
       if (authResponse) {
         // so we have a token set available
         // is the token set expired?
-        if (this.isAuthorized()) {
+        if (await this.isAuthorized()) {
           // return the valid, not expired access token
           console.log('checkAndRefreshAccessToken(): New token did not have to be fetched');
           results(authResponse.access_token);
@@ -96,21 +96,23 @@ export class AuthService {
           });
         }
       } else {
+        this.redirectToLogin();
+        // error('Auth response is not present!');
         // if null attempt to retrieve an auth token
-        this.refreshAccessToken().subscribe((response) => {
-          if (!(response instanceof HttpErrorResponse)) {
-            const authResponseTwo = response.response;
-            this.storeAuthResponse(authResponseTwo);
-            this.announceAuthUpdate('LOGIN');
-            results(authResponseTwo.access_token);
-          } else {
-            response.headers.keys();
-            error(response);
-            if (response.headers.get('X-UTPM-SESSION-ERROR')) {
-              this.redirectToLogin();
-            }
-          }
-        });
+        // this.refreshAccessToken().subscribe((response) => {
+        //   if (!(response instanceof HttpErrorResponse)) {
+        //     const authResponseTwo = response.response;
+        //     this.storeAuthResponse(authResponseTwo);
+        //     this.announceAuthUpdate('LOGIN');
+        //     results(authResponseTwo.access_token);
+        //   } else {
+        //     response.headers.keys();
+        //     error(response);
+        //     if (response.headers.get('X-UTPM-SESSION-ERROR')) {
+        //       this.redirectToLogin();
+        //     }
+        //   }
+        // });
       }
     });
   }
@@ -162,7 +164,9 @@ export class AuthService {
   async isAuthorized(): Promise<boolean> {
     const auth = await this.retrieveUserSession();
     if (auth) {
-      return moment().isBefore(await this.getExpiration());
+      const expires = await this.getExpiration();
+      const expireResults = moment().isBefore(expires);
+      return expireResults;
     }
 
     return false;
@@ -180,6 +184,6 @@ export class AuthService {
   redirectToLogin() {
     this.preservePath();
     // window.location.href = uri;
-    this.router.navigateByUrl('/auth')
+    this.router.navigateByUrl('/auth');
   }
 }

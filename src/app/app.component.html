@@ -1,26 +1,38 @@
 <ion-app>
   <ion-split-pane *ngIf="isAuthorized" contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
+      <!-- <ion-item>
+        <ion-label>
+          <h1>BendroCorp</h1>
+          <p>Expanding the frontier...</p>
+        </ion-label>
+      </ion-item> -->
       <ion-content>
+        <ion-label>
+          <img src="../assets/bendrocorp-final.png" style="max-height: 50px; float: left; padding-right: 10px;" alt="">
+          <h1>BendroCorp</h1>
+          <p>Expanding the frontier...</p>
+        </ion-label>
+        <hr />
         <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
+          <!-- top of menu -->
+          <ion-item>
+            <ion-avatar slot="start">
+              <img src="{{user.avatar}}">
+            </ion-avatar>
+            <ion-label>
+              <h2>{{user.first_name}} {{user.last_name}}</h2>
+              <p>{{user.job_title}}</p>
+            </ion-label>
+          </ion-item>
 
+          <!-- Actual Menu -->
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.link]" lines="none" detail="false" [class.selected]="selectedIndex == i">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
-
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
-
-          <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
-          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>

@@ -19,7 +19,7 @@ constructor(private authService: AuthService) { }
               .then((accessTokenResponse: string) => {
                   const authHeader = `Bearer ${accessTokenResponse}`;
                   return request.clone({
-                      withCredentials: true,
+                      // withCredentials: true,
                       setHeaders: {
                           Authorization: authHeader,
                       }
@@ -49,7 +49,7 @@ constructor(private authService: AuthService) { }
     } else {
         // whatever the request is we always want to try and tack on credentials
         const cloned = request.clone({
-            withCredentials: true
+            // withCredentials: true
         });
 
         return next.handle(cloned);

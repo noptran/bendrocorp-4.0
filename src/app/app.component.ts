@@ -1,23 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { UserSessionResponse } from './models/user.model';
+import { MenuItem } from './models/misc.model';
+import { MenuService } from './menu.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public selectedIndex = 0;
+  public appPages = [] as MenuItem[];
+  /*
   public appPages = [
     {
       title: 'Inbox',
       url: '/folder/Inbox',
-      icon: 'mail'
+      icon: 'star'
     },
     {
       title: 'Outbox',
@@ -44,31 +52,40 @@ export class AppComponent implements OnInit {
       url: '/folder/Spam',
       icon: 'warning'
     }
-  ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  ];*/
+  // public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
-  isAuthorized: boolean
+  isAuthorized: boolean;
+  authorizationSubscription: Subscription;
+  user: UserSessionResponse;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private authService: AuthService,
+    private menuService: MenuService,
     private router: Router
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      this.isAuthorized = this.authService.isAuthorized();
+    this.platform.ready().then(async () => {
+      this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe(async (result) => {
+        this.isAuthorized = await this.authService.isAuthorized();
+      });
+
+      this.isAuthorized = (await this.authService.checkAndRefreshAccessToken()) != null;
       if (!this.isAuthorized) {
         this.router.navigateByUrl('/auth');
+      } else {
+        this.user = await this.authService.retrieveUserSession();
+        this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
       }
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-
     });
   }
 
@@ -77,5 +94,9 @@ export class AppComponent implements OnInit {
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
+  }
+
+  ngOnDestroy() {
+    throw new Error('Method not implemented.');
   }
 }
