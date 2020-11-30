@@ -84,16 +84,20 @@ export class AppComponent implements OnInit, OnDestroy {
         this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
       }
 
+      const path = window.location.pathname.split('/')[1];
+      if (path !== undefined) {
+        this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
+      } else {
+        this.selectedIndex = 0;
+      }
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
   }
 
   ngOnInit() {
-    const path = window.location.pathname.split('folder/')[1];
-    if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
-    }
+
   }
 
   ngOnDestroy() {
