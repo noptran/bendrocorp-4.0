@@ -14,7 +14,45 @@
       <ion-card-subtitle>Your Dashboard</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      Dashboard content here
+      <ion-grid>
+        <ion-row>
+          <!-- if the next event is in front of us still -->
+          <ion-col *ngIf="nextEvent && showStartCountdown">
+            <ion-label>Next event <span style="font-size: 1.5em;">{{nextEvent.name}}</span> is in:</ion-label>
+          </ion-col>
+        </ion-row>
+        <!-- if the next event is now -->
+        <ion-row *ngIf="nextEvent && showEndCountdown">
+          <ion-col text-center>
+            <h3>{{nextEvent.name}} is happening now!</h3>
+            <ion-label>Events ends in:</ion-label>
+          </ion-col>
+        </ion-row>
+        <!-- if there is no next event -->
+        <ion-row *ngIf="!nextEvent">
+          <ion-col text-center>
+            <ion-label>No events scheduled!</ion-label>
+          </ion-col>
+        </ion-row>
+        <!-- Show event start countdown  && showCountdown-->
+        <ion-row *ngIf="showStartCountdown">
+          <ion-col>
+            <app-countdown-chart [endTime]="nextEvent.start_date"></app-countdown-chart>
+          </ion-col>
+        </ion-row>
+        <!-- Event end countdown -->
+        <ion-row *ngIf="showEndCountdown">
+          <ion-col>
+            <app-countdown-chart [endTime]="nextEvent.end_date"></app-countdown-chart>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button *ngIf="nextEvent" color="dark" expand="block" (click)="openEventModal(nextEvent)">Open Event</ion-button>
+            <ion-button (click)="openDiscord()" color="tertiary" expand="block">Open Discord</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
 </ion-content>

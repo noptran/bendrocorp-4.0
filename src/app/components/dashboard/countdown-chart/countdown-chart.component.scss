@@ -39,10 +39,10 @@
 /* 431px */
 @media screen and (min-width: 431px) {
   .timer-clock .clock-circle .clock-label { 
-     font-size: 2em;
+     font-size: 1.6em;
      /* width: 75px; */
-     top: 41%;
-     left: 1%;
+     top: 45%;
+     left: 0;
    }
 }
 
@@ -51,7 +51,7 @@
      font-size: 1.25em;
      /* width: 75px; */
      top: 50%;
-     left: 1%;
+     left: 0;
      /* left: calc(9% - 2px); 9% */
    } 
 }
@@ -61,7 +61,7 @@
      font-size: 1.25em;
      /* width: 75px; */
      top: 50%;
-     left: 1%;
+     left: 0;
      /* left: calc(9% - 5px); 9% */
    } 
 }
@@ -71,7 +71,7 @@
      font-size: 1.25em;
      /* width: 75px; */
      top: 50%;
-     left: 1%;
+     left: 0;
      /* left: calc(9% - 8px); 9% */
    } 
 }

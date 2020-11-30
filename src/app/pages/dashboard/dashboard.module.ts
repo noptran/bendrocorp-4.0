@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
+import { CountdownChartComponent } from 'src/app/components/dashboard/countdown-chart/countdown-chart.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    // CountdownChartComponent
   ],
-  declarations: [DashboardPage]
+  declarations: [DashboardPage, CountdownChartComponent]
 })
 export class DashboardPageModule {}
