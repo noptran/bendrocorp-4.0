@@ -7,7 +7,8 @@ import { Event } from 'src/app/models/event.model';
 import { ILNewsStory } from 'src/app/models/news.model';
 import { UserSessionResponse } from 'src/app/models/user.model';
 import { EventService } from 'src/app/services/event.service';
-import { LoadingService } from 'src/app/services/loading-service.service';
+// import { loading } from 'src/app/services/loading-service.service';
+import { NewsService } from 'src/app/services/news.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,13 +16,13 @@ import { LoadingService } from 'src/app/services/loading-service.service';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit, OnDestroy {
-
+  loadingIndicator: any;
   nextEvent: Event;
   news: ILNewsStory[] = [];
   events: Event[];
   eventStartedSubscription: Subscription;
   eventsFetched: boolean = false;
-  newsFetched: boolean = true;
+  newsFetched: boolean = false;
   showCountdown: boolean;
   showStartCountdown: boolean;
   showEndCountdown: boolean;
@@ -30,18 +31,51 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   constructor(
     private eventService: EventService,
-    private loadingService: LoadingService
+    private newsService: NewsService,
+    // private loading: loading
+    private loading: LoadingController
   ) { }
 
   async ngOnInit() {
-    this.loadingService.show();
+    this.loadingIndicator = await this.loading.create({
+      message: 'Loading'
+    });
+    await this.loadingIndicator.present();
+    // this.loading.show();
     this.fetchEvents();
+    this.fetchNews();
   }
 
   ngOnDestroy() {
     if (this.eventStartedSubscription) {
       this.eventStartedSubscription.unsubscribe();
     }
+  }
+
+  fetchNews(event?: any) {
+    this.newsFetched = false;
+    this.newsService.list().subscribe((results) => {
+      if (!(results instanceof HttpErrorResponse)) {
+        this.news = results.filter(x => x.published).slice(0, 3);
+        this.newsFetched = true;
+
+        if (event) {
+          if (this.newsFetched && this.eventsFetched) {
+            event.target.complete();
+          }
+        }
+
+        if (this.newsFetched && this.eventsFetched) {
+          if (!this.initialDataLoaded) {
+            this.initialDataLoaded = true;
+          }
+          console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+          this.loading.dismiss();
+        } else {
+          console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+        }
+      }
+    });
   }
 
   fetchEvents(event?: any) {
@@ -71,7 +105,8 @@ export class DashboardPage implements OnInit, OnDestroy {
                 if (!this.initialDataLoaded) {
                   this.initialDataLoaded = true;
                 }
-                this.loadingService.dismiss();
+                console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+                this.loading.dismiss();
                 event.target.complete();
               }
             }
@@ -80,7 +115,8 @@ export class DashboardPage implements OnInit, OnDestroy {
               if (!this.initialDataLoaded) {
                 this.initialDataLoaded = true;
               }
-              this.loadingService.dismiss();
+              console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+              this.loading.dismiss();
             } else {
               console.log(`e n ${this.newsFetched} e ${this.eventsFetched}`);
             }
@@ -108,7 +144,8 @@ export class DashboardPage implements OnInit, OnDestroy {
                     this.showStartCountdown = false;
                     this.showEndCountdown = true;
                     // this.eventStartedSubscription.unsubscribe();
-                  } else if (currentToStart.totalSeconds <= 0 && currentToEnd.totalSeconds <= 0) { // event has ended and we need to see if there is a new event
+                  } else if (currentToStart.totalSeconds <= 0
+                    && currentToEnd.totalSeconds <= 0) { // event has ended and we need to see if there is a new event
                     // console.log('Dashboard: Event expired!');
                     this.showStartCountdown = false;
                     this.showEndCountdown = false;
@@ -127,7 +164,7 @@ export class DashboardPage implements OnInit, OnDestroy {
                 if (!this.initialDataLoaded) {
                   this.initialDataLoaded = true;
                 }
-                this.loadingService.dismiss();
+                this.loading.dismiss();
                 event.target.complete();
               }
             }
@@ -136,7 +173,7 @@ export class DashboardPage implements OnInit, OnDestroy {
               if (!this.initialDataLoaded) {
                 this.initialDataLoaded = true;
               }
-              this.loadingService.dismiss();
+              this.loading.dismiss();
             } else {
               console.log(`en n ${this.newsFetched} e ${this.eventsFetched}`);
             }
