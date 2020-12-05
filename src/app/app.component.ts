@@ -4,13 +4,14 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { UserSessionResponse } from './models/user.model';
 import { MenuItem } from './models/misc.model';
 import { MenuService } from './menu.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConnectionService } from 'ng-connection-service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   isAuthorized: boolean;
   authorizationSubscription: Subscription;
+  navigationSubscription: Subscription;
+  connectionSubscription: Subscription;
   user: UserSessionResponse;
 
   constructor(
@@ -31,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private statusBar: StatusBar,
     private authService: AuthService,
     private menuService: MenuService,
+    private connection: ConnectionService,
     private router: Router
   ) {
     this.initializeApp();
@@ -50,16 +54,28 @@ export class AppComponent implements OnInit, OnDestroy {
         this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
       }
 
-      const path = window.location.pathname.split('/')[1];
-      if (path !== undefined) {
-        this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
-      } else {
-        this.selectedIndex = 0;
-      }
+      // get the initial menu selection
+      this.selectMenuItem();
+
+      this.navigationSubscription = this.router.events
+      .subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.selectMenuItem();
+        }
+      });
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  private selectMenuItem() {
+    const path = window.location.pathname.split('/')[1];
+    if (path !== undefined) {
+      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
+    } else {
+      this.selectedIndex = 0;
+    }
   }
 
   ngOnInit() {
@@ -68,6 +84,14 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.authorizationSubscription) {
       this.authorizationSubscription.unsubscribe();
+    }
+
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+
+    if (this.connectionSubscription) {
+      this.connectionSubscription.unsubscribe();
     }
   }
 }

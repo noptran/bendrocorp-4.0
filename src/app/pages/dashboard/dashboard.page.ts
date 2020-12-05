@@ -1,14 +1,19 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
 import { interval, Subscription } from 'rxjs';
+import { NewsDetailPage } from 'src/app/components/news-detail/news-detail.component';
 import { Event } from 'src/app/models/event.model';
 import { ILNewsStory } from 'src/app/models/news.model';
 import { UserSessionResponse } from 'src/app/models/user.model';
 import { EventService } from 'src/app/services/event.service';
 // import { loading } from 'src/app/services/loading-service.service';
 import { NewsService } from 'src/app/services/news.service';
+import { EventDetailsPage } from '../events/event-details/event-details.page';
+
+import { Plugins } from '@capacitor/core';
+const { Browser } = Plugins;
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +38,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     private eventService: EventService,
     private newsService: NewsService,
     // private loading: loading
-    private loading: LoadingController
+    private loading: LoadingController,
+    private modalController: ModalController
   ) { }
 
   async ngOnInit() {
@@ -50,6 +56,37 @@ export class DashboardPage implements OnInit, OnDestroy {
     if (this.eventStartedSubscription) {
       this.eventStartedSubscription.unsubscribe();
     }
+  }
+
+  async openNewsModal(newsItem: ILNewsStory) {
+    const modal = await this.modalController.create({
+      component: NewsDetailPage,
+      componentProps: {
+        newsItem
+      }
+    });
+    return await modal.present();
+  }
+
+  async openEventModal(event: Event) {
+    const modal = await this.modalController.create({
+      component: EventDetailsPage,
+      componentProps: {
+        event,
+        openedAsModal: true
+      }
+    });
+    return await modal.present();
+  }
+
+  async openDiscord() {
+    // Open our private Discord link
+    // https://discord.com/channels/123161736181317632/123161736181317632
+    // const browser = this.iab.create('https://discord.gg/daeYKRS', '_system');
+    await Browser.open({
+      url: 'https://discord.com/channels/123161736181317632/123161736181317632',
+      windowName: '_blank'
+    });
   }
 
   fetchNews(event?: any) {
@@ -181,5 +218,16 @@ export class DashboardPage implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  ionViewWillEnter() {
+    this.showCountdown = true;
+    if (!this.nextEvent) {
+      this.fetchEvents();
+    }
+  }
+
+  ionViewDidLeave() {
+    this.showCountdown = false;
   }
 }

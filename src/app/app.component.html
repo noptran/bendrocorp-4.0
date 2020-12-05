@@ -16,9 +16,9 @@
         <hr />
         <ion-list id="inbox-list">
           <!-- top of menu -->
-          <ion-item>
+          <ion-item *ngIf="user">
             <ion-avatar slot="start">
-              <img src="{{user.avatar}}">
+              <img src="{{user?.avatar}}">
             </ion-avatar>
             <ion-label>
               <h2>{{user.first_name}} {{user.last_name}}</h2>

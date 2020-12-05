@@ -38,14 +38,14 @@
                 <ion-label>No events scheduled!</ion-label>
               </ion-col>
             </ion-row>
-            <!-- Show event start countdown  && showCountdown-->
-            <ion-row *ngIf="showStartCountdown">
+            <!-- Show event start countdown -->
+            <ion-row *ngIf="showStartCountdown && showCountdown">
               <ion-col>
                 <app-countdown-chart [endTime]="nextEvent.start_date"></app-countdown-chart>
               </ion-col>
             </ion-row>
             <!-- Event end countdown -->
-            <ion-row *ngIf="showEndCountdown">
+            <ion-row *ngIf="showEndCountdown && showCountdown">
               <ion-col>
                 <app-countdown-chart [endTime]="nextEvent.end_date"></app-countdown-chart>
               </ion-col>
@@ -66,21 +66,9 @@
             <!-- if the next event is in front of us still -->
             <ion-col>
               <ion-label style="font-size: 1.5em;">Corporate News</ion-label>
-              <ion-list>
-                <ion-item details>
-                  <ion-label>News Item 1</ion-label>
-                </ion-item>
-                <ion-item details>
-                  <ion-label>News Item 2</ion-label>
-                </ion-item>
-                <ion-item details>
-                  <ion-label>News Item 3</ion-label>
-                </ion-item>
-                <ion-item details>
-                  <ion-label>News Item 4</ion-label>
-                </ion-item>
-                <ion-item details>
-                  <ion-label>News Item 5</ion-label>
+              <ion-list *ngIf="news">
+                <ion-item class="news-item" (click)="openNewsModal(item)" *ngFor="let item of news" details>
+                  <ion-label>{{item.title}}</ion-label>
                 </ion-item>
               </ion-list>
             </ion-col>

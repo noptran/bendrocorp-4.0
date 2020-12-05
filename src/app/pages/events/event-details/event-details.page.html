@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button *ngIf="!openedAsModal"></ion-back-button>
+      <ion-button *ngIf="openedAsModal" color="medium" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Event Details - <span *ngIf="event">{{event.name}}</span></ion-title>
+    <ion-buttons *ngIf="openedAsModal" slot="end">
+      <ion-button color="medium" (click)="openEventDetailsPage()">Open</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  Event details page works {{openedAsModal}}
+</ion-content>
