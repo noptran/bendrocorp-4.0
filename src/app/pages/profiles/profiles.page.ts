@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController, ModalController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { ProfileService } from 'src/app/services/profile.service';
   templateUrl: './profiles.page.html',
   styleUrls: ['./profiles.page.scss'],
 })
-export class ProfilesPage implements OnInit {
+export class ProfilesPage implements OnInit, OnDestroy {
 
   divisions: Division[] = [];
   profileSubscription: Subscription;
@@ -62,7 +62,7 @@ export class ProfilesPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.fetchProfilesByDivision();
+    // this.fetchProfilesByDivision();
   }
 
   async ngOnInit() {
@@ -70,6 +70,7 @@ export class ProfilesPage implements OnInit {
       message: 'Loading'
     });
     await this.loadingIndicator.present();
+    this.fetchProfilesByDivision();
   }
 
   ngOnDestroy() {

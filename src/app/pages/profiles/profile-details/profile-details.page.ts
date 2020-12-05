@@ -50,6 +50,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     this.profileService.fetch(this.characterId).subscribe((results) => {
       console.log(results);
       this.character = results;
+      this.loading.dismiss();
     });
   }
 
@@ -139,6 +140,11 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.loadingIndicator = await this.loading.create({
+      message: 'Loading'
+    });
+    await this.loadingIndicator.present();
+
     this.ceoRights = await this.authService.hasClaim(9);
     this.hrRights = await (this.authService.hasClaim(12) || this.authService.hasClaim(9));
     this.directorRights = await this.authService.hasClaim(3);
