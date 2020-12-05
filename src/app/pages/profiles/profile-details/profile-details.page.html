@@ -26,11 +26,17 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>Profile Information</ion-card-title>
-          </ion-card-header>
-        
+          </ion-card-header>        
           <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile,
-            and climb a mountain or spend a week in the woods. Wash your spirit clean.
+            <div>
+              Tap for more information:
+              <ion-item class="profile-detail-sub" detail (click)="openProfileBackground()">Background</ion-item>
+              <ion-item class="profile-detail-sub" detail (click)="openProfileServiceRecord()">Service Record</ion-item>
+              <ion-item class="profile-detail-sub" detail (click)="openProfileShips()">Ships</ion-item>
+              <ion-item class="profile-detail-sub" *ngIf="hrRights || (character.application && character.application.application_status_id < 6)" detail
+                (click)="openProfileApplication()">Application</ion-item>
+              <ion-item class="profile-detail-sub" *ngIf="hrRights" detail (click)="openProfileInterview()">Interview</ion-item>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
