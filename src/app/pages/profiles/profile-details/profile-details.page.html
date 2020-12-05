@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="profiles"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profile Details<span *ngIf="character"> - {{character.full_name}}</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="character">
+  <ion-grid>
+    <ion-row>
+      <!-- Basic Info Pane -->
+      <ion-col size-md="4" size-sm="12" size-xs="12" style="text-align: center;">
+        <ion-card>
+          <ion-card-header>
+            <img style="border-radius: 50%;" src="{{character.avatar_url}}">
+            <ion-card-title>{{character.full_name}}</ion-card-title>
+            <ion-card-subtitle>{{character.current_job.title}}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <!-- Details Pane -->
+      <ion-col size-md="8" size-sm="12" size-xs="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Profile Information</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Keep close to Nature's heart... and break clear away, once in awhile,
+            and climb a mountain or spend a week in the woods. Wash your spirit clean.
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Application Buttons -->
+  <!-- application_status_id -->
+  <!-- <div *ngIf="hrRights && character.application.application_status_id < 6">
+    <ion-button *ngIf="character.application.application_status_id == 5" expand="full" color="success" (click)="advanceApplication()">CEO Accept</ion-button>
+    <ion-button *ngIf="character.application.application_status_id < 5" expand="full" color="success" (click)="advanceApplication()">Advance Application</ion-button>
+    <ion-button expand="full" color="danger" (click)="rejectApplication()">Reject Application</ion-button>
+  </div> -->
+  <!-- <ion-item>Badges here</ion-item> -->
+  <!-- Profile Menu -->
+  <!-- <ion-item detail (click)="openProfileBackground()">Background</ion-item>
+  <ion-item detail (click)="openProfileServiceRecord()">Service Record</ion-item>
+  <ion-item detail (click)="openProfileShips()">Ships</ion-item>
+  <ion-item *ngIf="hrRights || (character.application && character.application.application_status_id < 6)" detail (click)="openProfileApplication()">Application</ion-item>
+  <ion-item *ngIf="hrRights" detail (click)="openProfileInterview()">Interview</ion-item> -->
+</ion-content>
