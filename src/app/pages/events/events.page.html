@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Events</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  This is the events page
+  <ion-card>
+    <div class="events-top"></div>
+    This is where the events will go
+    <!-- <ion-list>
+      <div *ngFor="let division of divisions">
+        <ion-list-header>
+          {{division.name}}
+        </ion-list-header>
+
+        <ion-item class="profile-item" detail *ngFor="let member of sortDivision(division)"
+          (click)="openProfileDetails(member)">
+          <ion-avatar slot="start">
+            <img src="{{member.avatar_url}}">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{member.full_name}}</h2>
+            <p>{{member.current_job.title}}</p>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-list> -->
+  </ion-card>
 </ion-content>

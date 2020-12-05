@@ -62,7 +62,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['profile-background'], navigationExtras);
+    this.router.navigate(['background'], navigationExtras);
   }
 
   openProfileServiceRecord() {
@@ -73,7 +73,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['profile-service-record'], navigationExtras);
+    this.router.navigate(['service-record'], navigationExtras);
   }
 
   openProfileApplication() {
@@ -84,7 +84,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['profile-application'], navigationExtras);
+    this.router.navigate(['application'], navigationExtras);
   }
 
   openProfileInterview() {
@@ -95,7 +95,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['profile-interview'], navigationExtras);
+    this.router.navigate(['interview'], navigationExtras);
   }
 
   openProfileShips() {
@@ -106,7 +106,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['profile-ships'], navigationExtras);
+    this.router.navigate(['ships'], navigationExtras);
   }
 
   async advanceApplication() {
@@ -139,7 +139,14 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     }
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
+    if (!this.character) {
+      await this.Initialize();
+    }
+  }
+
+  async Initialize()
+  {
     this.loadingIndicator = await this.loading.create({
       message: 'Loading'
     });
@@ -156,13 +163,16 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
         if (this.characterId) {
           this.fetchCharacter();
         } else {
-          this.router.navigateByUrl('/more/profile');
+          this.router.navigateByUrl('/profiles');
         }
       } else {
         this.characterId = parseInt(this.route.snapshot.paramMap.get('id'), null);
         this.fetchCharacter();
       }
     });
+  }
+
+  ngOnInit() {
   }
 
   ngOnDestroy() {

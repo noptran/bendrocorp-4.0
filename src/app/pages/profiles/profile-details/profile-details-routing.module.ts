@@ -7,28 +7,29 @@ const routes: Routes = [
   {
     path: '',
     component: ProfileDetailsPage
-  },  {
-    path: 'profile-application',
+  },
+  {
+    path: 'application',
     loadChildren: () => import('./profile-application/profile-application.module').then( m => m.ProfileApplicationPageModule)
   },
   {
-    path: 'profile-background',
+    path: 'background',
     loadChildren: () => import('./profile-background/profile-background.module').then( m => m.ProfileBackgroundPageModule)
   },
   {
-    path: 'profile-interview',
+    path: 'interview',
     loadChildren: () => import('./profile-interview/profile-interview.module').then( m => m.ProfileInterviewPageModule)
   },
   {
-    path: 'profile-interview-hints',
+    path: 'interview-hints',
     loadChildren: () => import('./profile-interview-hints/profile-interview-hints.module').then( m => m.ProfileInterviewHintsPageModule)
   },
   {
-    path: 'profile-service-record',
+    path: 'service-record',
     loadChildren: () => import('./profile-service-record/profile-service-record.module').then( m => m.ProfileServiceRecordPageModule)
   },
   {
-    path: 'profile-ships',
+    path: 'ships',
     loadChildren: () => import('./profile-ships/profile-ships.module').then( m => m.ProfileShipsPageModule)
   },
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
   },
   {
     path: 'profile-update-background',
+    // tslint:disable-next-line:max-line-length
     loadChildren: () => import('./profile-update-background/profile-update-background.module').then( m => m.ProfileUpdateBackgroundPageModule)
   }
 

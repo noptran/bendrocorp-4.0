@@ -33,9 +33,9 @@
               <ion-item class="profile-detail-sub" detail (click)="openProfileBackground()">Background</ion-item>
               <ion-item class="profile-detail-sub" detail (click)="openProfileServiceRecord()">Service Record</ion-item>
               <ion-item class="profile-detail-sub" detail (click)="openProfileShips()">Ships</ion-item>
-              <ion-item class="profile-detail-sub" *ngIf="hrRights || (character.application && character.application.application_status_id < 6)" detail
+              <ion-item class="profile-detail-sub" *ngIf="ceoRights || hrRights || (character.application && character.application.application_status_id < 6)" detail
                 (click)="openProfileApplication()">Application</ion-item>
-              <ion-item class="profile-detail-sub" *ngIf="hrRights" detail (click)="openProfileInterview()">Interview</ion-item>
+              <ion-item class="profile-detail-sub" *ngIf="ceoRights || hrRights" detail (click)="openProfileInterview()">Interview</ion-item>
             </div>
           </ion-card-content>
         </ion-card>

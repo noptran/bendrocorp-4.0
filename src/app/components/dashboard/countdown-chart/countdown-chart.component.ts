@@ -25,7 +25,14 @@ export class CountdownChartComponent implements OnInit, AfterViewInit {
   eventSeconds: number;
 
   // options
-  chartOptions = { animation: { duration: 0 } };
+  chartOptions = {
+    animation: {
+      duration: 0
+    },
+    tooltips: {
+      enabled: false
+    }
+  };
 
   //
   eventStarted: boolean;
