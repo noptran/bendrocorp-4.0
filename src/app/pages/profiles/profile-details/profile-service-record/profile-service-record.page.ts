@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Toast } from '@capacitor/core';
 import { LoadingController } from '@ionic/angular';
+import { AuthService } from 'src/app/auth.service';
 import { Character } from 'src/app/models/character.model';
 import { EventAttendence } from 'src/app/models/event.model';
 import { ProfileService } from 'src/app/services/profile.service';
@@ -20,7 +23,9 @@ export class ProfileServiceRecordPage implements OnInit {
   constructor(
     private router: Router,
     private loading: LoadingController,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
   ) { }
 
   chunkArray(array, size) {
@@ -56,7 +61,19 @@ export class ProfileServiceRecordPage implements OnInit {
       });
       await this.loadingIndicator.present();
 
-
+      // go look up the data
+      const characterId = parseInt(this.route.snapshot.paramMap.get('id'), null);
+      this.profileService.fetch(characterId).subscribe(async (results) => {
+        if (!(results instanceof HttpErrorResponse)) {
+          this.character = results;
+          this.loading.dismiss();
+        } else {
+          await Toast.show({
+            text: 'Error Occured: Could not load background data!'
+          });
+          this.router.navigate(['profiles', characterId]);
+        }
+      });
     }
   }
 

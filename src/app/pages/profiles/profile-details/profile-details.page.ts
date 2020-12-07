@@ -8,7 +8,7 @@ import { ApplicationService } from 'src/app/services/application.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
 import { Plugins } from '@capacitor/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 const { Modals } = Plugins;
 
 @Component({
@@ -39,7 +39,8 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private loading: LoadingController,
-    private router: Router
+    private router: Router,
+    private platform: Platform
   ) {
     this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchCharacter();

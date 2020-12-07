@@ -61,37 +61,38 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
   {
     console.log('profile background init');
 
-    this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
+    if (this.router.getCurrentNavigation()?.extras.state) {
+      this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
+      console.log('Loading route info');
+      this.character = this.router.getCurrentNavigation().extras.state.character;
+      this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
+      this.canEdit = this.hrRights || this.userIsOwner;
+      console.log(this.character);
+    } else {
+      this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
 
-    this.characterSubscription = this.route.queryParams.subscribe(async (params) => {
-      if (this.router.getCurrentNavigation()?.extras.state) {
-        console.log('Loading route info');
-        this.character = this.router.getCurrentNavigation().extras.state.character;
-        this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
-        this.canEdit = this.hrRights || this.userIsOwner;
-        console.log(this.character);
-      } else {
-        // create the loading indicator
-        this.loadingIndicator = await this.loading.create({
-          message: 'Loading'
-        });
-        await this.loadingIndicator.present();
+      // create the loading indicator
+      this.loadingIndicator = await this.loading.create({
+        message: 'Loading'
+      });
+      await this.loadingIndicator.present();
 
-        // go look up the data
-        const characterId = parseInt(this.route.snapshot.paramMap.get('id'), null);
-        this.profileService.fetch(characterId).subscribe(async (results) => {
-          if (!(results instanceof HttpErrorResponse)) {
-            this.character = results;
-            this.loading.dismiss();
-          } else {
-            await Toast.show({
-              text: 'Error Occured: Could not load background data!'
-            });
-            this.router.navigate(['profiles', characterId]);
-          }
-        });
-      }
-    });
+      // go look up the data
+      const characterId = parseInt(this.route.snapshot.paramMap.get('id'), null);
+      this.profileService.fetch(characterId).subscribe(async (results) => {
+        if (!(results instanceof HttpErrorResponse)) {
+          this.character = results;
+          this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
+          this.canEdit = this.hrRights || this.userIsOwner;
+          this.loading.dismiss();
+        } else {
+          await Toast.show({
+            text: 'Error Occured: Could not load background data!'
+          });
+          this.router.navigate(['profiles', characterId]);
+        }
+      });
+    }
   }
 
   async ionViewWillEnter() {
