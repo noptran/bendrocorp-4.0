@@ -26,6 +26,9 @@ export class UpdateAvatarComponent implements OnInit {
   }
 
   async selectAvatar() {
+  // for web need to fall back to a look alike button
+  // https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
+
     const ext = ['images'];
     const selectedFile = await FileSelector.fileSelector({
       ext,
