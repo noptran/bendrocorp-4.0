@@ -15,7 +15,8 @@
       <ion-col size-md="4" size-sm="12" size-xs="12" style="text-align: center;">
         <ion-card>
           <ion-card-header>
-            <img style="border-radius: 50%;" src="{{character.avatar_url}}">
+            <img *ngIf="canEdit" (click)="updateAvatar()" style="border-radius: 50%; max-height: 200px; cursor: pointer;" src="{{character.avatar_url}}">
+            <img *ngIf="!canEdit" style="border-radius: 50%; max-height: 200px;" src="{{character.avatar_url}}">
             <ion-card-title>{{character.full_name}}</ion-card-title>
             <ion-card-subtitle>{{character.current_job.title}}</ion-card-subtitle>
           </ion-card-header>

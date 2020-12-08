@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Update Avatar</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="saveAvatar()" [disabled]="!avatarSelected">Update</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="text-align: center;">
+    <img style="border-radius: 50%; max-height: 200px;" src="{{avatarData}}">
+    <br>
+    <ion-button (click)="selectAvatar()" color="primary" expand="block">Select New Avatar</ion-button>
+  </div>
+</ion-content>

@@ -21,6 +21,7 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
   characterSubscription: Subscription;
   userIsOwner: boolean;
   hrRights: boolean;
+  ceoRights: boolean;
   canEdit: boolean;
 
   // loading indicator
@@ -59,10 +60,11 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
 
   async Initialize()
   {
-    console.log('profile background init');
-
     if (this.router.getCurrentNavigation()?.extras.state) {
+      console.log('route info present');
+
       this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
+      this.ceoRights = await this.authService.hasClaim(9);
       console.log('Loading route info');
       this.character = this.router.getCurrentNavigation().extras.state.character;
       this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
@@ -83,7 +85,7 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
         if (!(results instanceof HttpErrorResponse)) {
           this.character = results;
           this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
-          this.canEdit = this.hrRights || this.userIsOwner;
+          this.canEdit = this.hrRights || this.userIsOwner || this.ceoRights;
           this.loading.dismiss();
         } else {
           await Toast.show({

@@ -8,7 +8,8 @@ import { ApplicationService } from 'src/app/services/application.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
 import { Plugins } from '@capacitor/core';
-import { LoadingController, Platform } from '@ionic/angular';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
+import { UpdateAvatarComponent } from 'src/app/components/update-avatar/update-avatar.component';
 const { Modals } = Plugins;
 
 @Component({
@@ -26,6 +27,8 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   ceoRights: boolean;
   hrRights: boolean;
   directorRights: boolean;
+  userIsOwner: boolean;
+  canEdit: boolean;
 
   // subscriptions
   profileSubscription: Subscription;
@@ -40,7 +43,8 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private loading: LoadingController,
     private router: Router,
-    private platform: Platform
+    private platform: Platform,
+    private modalController: ModalController
   ) {
     this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchCharacter();
@@ -48,11 +52,25 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   }
 
   fetchCharacter() {
-    this.profileService.fetch(this.characterId).subscribe((results) => {
+    this.profileService.fetch(this.characterId).subscribe(async (results) => {
       console.log(results);
       this.character = results;
+      this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
+      this.canEdit = this.hrRights || this.userIsOwner;
       this.loading.dismiss();
     });
+  }
+
+  async updateAvatar() {
+    if (this.canEdit) {
+      const modal = await this.modalController.create({
+        component: UpdateAvatarComponent,
+        componentProps: {
+          character: this.character
+        }
+      });
+      return await modal.present();
+    }
   }
 
   openProfileBackground() {
