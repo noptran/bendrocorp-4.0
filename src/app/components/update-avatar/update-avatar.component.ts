@@ -15,22 +15,24 @@ export class UpdateAvatarComponent implements OnInit {
   avatarSelected: boolean;
   constructor(
     private platform: Platform
-  ) { }
-
-  async selectAvatar() {
-    const ext = ['images'];
-    const selectedFile = await FileSelector.fileSelector({
-      ext
-    });
-
-    console.log(selectedFile);
+  ) {
   }
 
   async ngOnInit() {
     if (!this.platform.is('mobile')) {
-      await this.importModule('capacitor-file-selector');
+      await import('capacitor-file-selector');
     }
     this.avatarData = this.character.avatar_url;
+  }
+
+  async selectAvatar() {
+    const ext = ['images'];
+    const selectedFile = await FileSelector.fileSelector({
+      ext,
+      multiple_selection: false
+    });
+
+    console.log(selectedFile);
   }
 
   async importModule(moduleName): Promise<any>{
