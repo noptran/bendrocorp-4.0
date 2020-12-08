@@ -18,7 +18,7 @@
           <!-- top of menu -->
           <ion-item *ngIf="user">
             <ion-avatar slot="start">
-              <img src="{{user?.avatar}}">
+              <img src="{{getAvatar()}}">
             </ion-avatar>
             <ion-label>
               <h2>{{user.first_name}} {{user.last_name}}</h2>

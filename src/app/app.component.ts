@@ -12,6 +12,7 @@ import { MenuItem } from './models/misc.model';
 import { MenuService } from './menu.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConnectionService } from 'ng-connection-service';
+import { ProfileService } from './services/profile.service';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   authorizationSubscription: Subscription;
   navigationSubscription: Subscription;
   connectionSubscription: Subscription;
+  profileSubscription: Subscription;
   user: UserSessionResponse;
 
   constructor(
@@ -35,9 +37,20 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private menuService: MenuService,
     private connection: ConnectionService,
+    private profileService: ProfileService,
     private router: Router
   ) {
     this.initializeApp();
+    this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(async () => {
+      await this.authService.checkAndRefreshAccessToken(true);
+      this.user = await this.authService.retrieveUserSession();
+    });
+  }
+
+  getAvatar(): string {
+    if (this.user) {
+      return this.user.avatar;
+    }
   }
 
   initializeApp() {

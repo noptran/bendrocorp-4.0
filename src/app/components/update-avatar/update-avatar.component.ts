@@ -60,7 +60,7 @@ export class UpdateAvatarComponent implements OnInit {
   // for web need to fall back to a look alike button
   // https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
 
-    if (this.isMobile) {
+    if (this.isMobile) { // TODO: https://github.com/hinddeep/capacitor-file-selector
       const ext = ['images'];
       const selectedFile = await FileSelector.fileSelector({
         ext,
@@ -115,6 +115,19 @@ export class UpdateAvatarComponent implements OnInit {
       const base64Result = await this.getBase64(file);
 
       this.newAvatar = { name: file.name, type: file.type, size: file.size, base64: base64Result } as Base64Upload;
+
+      if (this.newAvatar.type === 'image/jpeg') {
+        // fix the type
+        this.newAvatar.type = 'image/jpg';
+
+        // fix the file name
+        this.newAvatar.name = this.newAvatar.name.replace('jpeg', 'jpg');
+
+        // fix the base64
+        this.newAvatar.base64 = this.newAvatar.base64.replace('jpeg', 'jpg');
+      }
+
+      console.log(this.newAvatar);
 
       this.avatarData = base64Result as string;
     }

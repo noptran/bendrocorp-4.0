@@ -15,17 +15,20 @@
       <ion-col size-md="4" size-sm="12" size-xs="12" style="text-align: center;">
         <ion-card>
           <ion-card-header>
-            <!-- editable bade (ie you have the rights) -->
-            <div class="editable-avatar" *ngIf="canEdit">
-              <img (click)="updateAvatar()" style="border-radius: 50%; max-height: 200px; cursor: pointer;" src="{{character.avatar_url}}">
-              <div>
-                <small>Tap to update avatar</small>
-              </div>
-            </div>     
+            <!-- avatar -->
+            <div>
+              <!-- editable bade (ie you have the rights) -->
+              <div class="editable-avatar" *ngIf="canEdit">
+                <img (click)="updateAvatar()" style="border-radius: 50%; max-height: 200px; cursor: pointer;" src="{{character.avatar_url}}">
+                <div>
+                  <small>Tap to update avatar</small>
+                </div>
+              </div>     
 
-            <!-- no edit page -->
-            <div *ngIf="!canEdit">
-              <img style="border-radius: 50%; max-height: 200px;" src="{{character.avatar_url}}">
+              <!-- no edit page -->
+              <div *ngIf="!canEdit">
+                <img style="border-radius: 50%; max-height: 200px;" src="{{character.avatar_url}}">
+              </div>
             </div>
             <ion-card-title>{{character.full_name}}</ion-card-title>
             <ion-card-subtitle>{{character.current_job.title}}</ion-card-subtitle>
@@ -48,6 +51,19 @@
                 (click)="openProfileApplication()">Application</ion-item>
               <ion-item class="profile-detail-sub" *ngIf="ceoRights || hrRights" detail (click)="openProfileInterview()">Interview</ion-item>
             </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- App info -->
+    <ion-row *ngIf="character && (hrRights && character.application.application_status_id < 6 )">
+      <ion-col size-md="4" size-sm="12" size-xs="12">
+        <ion-card>
+          <ion-card-content>
+            <ion-button *ngIf="character.application.application_status_id == 5" expand="full" color="success" (click)="advanceApplication()">CEO Accept</ion-button>
+            <ion-button *ngIf="character.application.application_status_id < 5" expand="full" color="success" (click)="advanceApplication()">Advance Application</ion-button>
+            <ion-button expand="full" color="danger" (click)="rejectApplication()">Reject Application</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

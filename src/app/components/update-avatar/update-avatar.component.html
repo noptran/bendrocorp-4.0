@@ -25,7 +25,7 @@
     </div>
     <div>
       <ion-button (click)="webAvatarPicker.click()" color="primary" expand="block"><span>Select <span *ngIf="!newAvatar">New</span> <span *ngIf="newAvatar">Another</span> Avatar</span></ion-button>
-      <input #webAvatarPicker class="custom-file-input" style="display: none;" type="file" id="webAvatarPicker" accept="image/x-png,image/jpeg" (change)="handleAvatarFileInput($event.target.files)">
+      <input #webAvatarPicker class="custom-file-input" style="display: none;" type="file" id="webAvatarPicker" accept="image/x-png,image/jpg" (change)="handleAvatarFileInput($event.target.files)">
     </div>
   </div>
 </ion-content>

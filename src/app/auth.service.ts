@@ -66,7 +66,7 @@ export class AuthService {
     );
   }
 
-  async checkAndRefreshAccessToken(): Promise<string|HttpErrorResponse> {
+  async checkAndRefreshAccessToken(override: boolean = false): Promise<string|HttpErrorResponse> {
     return new Promise (async (results, error) => {
       const authResponse = await this.getAuthResponse();
 
@@ -74,7 +74,7 @@ export class AuthService {
       if (authResponse) {
         // so we have a token set available
         // is the token set expired?
-        if (await this.isAuthorized()) {
+        if (await this.isAuthorized() || override) {
           // return the valid, not expired access token
           console.log('checkAndRefreshAccessToken(): New token did not have to be fetched');
           results(authResponse.access_token);
