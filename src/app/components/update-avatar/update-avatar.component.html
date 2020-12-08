@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Cancel</ion-button>
     </ion-buttons>
     <ion-title>Update Avatar</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="primary" (click)="saveAvatar()" [disabled]="!avatarSelected">Update</ion-button>
+      <ion-button color="primary" (click)="updateAvatar()" [disabled]="!newAvatar || updating">Update</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -13,7 +13,19 @@
 <ion-content>
   <div style="text-align: center;">
     <img style="border-radius: 50%; max-height: 200px;" src="{{avatarData}}">
-    <br>
-    <ion-button (click)="selectAvatar()" color="primary" expand="block">Select New Avatar</ion-button>
+    <br><br>
+    <div>
+      <ion-item style="text-align:center;">
+        <ion-label>
+          <p *ngIf="!newAvatar">&nbsp;</p>
+          <p *ngIf="newAvatar">{{newAvatar.name}}</p>
+          <p>Select a .png or .jpg only</p>
+        </ion-label>
+      </ion-item>
+    </div>
+    <div>
+      <ion-button (click)="webAvatarPicker.click()" color="primary" expand="block"><span>Select <span *ngIf="!newAvatar">New</span> <span *ngIf="newAvatar">Another</span> Avatar</span></ion-button>
+      <input #webAvatarPicker class="custom-file-input" style="display: none;" type="file" id="webAvatarPicker" accept="image/x-png,image/jpeg" (change)="handleAvatarFileInput($event.target.files)">
+    </div>
   </div>
 </ion-content>

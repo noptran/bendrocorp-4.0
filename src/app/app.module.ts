@@ -15,11 +15,14 @@ import { EventService } from './services/event.service';
 import { ProfileService } from './services/profile.service';
 import { RequestsService } from './services/requests.service';
 import { LoadingService } from './services/loading-service.service';
+import { CommonModule } from '@angular/common';
+import { UpdateAvatarComponent } from './components/update-avatar/update-avatar.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, UpdateAvatarComponent],
   entryComponents: [],
   imports: [
+    CommonModule,
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(),
