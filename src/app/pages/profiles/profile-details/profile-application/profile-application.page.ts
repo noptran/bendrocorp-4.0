@@ -21,7 +21,7 @@ export class ProfileApplicationPage implements OnInit {
   character: Character;
   newComment: CharacterApplicationComment;
 
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   // permissions
   ceoRights: boolean;
@@ -90,7 +90,7 @@ export class ProfileApplicationPage implements OnInit {
       this.profileService.fetch(characterId).subscribe(async (results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.character = results;
-          this.loading.dismiss();
+          this.loadingIndicator.dismiss();
         } else {
           await Toast.show({
             text: 'Error Occured: Could not load background data!'

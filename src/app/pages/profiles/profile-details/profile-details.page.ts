@@ -34,7 +34,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   profileSubscription: Subscription;
 
   // loading indicator
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   constructor(
     private profileService: ProfileService,
@@ -57,7 +57,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
       this.character = results;
       this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
       this.canEdit = this.hrRights || this.userIsOwner;
-      this.loading.dismiss();
+      this.loadingIndicator.dismiss();
     });
   }
 

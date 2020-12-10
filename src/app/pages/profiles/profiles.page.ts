@@ -17,7 +17,7 @@ export class ProfilesPage implements OnInit, OnDestroy {
   profileSubscription: Subscription;
 
   // loading indicator
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   constructor(
     private profileService: ProfileService,
@@ -39,7 +39,7 @@ export class ProfilesPage implements OnInit, OnDestroy {
       }
 
       if (this.loadingIndicator) {
-        this.loading.dismiss();
+        this.loadingIndicator.dismiss();
       }
     });
   }

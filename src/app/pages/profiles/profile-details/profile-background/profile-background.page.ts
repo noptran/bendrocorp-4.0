@@ -25,7 +25,7 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
   canEdit: boolean;
 
   // loading indicator
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   constructor(
     private router: Router,
@@ -86,7 +86,7 @@ export class ProfileBackgroundPage implements OnInit, OnDestroy {
           this.character = results;
           this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
           this.canEdit = this.hrRights || this.userIsOwner || this.ceoRights;
-          this.loading.dismiss();
+          this.loadingIndicator.dismiss();
         } else {
           await Toast.show({
             text: 'Error Occured: Could not load background data!'

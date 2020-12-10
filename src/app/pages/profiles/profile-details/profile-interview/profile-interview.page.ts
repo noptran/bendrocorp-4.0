@@ -33,7 +33,7 @@ export class ProfileInterviewPage implements OnInit {
   character: Character;
   lockForReview: boolean;
 
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   // permissions
   ceoRights: boolean;
@@ -98,7 +98,7 @@ export class ProfileInterviewPage implements OnInit {
       this.profileService.fetch(characterId).subscribe(async (results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.character = results;
-          this.loading.dismiss();
+          this.loadingIndicator.dismiss();
         } else {
           await Toast.show({
             text: 'Error Occured: Could not load background data!'

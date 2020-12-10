@@ -26,7 +26,7 @@ export class ProfileShipsPage implements OnInit, OnDestroy {
 
   profileSubscription: Subscription;
 
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
 
   constructor(
     private profileService: ProfileService,
@@ -103,7 +103,7 @@ export class ProfileShipsPage implements OnInit, OnDestroy {
           this.character = results;
           this.userIsOwner = ((await this.authService.retrieveUserSession()).id === this.character.user_id) ? true : false;
           this.canEdit = this.hrRights || this.userIsOwner;
-          this.loading.dismiss();
+          this.loadingIndicator.dismiss();
         } else {
           await Toast.show({
             text: 'Error Occured: Could not load background data!'
