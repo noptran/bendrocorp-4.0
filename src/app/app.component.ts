@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ConnectionService } from 'ng-connection-service';
 import { ProfileService } from './services/profile.service';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -40,13 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private connection: ConnectionService,
     private profileService: ProfileService,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private settings: SettingsService
   ) {
     this.initializeApp();
-    this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(async () => {
-      await this.authService.checkAndRefreshAccessToken(true);
-      this.user = await this.authService.retrieveUserSession();
-    });
 
     // this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe((action) => {
     //   if (action === 'LOGOUT') {
@@ -63,8 +61,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   initializeApp() {
     this.platform.ready().then(async () => {
+      // intialize settings
+      await this.settings.intializeConfig();
+
+      // create auth subscriber
       this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe(async (result) => {
         this.isAuthorized = await this.authService.isAuthorized();
+      });
+
+      // profile subscriber
+      this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(async () => {
+        await this.authService.checkAndRefreshAccessToken(true);
+        this.user = await this.authService.retrieveUserSession();
       });
 
       this.isAuthorized = (await this.authService.checkAndRefreshAccessToken()) != null;

@@ -9,17 +9,17 @@
 
 <ion-content>
   <div style="text-align: center;">
-    <qrcode [qrdata]="qrData" [size]="256" [level]="'M'"></qrcode>
-    <p>{{qrData}}</p>
+    <qrcode [qrdata]="qrData" [size]="256" [level]="'L'"></qrcode>
+    <p>Your Profile Code</p>
   </div>
-  <ion-list>
+  <ion-list *ngIf="config">
     <ion-item>
       <ion-label>Show Slide Hints</ion-label>
-      <ion-toggle slot="end" name="blueberry" checked></ion-toggle>
+      <ion-toggle slot="end" id="slide-hints" (ionChange)="updateConfig()" [(ngModel)]="config.slideHints"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>Use Touch/Face ID</ion-label>
-      <ion-toggle slot="end" name="blueberry" disabled></ion-toggle>
+      <ion-toggle slot="end" id="biometrics" (ionChange)="updateConfig()" [(ngModel)]="config.useTouchId" disabled></ion-toggle>
     </ion-item>
   </ion-list>
   <ion-button (click)="logout()" color="danger" expand="block">Logout</ion-button>

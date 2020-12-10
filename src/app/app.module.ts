@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { UpdateAvatarComponent } from './components/update-avatar/update-avatar.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SettingsComponent } from './components/settings/settings.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, UpdateAvatarComponent, SettingsComponent],
@@ -29,7 +30,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     HttpClientModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    QRCodeModule
+    QRCodeModule,
+    FormsModule
   ],
   providers: [
     LoadingService,

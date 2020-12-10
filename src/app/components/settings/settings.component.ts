@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
-import { SettingsService } from 'src/app/services/settings.service';
+import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 import { environment } from 'src/environments/environment';
 
 const { Modals } = Plugins;
@@ -15,7 +15,7 @@ const { Modals } = Plugins;
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-
+  config: AppConfig;
   qrData: string;
 
   constructor(
@@ -24,6 +24,11 @@ export class SettingsComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) { }
+
+  async updateConfig() {
+    await this.settingsService.setConfig(this.config);
+    console.log('updated settings');
+  }
 
   async logout() {
     const confirmRet = await Modals.confirm({
@@ -44,6 +49,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.config = await this.settingsService.getConfig();
     this.qrData = environment.userQRBase + (await this.authService.retrieveUserSession()).character_id;
   }
 
