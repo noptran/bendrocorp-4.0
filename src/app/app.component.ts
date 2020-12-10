@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
@@ -13,6 +13,7 @@ import { MenuService } from './menu.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConnectionService } from 'ng-connection-service';
 import { ProfileService } from './services/profile.service';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     private connection: ConnectionService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) {
     this.initializeApp();
     this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(async () => {
@@ -89,6 +91,13 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.selectedIndex = 0;
     }
+  }
+
+  async openSettingsModal() {
+    const modal = await this.modalController.create({
+      component: SettingsComponent,
+    });
+    return await modal.present();
   }
 
   ngOnInit() {

@@ -53,7 +53,7 @@ const routes: Routes = [
   {
     path: 'system-map',
     loadChildren: () => import('./pages/system-map/system-map.module').then( m => m.SystemMapPageModule)
-  }
+  },
 ];
 
 @NgModule({

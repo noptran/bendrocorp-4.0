@@ -24,7 +24,7 @@
               <h2>{{user.first_name}} {{user.last_name}}</h2>
               <p>{{user.job_title}}</p>
             </ion-label>
-            <ion-button color="dark" slot="end">
+            <ion-button (click)="openSettingsModal()" color="dark" slot="end">
               <ion-icon name="cog-outline"></ion-icon>
             </ion-button>
           </ion-item>

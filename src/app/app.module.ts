@@ -17,16 +17,19 @@ import { RequestsService } from './services/requests.service';
 import { LoadingService } from './services/loading-service.service';
 import { CommonModule } from '@angular/common';
 import { UpdateAvatarComponent } from './components/update-avatar/update-avatar.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
-  declarations: [AppComponent, UpdateAvatarComponent],
+  declarations: [AppComponent, UpdateAvatarComponent, SettingsComponent],
   entryComponents: [],
   imports: [
     CommonModule,
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    QRCodeModule
   ],
   providers: [
     LoadingService,
