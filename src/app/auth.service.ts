@@ -45,7 +45,7 @@ export class AuthService {
       tap(async result => {
         Toast.show({ text: 'Login Successful!' });
       }),
-      catchError(this.error.handleError<any>('Login'))
+      catchError(this.error.handleError<any>('Login', null, true))
     );
   }
 

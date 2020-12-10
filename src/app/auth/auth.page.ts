@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { LoginRequest } from '../models/user.model';
+import { Plugins } from '@capacitor/core';
+const { Toast } = Plugins;
 
 @Component({
   selector: 'app-auth',
@@ -22,7 +24,7 @@ export class AuthPage implements OnInit {
   /**
    * Call the login service with the filled in form object and attempt to authenticate the user
    */
-  doLogin()
+  async doLogin()
   {
     this.authService.login(
       this.login.email,
@@ -33,6 +35,10 @@ export class AuthPage implements OnInit {
         await this.authService.storeAuthResponse(response);
         this.authService.announceAuthUpdate('LOGIN');
         this.router.navigateByUrl('/');
+      } else {
+        await Toast.show({
+          text: response.error.message
+        });
       }
     });
   }

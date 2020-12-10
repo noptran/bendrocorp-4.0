@@ -23,10 +23,14 @@ export class ErrorService {
         if (error.statusText !== 'Unknown Error') {
           if (error.error && error.error.message) {
             this.message = `${operation}: ${error.message}`;
-            Toast.show({ text: this.message });
+            if (!skipMessage) {
+              Toast.show({ text: this.message });
+            }
           } else {
             this.message = `${operation}: ${error.message}`;
-            Toast.show({ text: this.message });
+            if (!skipMessage) {
+              Toast.show({ text: this.message });
+            }
           }
 
           // if we get a 401 that means that we need to be logged in
