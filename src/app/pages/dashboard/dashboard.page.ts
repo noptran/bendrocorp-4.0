@@ -21,7 +21,7 @@ const { Browser } = Plugins;
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit, OnDestroy {
-  loadingIndicator: any;
+  loadingIndicator: HTMLIonLoadingElement;
   nextEvent: Event;
   news: ILNewsStory[] = [];
   events: Event[];
@@ -47,8 +47,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.dataLoadedSubscription = this.dataInterval.subscribe(() => {
       if (this.newsFetched && this.eventsFetched) {
         try {
-          this.loading.dismiss();
+          this.loadingIndicator.dismiss();
           this.dataLoadedSubscription.unsubscribe();
+          this.initialDataLoaded = true;
         } catch (error) {
           // do nada
         }
@@ -64,7 +65,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       message: 'Loading'
     });
     await this.loadingIndicator.present();
-    // this.loading.show();
+
     this.fetchEvents();
     this.fetchNews();
   }
@@ -113,11 +114,11 @@ export class DashboardPage implements OnInit, OnDestroy {
         this.news = results.filter(x => x.published).slice(0, 3);
         this.newsFetched = true;
 
-        if (event) {
-          if (this.newsFetched && this.eventsFetched) {
-            event.target.complete();
-          }
-        }
+        // if (event) {
+        //   if (this.newsFetched && this.eventsFetched) {
+        //     event.target.complete();
+        //   }
+        // }
 
         // if (this.newsFetched && this.eventsFetched) {
         //   if (!this.initialDataLoaded) {
@@ -154,16 +155,16 @@ export class DashboardPage implements OnInit, OnDestroy {
             // set fetched to true?
             this.eventsFetched = true;
 
-            if (event) {
-              if (this.newsFetched && this.eventsFetched) {
-                if (!this.initialDataLoaded) {
-                  this.initialDataLoaded = true;
-                }
-                // console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
-                // this.loading.dismiss();
-                event.target.complete();
-              }
-            }
+            // if (event) {
+            //   if (this.newsFetched && this.eventsFetched) {
+            //     if (!this.initialDataLoaded) {
+            //       this.initialDataLoaded = true;
+            //     }
+            //     // console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+            //     // this.loading.dismiss();
+            //     event.target.complete();
+            //   }
+            // }
 
             // if (this.newsFetched && this.eventsFetched) {
             //   if (!this.initialDataLoaded) {
