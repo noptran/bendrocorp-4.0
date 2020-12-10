@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   async logout() {
-    let confirmRet = await Modals.confirm({
+    const confirmRet = await Modals.confirm({
       title: 'Logout',
       message: 'Are you sure you want to logout?'
     });
@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit {
       await this.authService.logout();
       this.authService.announceAuthUpdate('LOGOUT');
       this.router.navigateByUrl('/auth');
+      this.dismiss();
     }
   }
 

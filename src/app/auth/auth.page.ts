@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { LoginRequest } from '../models/user.model';
 
@@ -11,9 +12,11 @@ import { LoginRequest } from '../models/user.model';
 })
 export class AuthPage implements OnInit {
   login: LoginRequest = {} as LoginRequest;
+  isWeb: boolean;
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private platform: Platform
   ) { }
 
   /**
@@ -35,6 +38,7 @@ export class AuthPage implements OnInit {
   }
 
   ngOnInit() {
+    this.isWeb = this.platform.is('desktop');
   }
 
 }

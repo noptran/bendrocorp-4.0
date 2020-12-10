@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrlRoot: 'https://api.bendrocorp.com/',
+  baseUrlRoot: 'https://api.bendrocorp.com',
   baseUrl: 'https://api.bendrocorp.com/api',
   wssUri: 'wss://api.bendrocorp.com/cable',
   userQRBase: 'https://bendrocorp.app/profiles/'
