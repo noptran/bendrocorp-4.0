@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # we only push tags to kubernetes
-    if: startsWith(github.ref, 'refs/tags/v')
+    # if: startsWith(github.ref, 'refs/tags/v') # for now we will just push latest
 
     # steps to push to kube
     steps:
