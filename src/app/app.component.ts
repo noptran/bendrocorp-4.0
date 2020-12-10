@@ -47,6 +47,12 @@ export class AppComponent implements OnInit, OnDestroy {
       await this.authService.checkAndRefreshAccessToken(true);
       this.user = await this.authService.retrieveUserSession();
     });
+
+    // this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe((action) => {
+    //   if (action === 'LOGOUT') {
+    //     this.router.navigateByUrl('/auth')
+    //   }
+    // });
   }
 
   getAvatar(): string {

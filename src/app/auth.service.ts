@@ -178,7 +178,9 @@ export class AuthService {
   }
 
   preservePath() {
-    localStorage.setItem('bendro:redirect:path', window.location.pathname);
+    if (!window.location.pathname.includes('auth')) {
+      localStorage.setItem('bendro:redirect:path', window.location.pathname);
+    }
   }
 
   redirectToLogin() {

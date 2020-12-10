@@ -33,7 +33,8 @@ export class SettingsComponent implements OnInit {
 
     if (confirmRet && confirmRet.value) {
       await this.authService.logout();
-      this.router.navigateByUrl('/');
+      this.authService.announceAuthUpdate('LOGOUT');
+      this.router.navigateByUrl('/auth');
     }
   }
 
