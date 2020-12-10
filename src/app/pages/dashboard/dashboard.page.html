@@ -67,7 +67,7 @@
             <ion-col>
               <ion-label style="font-size: 1.5em;">Corporate News</ion-label>
               <ion-list *ngIf="news">
-                <ion-item class="news-item" (click)="openNewsModal(item)" *ngFor="let item of news" details>
+                <ion-item class="news-item" (click)="openNewsModal(item)" *ngFor="let item of news" detail>
                   <ion-label>{{item.title}}</ion-label>
                 </ion-item>
               </ion-list>
