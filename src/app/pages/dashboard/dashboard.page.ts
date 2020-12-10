@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
-import { interval, Subscription } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { NewsDetailPage } from 'src/app/components/news-detail/news-detail.component';
 import { Event } from 'src/app/models/event.model';
 import { ILNewsStory } from 'src/app/models/news.model';
@@ -34,13 +34,30 @@ export class DashboardPage implements OnInit, OnDestroy {
   checkerStarted: boolean;
   initialDataLoaded: boolean = false;
 
+  dataLoadedSubscription: Subscription;
+  dataInterval: Observable<number> = interval(500);
+
   constructor(
     private eventService: EventService,
     private newsService: NewsService,
-    // private loading: loading
     private loading: LoadingController,
     private modalController: ModalController
-  ) { }
+  ) {
+
+    this.dataLoadedSubscription = this.dataInterval.subscribe(() => {
+      if (this.newsFetched && this.eventsFetched) {
+        try {
+          this.loading.dismiss();
+          this.dataLoadedSubscription.unsubscribe();
+        } catch (error) {
+          // do nada
+        }
+
+        // stop the subscriber
+        this.dataLoadedSubscription.unsubscribe();
+      }
+    });
+  }
 
   async ngOnInit() {
     this.loadingIndicator = await this.loading.create({
@@ -102,15 +119,15 @@ export class DashboardPage implements OnInit, OnDestroy {
           }
         }
 
-        if (this.newsFetched && this.eventsFetched) {
-          if (!this.initialDataLoaded) {
-            this.initialDataLoaded = true;
-          }
-          console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
-          this.loading.dismiss();
-        } else {
-          console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
-        }
+        // if (this.newsFetched && this.eventsFetched) {
+        //   if (!this.initialDataLoaded) {
+        //     this.initialDataLoaded = true;
+        //   }
+        //   console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+        //   this.loading.dismiss();
+        // } else {
+        //   console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+        // }
       }
     });
   }
@@ -142,21 +159,21 @@ export class DashboardPage implements OnInit, OnDestroy {
                 if (!this.initialDataLoaded) {
                   this.initialDataLoaded = true;
                 }
-                console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
-                this.loading.dismiss();
+                // console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+                // this.loading.dismiss();
                 event.target.complete();
               }
             }
 
-            if (this.newsFetched && this.eventsFetched) {
-              if (!this.initialDataLoaded) {
-                this.initialDataLoaded = true;
-              }
-              console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
-              this.loading.dismiss();
-            } else {
-              console.log(`e n ${this.newsFetched} e ${this.eventsFetched}`);
-            }
+            // if (this.newsFetched && this.eventsFetched) {
+            //   if (!this.initialDataLoaded) {
+            //     this.initialDataLoaded = true;
+            //   }
+            //   console.log(`n n ${this.newsFetched} e ${this.eventsFetched}`);
+            //   this.loading.dismiss();
+            // } else {
+            //   console.log(`e n ${this.newsFetched} e ${this.eventsFetched}`);
+            // }
 
             // if we found a next event do the work to monitor it
             if (this.nextEvent) {
@@ -166,7 +183,7 @@ export class DashboardPage implements OnInit, OnDestroy {
                   const eventStart = new Date(this.nextEvent.start_date);
                   const eventEnd = new Date(this.nextEvent.end_date);
 
-                  const currentToStart = TimeSpan.Subtract(new Date(), eventStart); //new Date().getTime();
+                  const currentToStart = TimeSpan.Subtract(new Date(), eventStart); // new Date().getTime();
                   const currentToEnd = TimeSpan.Subtract(new Date(), eventEnd);
 
                   // console.log(`Dashboard Event:: STTC: ${currentToStart.totalSeconds}, ETTC: ${currentToEnd.totalSeconds}`);
@@ -196,24 +213,24 @@ export class DashboardPage implements OnInit, OnDestroy {
           } else {
             this.eventsFetched = true;
 
-            if (event) {
-              if (this.newsFetched && this.eventsFetched) {
-                if (!this.initialDataLoaded) {
-                  this.initialDataLoaded = true;
-                }
-                this.loading.dismiss();
-                event.target.complete();
-              }
-            }
+            // if (event) {
+            //   if (this.newsFetched && this.eventsFetched) {
+            //     if (!this.initialDataLoaded) {
+            //       this.initialDataLoaded = true;
+            //     }
+            //     this.loading.dismiss();
+            //     event.target.complete();
+            //   }
+            // }
 
-            if (this.newsFetched && this.eventsFetched) {
-              if (!this.initialDataLoaded) {
-                this.initialDataLoaded = true;
-              }
-              this.loading.dismiss();
-            } else {
-              console.log(`en n ${this.newsFetched} e ${this.eventsFetched}`);
-            }
+            // if (this.newsFetched && this.eventsFetched) {
+            //   if (!this.initialDataLoaded) {
+            //     this.initialDataLoaded = true;
+            //   }
+            //   this.loading.dismiss();
+            // } else {
+            //   console.log(`en n ${this.newsFetched} e ${this.eventsFetched}`);
+            // }
           }
         }
       }
