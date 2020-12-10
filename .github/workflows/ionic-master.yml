@@ -96,9 +96,10 @@ jobs:
         [ "$VERSION" == "master" ] && VERSION=latest
         echo VERSION=$VERSION
         # Update deployment file w/Docker Version
-        sed -i 's/VERSION_HERE/'"$VERSION"'/' ./k8/bendrocorp_app_v1_deployment.yml
+        sed -i 's/VERSION_HERE/'"$VERSION"'/' ./k8/bendrocorp_app_v4_deployment.yml
+    
     - name: Cat Deployment
-      run: cat ./k8/bendrocorp_app_v1_deployment.yml
+      run: cat ./k8/bendrocorp_app_v4_deployment.yml
 
     - name: Allow unsecure commands
       run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
