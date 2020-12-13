@@ -10,24 +10,87 @@
 <ion-content>
   <ion-card>
     <div class="events-top"></div>
-    This is where the events will go
-    <!-- <ion-list>
-      <div *ngFor="let division of divisions">
-        <ion-list-header>
-          {{division.name}}
-        </ion-list-header>
-
-        <ion-item class="profile-item" detail *ngFor="let member of sortDivision(division)"
-          (click)="openProfileDetails(member)">
-          <ion-avatar slot="start">
-            <img src="{{member.avatar_url}}">
-          </ion-avatar>
+    <!-- This is where the events will go -->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+    <ion-list *ngIf="!isAdmin">
+      <ion-list-header>
+        <ion-label>Current Events</ion-label>
+      </ion-list-header>
+      <ion-item *ngIf="events.length == 0">
+        <ion-label>There are currently no events posted - check back later!</ion-label>
+      </ion-item>
+      <ion-item detail *ngFor="let item of events" (click)="openEvent(item)">
+        <!-- <ion-label>{{item.name}}</ion-label>
+          <ion-label><small>{{event.start_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}</small></ion-label> -->
+        <ion-label>
+          {{item.name}}
+          <p><small>
+              <ion-icon name="calendar"></ion-icon> Starts: {{item.start_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}
+            </small></p>
+          <p><small>{{fetchAttendenceString(item)}}</small></p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    
+    <ion-list *ngIf="isAdmin">
+      <ion-list-header>
+        <ion-label>Current Events</ion-label>
+      </ion-list-header>
+      <ion-item *ngIf="events.length == 0">
+        <ion-label>There are currently no events posted - check back later!</ion-label>
+      </ion-item>
+      <ion-item-sliding *ngFor="let item of events" #slidingItem>
+        <ion-item detail (click)="openEvent(item)">
           <ion-label>
-            <h2>{{member.full_name}}</h2>
-            <p>{{member.current_job.title}}</p>
+            {{item.name}}
+            <p><small>
+                <ion-icon name="calendar"></ion-icon> Starts: {{item.start_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}
+              </small></p>
+            <p><small>{{fetchAttendenceString(item)}}</small></p>
           </ion-label>
         </ion-item>
-      </div>
-    </ion-list> -->
+        <ion-item-options side="end">
+          <ion-item-option *ngIf="!item.published" color="warning" (click)="publishEvent(item)">
+            <ion-icon name="megaphone"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="medium" (click)="addUpdateEvent(item)">
+            <ion-icon name="create"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="archiveEvent(item)">
+            <ion-icon name="archive"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    
+      <ion-list-header>
+        <ion-label>Past Events</ion-label>
+      </ion-list-header>
+      <ion-item-sliding *ngFor="let item of expiredEvents">
+        <ion-item detail (click)="openEvent(item)">
+          <ion-label>
+            <span>{{item.name}}</span><span *ngIf="!item.submitted_for_certification && !item.certified"> (<strong>Needs
+                Certification</strong>)</span>
+            <p><small>
+                <ion-icon name="calendar"></ion-icon> Ended: {{item.end_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}
+              </small></p>
+            <p><small>{{fetchAttendenceString(item)}}</small></p>
+          </ion-label>
+        </ion-item>
+        <ion-item-options *ngIf="!item.certified && !item.submitted_for_certification" side="end">
+          <ion-item-option color="primary" (click)="certifyEvent(item)">
+            <ion-icon name="checkbox-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    
+    <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="addUpdateEvent()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </ion-card>
 </ion-content>

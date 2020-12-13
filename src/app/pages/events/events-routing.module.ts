@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { EventsPage } from './events.page';
+import { EventPage } from './events.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: EventsPage
+    component: EventPage
   },
   {
     path: ':id',
     loadChildren: () => import('./event-details/event-details.module').then( m => m.EventDetailsPageModule)
-  }
+  },
+
 ];
 
 @NgModule({
