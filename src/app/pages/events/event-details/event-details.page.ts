@@ -46,6 +46,10 @@ export class EventDetailsPage implements OnInit {
   //   }
   // }
 
+  doRefresh(event: any) {
+    this.getEvent(event);
+  }
+
   async checkCurrentStatus() {
     if (this.event && this.event.attendences) {
       const id = (await this.authService.retrieveUserSession()).id;
@@ -80,11 +84,16 @@ export class EventDetailsPage implements OnInit {
     });
   }
 
-  getEvent() {
+  getEvent(event?: any) {
     if (this.eventId) {
       this.eventService.fetch(this.eventId).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.event = results;
+
+          if (event) {
+            event.target.complete();
+          }
+
           this.loading.dismiss();
         }
       });
