@@ -149,8 +149,6 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   openEvent(event: Event) {
-    // this.eventService.setPassData(event);
-    // this.nav.navigateForward(`/tabs/event/details/${event.id}`);
     const navigationExtras: NavigationExtras = {
       relativeTo: this.route,
       state: {
