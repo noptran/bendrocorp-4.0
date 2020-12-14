@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="job-board"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Job Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngIf="job">
+    <ion-card-header>
+      <ion-card-title>{{job.title}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <!-- Status -->
+        <ion-row *ngIf="job.mission_status">
+          <ion-col>
+            <small>Status: {{job.mission_status.title}}</small>
+          </ion-col>
+        </ion-row>
+        <!-- Expires -->
+        <ion-row *ngIf="job.expires_when">
+          <ion-col>
+            <small>Expires: {{job.expires_when | date}}</small>
+          </ion-col>
+        </ion-row>
+        <!-- Max Acceptors -->
+        <ion-row>
+          <ion-col>
+            <small>Max Employees: {{job.max_acceptors}}</small>
+          </ion-col>
+        </ion-row>
+        <!-- OP Value -->
+        <ion-row>
+          <ion-col>
+            <small>Reward: {{job.op_value}}</small>
+          </ion-col>
+        </ion-row>
+        <!-- Description -->
+        <ion-row>
+          <ion-col>
+            {{job.description}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <small>On Mission: {{fetchAcceptors()}}</small>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+
+    <ion-button *ngIf="!isAcceptor() && !isExpired() && !job.on_mission.length >= job.max_acceptors" expand="full"
+      color="success" (click)="acceptMission()">Accept Mission</ion-button>
+    <ion-button *ngIf="isAcceptor() && !isExpired()" expand="full" color="danger" (click)="abandonMission()">Abandon
+      Mission</ion-button>
+    <ion-button *ngIf="isAcceptor() && !isExpired()" expand="full" color="dark" (click)="completeJob()">Complete
+    </ion-button>
+  </ion-card>
+</ion-content>

@@ -22,6 +22,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule } from '@angular/forms';
 import { EventAddUpdateComponent } from './components/events/event-add-update/event-add-update.component';
 import { CertifyEventComponent } from './components/events/certify-event/certify-event.component';
+import { CompleteJobComponent } from './components/jobs/complete-job/complete-job.component';
+import { AddUpdateJobComponent } from './components/jobs/add-update-job/add-update-job.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,10 @@ import { CertifyEventComponent } from './components/events/certify-event/certify
     UpdateAvatarComponent,
     SettingsComponent,
     EventAddUpdateComponent,
-    CertifyEventComponent
+    CertifyEventComponent,
+    EventAddUpdateComponent,
+    CompleteJobComponent,
+    AddUpdateJobComponent
   ],
   entryComponents: [],
   imports: [

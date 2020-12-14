@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Complete Job</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="doComplete()" [disabled]="dataSubmitted">Complete</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h2 *ngIf="job">Completion Request: {{job.title}}</h2>
+  <!-- Title -->
+  <ion-item>
+    <ion-label position="floating">Job Title</ion-label>
+    <ion-select placeholder="Flight Log" okText="Select" cancelText="Cancel" [(ngModel)]="completion.flight_log_id">
+      <ion-select-option *ngFor="let fl of flightLogs" [value]="fl.id">{{fl.title}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <!-- Description -->
+  <ion-item>
+    <ion-label position="floating">Job Description</ion-label>
+    <ion-textarea placeholder="Completion Message" [(ngModel)]="completion.completion_message"></ion-textarea>
+  </ion-item>
+</ion-content>
