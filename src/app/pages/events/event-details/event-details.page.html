@@ -8,6 +8,9 @@
     <ion-buttons *ngIf="openedAsModal" slot="end">
       <ion-button color="medium" (click)="openEventDetailsPage()">Open</ion-button>
     </ion-buttons>
+    <ion-buttons *ngIf="!openedAsModal" slot="end">
+      <ion-button color="medium" (click)="addUpdateEvent()">Edit</ion-button>
+    </ion-buttons>    
   </ion-toolbar>
 </ion-header>
 
@@ -47,9 +50,7 @@
         </ion-row>
       </ion-grid>
     </ion-card-content>
-  <!--
-    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus().attendence_type_id == 2) && !isExpired()" expand="full" color="success" (click)="setAttendance(1)">Attending</ion-button>
-    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus().attendence_type_id == 1) && !isExpired()" expand="full" color="danger" (click)="setAttendance(2)">Not Attending</ion-button>
-  -->
+    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 2) && !isExpired()" expand="block" color="success" (click)="setAttendance(1)">Attending</ion-button>
+    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 1) && !isExpired()" expand="block" color="danger" (click)="setAttendance(2)">Not Attending</ion-button>
   </ion-card>  
 </ion-content>

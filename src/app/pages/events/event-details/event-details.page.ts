@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
 import { AuthService } from 'src/app/auth.service';
+import { EventAddUpdateComponent } from 'src/app/components/events/event-add-update/event-add-update.component';
 import { Event } from 'src/app/models/event.model';
 import { EventService } from 'src/app/services/event.service';
 
@@ -15,6 +16,7 @@ import { EventService } from 'src/app/services/event.service';
 export class EventDetailsPage implements OnInit {
   @Input() event: Event;
   eventId: number;
+  userId: number;
   openedAsModal = false;
 
   // loading indicator
@@ -28,32 +30,40 @@ export class EventDetailsPage implements OnInit {
     private loading: LoadingController,
     private authService: AuthService
   ) {
-    if (this.router.getCurrentNavigation().extras.state) {
+    if (this.router.getCurrentNavigation()?.extras.state) {
       this.event = this.router.getCurrentNavigation().extras.state.event;
       console.log('details transferred');
       console.log(this.event);
     }
   }
 
-  // openEventDetailsPage()
-  // {
-  //   if (this.event) {
-  //     this.router.navigate(['events', this.event.id]);
-  //     // this.router.navigateByUrl(`/events`);
-  //     // this.router.navigateByUrl(`/events/${this.event.id}`);
-  //     this.openedAsModal = false;
-  //     this.dismiss();
-  //   }
-  // }
+  openEventDetailsPage()
+  {
+    if (this.event) {
+      this.router.navigate(['events', this.event.id]);
+      this.openedAsModal = false;
+      this.dismiss();
+    }
+  }
 
   doRefresh(event: any) {
     this.getEvent(event);
   }
 
-  async checkCurrentStatus() {
+  async addUpdateEvent() {
+    const modal = await this.modalController.create({
+      component: EventAddUpdateComponent,
+      componentProps: {
+        event: this.event
+      }
+    });
+    return await modal.present();
+  }
+
+  checkCurrentStatus(): number {
     if (this.event && this.event.attendences) {
-      const id = (await this.authService.retrieveUserSession()).id;
-      return this.event.attendences.find(x => x.user_id === id);
+      const status = this.event.attendences.find(x => x.user_id === this.userId)?.attendence_type_id;
+      return status;
     }
   }
 
@@ -102,6 +112,7 @@ export class EventDetailsPage implements OnInit {
 
   async ngOnInit() {
     this.eventId = parseInt(this.route.snapshot.paramMap.get('id'), null);
+    this.userId = (await this.authService.retrieveUserSession()).id;
 
     // if the event is not loaded (ie we came to this page directly) then load it
     if (!this.event) {
