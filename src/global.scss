@@ -29,6 +29,12 @@ ion-content {
   --background: none;
 }
 
+// makes the buttons a reasonable size
+ion-item-option {
+  font-size: 2em;
+  color: #fff;
+}
+
 body {
   background: url('./assets/app-background.png') !important;
   background-color: none;

@@ -23,8 +23,6 @@
         <ion-label>There are currently no events posted - check back later!</ion-label>
       </ion-item>
       <ion-item detail *ngFor="let item of events" (click)="openEvent(item)">
-        <!-- <ion-label>{{item.name}}</ion-label>
-          <ion-label><small>{{event.start_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}</small></ion-label> -->
         <ion-label>
           {{item.name}}
           <p><small>
@@ -53,22 +51,22 @@
           </ion-label>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option *ngIf="!item.published" color="warning" (click)="publishEvent(item)">
+          <ion-item-option *ngIf="!item.published" color="warning" (click)="publishEvent(item); slidingItem.close()">
             <ion-icon name="megaphone"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="medium" (click)="addUpdateEvent(item)">
+          <ion-item-option color="medium" (click)="addUpdateEvent(item); slidingItem.close()">
             <ion-icon name="create"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger" (click)="archiveEvent(item)">
+          <ion-item-option color="danger" (click)="archiveEvent(item); slidingItem.close()">
             <ion-icon name="archive"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     
       <ion-list-header>
-        <ion-label>Past Events</ion-label>
+        <ion-label>Past Events (Admin Viewable Only)</ion-label>
       </ion-list-header>
-      <ion-item-sliding *ngFor="let item of expiredEvents">
+      <ion-item-sliding #slideItemAdmin *ngFor="let item of expiredEvents">
         <ion-item detail (click)="openEvent(item)">
           <ion-label>
             <span>{{item.name}}</span><span *ngIf="!item.submitted_for_certification && !item.certified"> (<strong>Needs
@@ -80,7 +78,7 @@
           </ion-label>
         </ion-item>
         <ion-item-options *ngIf="!item.certified && !item.submitted_for_certification" side="end">
-          <ion-item-option color="primary" (click)="certifyEvent(item)">
+          <ion-item-option color="primary" (click)="certifyEvent(item); slideItemAdmin.close()">
             <ion-icon name="checkbox-outline"></ion-icon>
           </ion-item-option>
         </ion-item-options>

@@ -2,6 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
+import { TimeSpan } from 'ng-timespan';
+import { AuthService } from 'src/app/auth.service';
 import { Event } from 'src/app/models/event.model';
 import { EventService } from 'src/app/services/event.service';
 
@@ -23,7 +25,8 @@ export class EventDetailsPage implements OnInit {
     private modalController: ModalController,
     private router: Router,
     private route: ActivatedRoute,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private authService: AuthService
   ) {
     if (this.router.getCurrentNavigation().extras.state) {
       this.event = this.router.getCurrentNavigation().extras.state.event;
@@ -42,6 +45,32 @@ export class EventDetailsPage implements OnInit {
   //     this.dismiss();
   //   }
   // }
+
+  async checkCurrentStatus() {
+    if (this.event && this.event.attendences) {
+      const id = (await this.authService.retrieveUserSession()).id;
+      return this.event.attendences.find(x => x.user_id === id);
+    }
+  }
+
+  fetchAttendanceString() {
+    if (this.event) {
+      if (this.event.attendences && this.event.attendences.filter(x => x.attendence_type_id === 1).length > 0) {
+        return this.event.attendences.filter(x => x.attendence_type_id === 1).map(val => val.character.full_name).join(', ');
+      } else {
+        return 'None';
+      }
+    }
+  }
+
+  isExpired() {
+    if (this.event) {
+      const ts = TimeSpan.Subtract(new Date(), new Date(this.event.end_date));
+      return (ts.totalSeconds < 0) ? true : false;
+    } else {
+      return false;
+    }
+  }
 
   dismiss() {
     // using the injected ModalController this page

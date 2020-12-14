@@ -20,9 +20,17 @@ import { UpdateAvatarComponent } from './components/update-avatar/update-avatar.
 import { QRCodeModule } from 'angularx-qrcode';
 import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule } from '@angular/forms';
+import { EventAddUpdateComponent } from './components/events/event-add-update/event-add-update.component';
+import { CertifyEventComponent } from './components/events/certify-event/certify-event.component';
 
 @NgModule({
-  declarations: [AppComponent, UpdateAvatarComponent, SettingsComponent],
+  declarations: [
+    AppComponent,
+    UpdateAvatarComponent,
+    SettingsComponent,
+    EventAddUpdateComponent,
+    CertifyEventComponent
+  ],
   entryComponents: [],
   imports: [
     CommonModule,

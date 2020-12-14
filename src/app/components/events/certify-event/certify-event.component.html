@@ -1,3 +1,26 @@
-<p>
-  certify-event works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" [disabled]="attendenceSubmitting">Close</ion-button>
+    </ion-buttons>    
+    <ion-title>Certify Event</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="submitForCertification()" [disabled]="attendenceSubmitting">Submit</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="initialDataLoaded">
+  <ion-list *ngIf="attendences">
+    <ion-item *ngFor="let attendence of attendences">
+      {{attendence.character.full_name}}
+      <ion-select slot="end" okText="Select" cancelText="Cancel" [(ngModel)]="attendence.attendence_type_id">
+        <ion-select-option *ngFor="let ty of attendenceTypes" [value]="ty.id">{{ty.title}}</ion-select-option>
+      </ion-select>
+      <ion-badge slot="end" color="success" *ngIf="attendence.attendence_type_id == 1"><ion-icon name="checkmark-circle"></ion-icon></ion-badge>
+      <ion-badge slot="end" color="danger" *ngIf="attendence.attendence_type_id == 2"><ion-icon name="close-circle"></ion-icon></ion-badge>
+    </ion-item>
+  </ion-list>
+  <!-- <ion-button expand="full" color="primary" (click)="submitForCertification()" [disabled]="attendenceSubmitting">Submit Certification</ion-button>
+  <ion-button expand="full" color="medium" (click)="dismiss()" [disabled]="attendenceSubmitting">Cancel</ion-button> -->
+</ion-content>

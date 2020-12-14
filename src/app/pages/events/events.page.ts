@@ -92,18 +92,20 @@ export class EventPage implements OnInit, OnDestroy {
   async certifyEvent(event: Event) {
     this.eventService.setPassData(event);
     const modal = await this.modalController.create({
-      component: CertifyEventComponent
+      component: CertifyEventComponent,
+      componentProps: {
+        event
+      }
     });
     return await modal.present();
   }
 
   async addUpdateEvent(event?: Event) {
-    if (event) {
-      this.eventService.setPassData(event);
-    }
-
     const modal = await this.modalController.create({
-      component: EventAddUpdateComponent
+      component: EventAddUpdateComponent,
+      componentProps: {
+        event
+      }
     });
     return await modal.present();
   }

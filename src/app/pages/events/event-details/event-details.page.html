@@ -12,5 +12,44 @@
 </ion-header>
 
 <ion-content *ngIf="event">
-  Event details page works {{openedAsModal}}
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingText="Pull to refresh"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-card>    
+    <ion-card-header>
+      <ion-card-title>{{event.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            Starts: {{event.start_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Ends: {{event.end_date | date: 'MM/dd/yyyy hh:mm a (Z)'}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <small>Attendance: {{fetchAttendanceString()}}</small>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h6>Description</h6>
+            {{event.description}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  
+    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus().attendence_type_id == 2) && !isExpired()" expand="full" color="success" (click)="setAttendance(1)">Attending</ion-button>
+    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus().attendence_type_id == 1) && !isExpired()" expand="full" color="danger" (click)="setAttendance(2)">Not Attending</ion-button>
+    <!-- <ion-button *ngIf="!event.submitted_for_certification && !event.certified && isAdmin" expand="full" color="dark" (click)="addUpdateEvent()">Update Event</ion-button> -->
+  </ion-card>  
 </ion-content>
