@@ -1,0 +1,10 @@
+.flight-log-topper {
+  background: url('../../../assets/backgrounds/flight-logs.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 150px;
+}
+
+ion-item-sliding > ion-item {
+  cursor: pointer;
+}

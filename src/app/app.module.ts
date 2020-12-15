@@ -24,6 +24,7 @@ import { EventAddUpdateComponent } from './components/events/event-add-update/ev
 import { CertifyEventComponent } from './components/events/certify-event/certify-event.component';
 import { CompleteJobComponent } from './components/jobs/complete-job/complete-job.component';
 import { AddUpdateJobComponent } from './components/jobs/add-update-job/add-update-job.component';
+import { AddUpdateFlightLogComponent } from './componenents/flight-logs/add-update-flight-log/add-update-flight-log.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AddUpdateJobComponent } from './components/jobs/add-update-job/add-upda
     CertifyEventComponent,
     EventAddUpdateComponent,
     CompleteJobComponent,
-    AddUpdateJobComponent
+    AddUpdateJobComponent,
+    AddUpdateFlightLogComponent
   ],
   entryComponents: [],
   imports: [

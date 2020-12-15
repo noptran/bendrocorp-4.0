@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: FlightLogsPage
+  },
+  {
+    path: ':id',
+    loadChildren: () => import('./flight-log-details/flight-log-details.module').then( m => m.FlightLogDetailsPageModule)
   }
 ];
 
