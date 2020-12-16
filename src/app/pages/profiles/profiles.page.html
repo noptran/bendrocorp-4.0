@@ -15,6 +15,12 @@
         <ion-list-header>
           {{division.name}}
         </ion-list-header>
+
+        <ion-item *ngIf="sortDivision(division).length == 0">
+          <ion-label>
+            <p>No members in this division</p>
+          </ion-label>
+        </ion-item>
   
         <ion-item class="profile-item" detail *ngFor="let member of sortDivision(division)" (click)="openProfileDetails(member)">
           <ion-avatar slot="start">
