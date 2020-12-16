@@ -14,7 +14,7 @@
 
 <ion-content *ngIf="report">
   <div class="offender-avatar">
-    <img src="{{report.offender.offender_rsi_avatar}}" alt="">
+    <img src="{{report.offender.offender_rsi_avatar}}" onerror="this.src='../../../../../assets/imgs/missing-avatar.png'" alt="">
   </div>
   <div style="text-align: center;">
     <ion-badge color="success" *ngIf="report.submitted_for_approval && report.report_approved">ACCEPTED</ion-badge>

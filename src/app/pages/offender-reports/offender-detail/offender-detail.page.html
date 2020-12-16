@@ -10,7 +10,7 @@
 
 <ion-content *ngIf="offender">
   <div class="offender-avatar">
-    <img src="{{offender.offender_rsi_avatar}}" alt="">
+    <img src="{{offender.offender_rsi_avatar}}" onerror="this.src='../../../../assets/imgs/missing-avatar.png'" alt="">
   </div>
   <div style="text-align: center; color: #fff;">
     <h2>{{offender.offender_handle}}</h2>

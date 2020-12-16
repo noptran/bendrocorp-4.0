@@ -38,7 +38,7 @@
     </ion-list-header>
     <ion-item detail *ngFor="let offender of offenders" (click)="openOffenderDetails(offender)">
       <ion-avatar slot="start">
-        <img src="{{offender.offender_rsi_avatar}}" alt="">
+        <img src="{{offender.offender_rsi_avatar}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'" alt="">
       </ion-avatar>
       <ion-label>{{offender.offender_handle}}<p>{{offender.offender_rating.title}}</p></ion-label>
     </ion-item>
