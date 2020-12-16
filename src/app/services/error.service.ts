@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 const { Toast } = Plugins;
 
@@ -10,7 +11,9 @@ const { Toast } = Plugins;
 export class ErrorService {
   message: string;
 
-  constructor() { }
+  constructor(
+    private platform: Platform
+  ) { }
 
   handleError<T>(operation = 'operation', result?: T, skipMessage?: boolean) {
     return (error: any): Observable<T> => {
@@ -51,7 +54,8 @@ export class ErrorService {
             Toast.show({ text: this.message });
           }
         } else {
-         Toast.show({ text: 'An internet connection error has occured.' });
+          const keyword: string = (this.platform.is('mobile')) ? 'restart' : 'refresh';
+          Toast.show({ text: `An internet connection error has occured. If the app does ${keyword} you may need to ${keyword} it.` });
         }
       } else {
         this.message = `${operation} failed: ${error.message}`;
