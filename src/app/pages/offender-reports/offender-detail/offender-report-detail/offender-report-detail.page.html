@@ -13,39 +13,69 @@
 </ion-header>
 
 <ion-content *ngIf="report">
-  <div class="offender-avatar">
-    <img src="{{report.offender.offender_rsi_avatar}}" onerror="this.src='../../../../../assets/imgs/missing-avatar.png'" alt="">
-  </div>
-  <div style="text-align: center;">
-    <ion-badge color="success" *ngIf="report.submitted_for_approval && report.report_approved">ACCEPTED</ion-badge>
-    <ion-badge color="danger" *ngIf="!report.submitted_for_approval && report.report_approved">SUBMITTED</ion-badge>
-    <ion-badge color="primary" *ngIf="!report.submitted_for_approval && !report.report_approved">NOT SUBMITTED</ion-badge>
-  </div>
-  <div style="text-align: center; color: #fff;">
-    <h2>{{report.offender.offender_handle}}</h2>
-  </div>
-  <ion-item>
-    <ion-label text-wrap>
-      Description
-      <p>{{report.description}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>
-      <p><strong>Report #: </strong>{{report.id}}</p>
-      <p><strong>Location: </strong>{{report.full_location}}</p>
-      <p><strong>Occured: </strong>{{report.occured_when | date}}</p>
-      <p><strong>Submitted: </strong>{{report.created_at | date}}</p>
-      <p><strong>Submitted By: </strong>{{report.created_by.main_character.first_name}}</p>
-      <p *ngIf="report.force_level_applied"><strong>Force Applied: </strong>{{report.force_level_applied.title}}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item>
-    Infractions
-  </ion-item>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4" text-center *ngFor="let item of report.infractions"><ion-text color="light">{{item.title}}</ion-text></ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Overview info -->
+  <ion-card>
+    <ion-card-content>
+      <div class="offender-avatar">
+        <img src="{{report.offender.offender_rsi_avatar}}" onerror="this.src='../../../../../assets/imgs/missing-avatar.png'" alt="">
+      </div>
+      <div style="text-align: center;">
+        <ion-badge color="success" *ngIf="report.submitted_for_approval && report.report_approved">ACCEPTED</ion-badge>
+        <ion-badge color="danger" *ngIf="!report.submitted_for_approval && report.report_approved">SUBMITTED</ion-badge>
+        <ion-badge color="primary" *ngIf="!report.submitted_for_approval && !report.report_approved">NOT SUBMITTED</ion-badge>
+      </div>
+      <div style="text-align: center; color: #fff;">
+        <h2>{{report.offender.offender_handle}}</h2>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <!-- report info -->
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label text-wrap>
+          Description
+          <p>{{report.description}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p><strong>Report #: </strong>{{report.id}}</p>
+          <p><strong>Location: </strong>{{report.full_location}}</p>
+          <p><strong>Occured: </strong>{{report.occured_when | date}}</p>
+          <p><strong>Submitted: </strong>{{report.created_at | date}}</p>
+          <p><strong>Submitted By: </strong>{{report.created_by.main_character.first_name}}</p>
+          <p *ngIf="report.force_level_applied"><strong>Force Applied: </strong>{{report.force_level_applied.title}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <!-- infractions -->
+  <ion-card>
+    <ion-card-content>
+      <!-- <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Infractions</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="4" text-center *ngFor="let item of report.infractions"><ion-text>{{item.title}}</ion-text></ion-col>
+        </ion-row>
+      </ion-grid> -->
+
+      <ion-item>
+        <ion-label>Infractions</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4" text-center *ngFor="let item of report.infractions"><ion-text>{{item.title}}</ion-text></ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

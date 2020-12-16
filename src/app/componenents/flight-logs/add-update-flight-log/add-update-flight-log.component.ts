@@ -51,7 +51,7 @@ export class AddUpdateFlightLogComponent implements OnInit {
   fetchOwnedShips() {
     this.flightLogService.list_ships().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
-        this.playerShips = results;
+        this.playerShips = results.filter(x => !x.archived);
         console.log(this.playerShips);
       }
     });

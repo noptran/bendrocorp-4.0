@@ -14,4 +14,5 @@ export class OwnedShip
     ship: Ship;
     character_id: number;
     character: Character;
+    archived: boolean;
 }

@@ -9,13 +9,13 @@ const routes: Routes = [
     component: OffenderReportsPage
   },
   {
+    path: 'reports',
+    loadChildren: () => import('./offender-report/offender-report.module').then( m => m.OffenderReportPageModule)
+  },
+  {
     path: ':offenderId',
     loadChildren: () => import('./offender-detail/offender-detail.module').then( m => m.OffenderDetailPageModule)
   },
-  // {
-  //   path: 'offender-report',
-  //   loadChildren: () => import('./offender-report/offender-report.module').then( m => m.OffenderReportPageModule)
-  // },
   // {
   //   path: ':id/report-detail/:reportId',
   //   loadChildren: () => import('./offender-report-detail/offender-report-detail.module').then( m => m.OffenderReportDetailPageModule)

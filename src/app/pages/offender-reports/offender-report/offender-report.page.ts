@@ -3,6 +3,9 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { OffenderReport } from 'src/app/models/offender.model';
 import { OffenderService } from 'src/app/services/offender.service';
+import { Plugins } from '@capacitor/core';
+
+const { Toast } = Plugins;
 
 @Component({
   selector: 'app-offender-report',
@@ -29,20 +32,23 @@ export class OffenderReportPage implements OnInit {
       }
     };
 
-    this.router.navigate(['report-detail'], navigationExtras);
+    this.router.navigateByUrl(`/offender-reports/${report.offender_id}/report/${report.id}`, navigationExtras);
   }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        console.log(this.router.getCurrentNavigation().extras.state);
+  async ngOnInit() {
+    if (this.router.getCurrentNavigation().extras.state) {
+      console.log(this.router.getCurrentNavigation().extras.state);
 
-        this.reports = this.router.getCurrentNavigation().extras.state.reports;
-        this.reports.sort((a, b) => {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        });
-        console.log(this.reports);
-      }
-    });
+      this.reports = this.router.getCurrentNavigation().extras.state.reports;
+      this.reports.sort((a, b) => {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+      console.log(this.reports);
+    } else {
+      await Toast.show({
+        text: 'Report types not selected!'
+      });
+      this.router.navigateByUrl('/offender-reports');
+    }
   }
 }

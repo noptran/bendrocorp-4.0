@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { Offender, OffenderReport } from 'src/app/models/offender.model';
@@ -24,7 +24,8 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
     private offenderService: OffenderService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private loading: LoadingController
   ) {
     this.offenderSubscription = this.offenderService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchOffender();
@@ -62,6 +63,10 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
         });
 
         this.offenderInfractionHistogram = infractionsHistogram;
+
+        if (this.loadingIndicator) {
+          this.loadingIndicator.dismiss();
+        }
       }
     });
   }
@@ -75,7 +80,7 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.route.snapshot.paramMap.get('offenderId')) {
       this.offenderId = parseInt(this.route.snapshot.paramMap.get('offenderId'), null);
     }
@@ -87,6 +92,10 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
       console.log(this.offender);
     } else {
       console.log('need to fetch offender');
+      this.loadingIndicator = await this.loading.create({
+        message: 'Loading'
+      });
+      await this.loadingIndicator.present();
       this.fetchOffender();
     }
   }

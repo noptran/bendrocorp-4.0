@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
 import { AddUpdateOffenderReportComponent } from 'src/app/componenents/offender-reports/add-update-offender-report/add-update-offender-report.component';
 import { OffenderReport } from 'src/app/models/offender.model';
@@ -28,7 +28,8 @@ export class OffenderReportDetailPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loading: LoadingController
   ) { }
 
   async updateOffenderReport() {
@@ -48,6 +49,10 @@ export class OffenderReportDetailPage implements OnInit {
       if (!(results instanceof HttpErrorResponse)) {
         this.report = results;
         this.initialDataLoaded = true;
+
+        if (this.loadingIndicator) {
+          this.loadingIndicator.dismiss();
+        }
       }
     });
   }
@@ -77,6 +82,10 @@ export class OffenderReportDetailPage implements OnInit {
 
       this.initialDataLoaded = true;
     } else {
+      this.loadingIndicator = await this.loading.create({
+        message: 'Loading'
+      });
+      await this.loadingIndicator.present();
       this.getReport();
     }
   }

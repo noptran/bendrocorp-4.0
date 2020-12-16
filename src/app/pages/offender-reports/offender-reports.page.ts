@@ -75,7 +75,7 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['report'], navigationExtras);
+    this.router.navigate(['reports'], navigationExtras);
   }
 
   doRefresh(event: any) {
@@ -85,7 +85,7 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
   async fetchOffenders(event?: any) {
     this.offenderService.list().subscribe(async (results) => {
       if (!(results instanceof HttpErrorResponse)) {
-        this.offenders = results;
+        this.offenders = results.sort((a, b) => a.offender_handle.localeCompare(b.offender_handle));
         console.log(this.offenders);
       }
 
