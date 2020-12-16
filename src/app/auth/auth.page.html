@@ -23,17 +23,17 @@
             <ion-list lines="full" class="ion-no-margin">
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
-                <ion-input [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
+                <ion-input name="username" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
+                <ion-input name="password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">2FA</ion-label>
-                <ion-input [(ngModel)]="login.code" placeholder="2FA code (if applicable)" type="number"></ion-input>
+                <ion-input name="code" [(ngModel)]="login.code" placeholder="2FA code (if applicable)" type="number"></ion-input>
               </ion-item>
             </ion-list>
         
