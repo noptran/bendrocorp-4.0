@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, ModalController } from '@ionic/angular';
@@ -14,16 +15,19 @@ import { OffenderService } from 'src/app/services/offender.service';
 export class OffenderReportDetailPage implements OnInit {
 
   userId: number;
+  offenderId: number;
+  reportId: number;
   report: OffenderReport;
   isAdmin: boolean;
   canEdit: boolean;
+  loadingIndicator: any;
+  initialDataLoaded: boolean;
 
   constructor(
     private offenderService: OffenderService,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private navController: NavController,
     private modalController: ModalController
   ) { }
 
@@ -39,13 +43,29 @@ export class OffenderReportDetailPage implements OnInit {
     }
   }
 
+  getReport() {
+    this.offenderService.fetch_report(this.reportId).subscribe((results) => {
+      if (!(results instanceof HttpErrorResponse)) {
+        this.report = results;
+        this.initialDataLoaded = true;
+      }
+    });
+  }
+
   async ngOnInit() {
     this.isAdmin = await this.authService.hasClaim(16);
     this.userId = (await this.authService.retrieveUserSession()).id;
 
+    if (this.route.snapshot.paramMap.get('offenderId')) {
+      this.offenderId = parseInt(this.route.snapshot.paramMap.get('offenderId'), null);
+    }
+
+    if (this.route.snapshot.paramMap.get('reportId')) {
+      this.reportId = parseInt(this.route.snapshot.paramMap.get('reportId'), null);
+    }
+
     //
     if (this.router.getCurrentNavigation()?.extras.state) {
-
       this.report = this.router.getCurrentNavigation().extras.state.report;
       console.log(this.report);
       if ((this.report.created_by_id === this.userId
@@ -54,6 +74,10 @@ export class OffenderReportDetailPage implements OnInit {
       } else {
         this.canEdit = false;
       }
+
+      this.initialDataLoaded = true;
+    } else {
+      this.getReport();
     }
   }
 }

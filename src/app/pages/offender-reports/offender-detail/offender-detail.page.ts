@@ -16,6 +16,7 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
   offenderId: number;
   offender: Offender;
   offenderSubscription: Subscription;
+  loadingIndicator: any;
   offenderInfractionHistogram: { };
 
   constructor(
@@ -38,7 +39,7 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
       }
     };
 
-    this.router.navigate(['report-detail'], navigationExtras);
+    this.router.navigate(['report', report.id], navigationExtras);
   }
 
   fetchOffender() {
@@ -75,8 +76,8 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.route.snapshot.paramMap.get('id')) {
-      this.offenderId = parseInt(this.route.snapshot.paramMap.get('id'), null);
+    if (this.route.snapshot.paramMap.get('offenderId')) {
+      this.offenderId = parseInt(this.route.snapshot.paramMap.get('offenderId'), null);
     }
 
     if (this.router.getCurrentNavigation()?.extras.state?.offender) {
@@ -95,5 +96,4 @@ export class OffenderDetailPage implements OnInit, OnDestroy {
       this.offenderSubscription.unsubscribe();
     }
   }
-
 }

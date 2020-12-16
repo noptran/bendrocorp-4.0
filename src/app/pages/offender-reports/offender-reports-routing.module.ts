@@ -9,7 +9,7 @@ const routes: Routes = [
     component: OffenderReportsPage
   },
   {
-    path: ':id',
+    path: ':offenderId',
     loadChildren: () => import('./offender-detail/offender-detail.module').then( m => m.OffenderDetailPageModule)
   },
   // {
