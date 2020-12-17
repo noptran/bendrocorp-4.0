@@ -246,7 +246,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
         {
           text: 'Done',
           handler: (val) => {
-            this.offenderReport.system_id = parseInt(val.systemMapSystem.value);
+            this.offenderReport.system_id = val.systemMapSystem.value;
           }
         }
       ],
@@ -282,7 +282,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
           {
             text: 'Done',
             handler: (val) => {
-              this.offenderReport.planet_id = parseInt(val.systemMapPlanet.value, null);
+              this.offenderReport.planet_id = val.systemMapPlanet.value;
             }
           }
         ],
@@ -324,7 +324,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
           {
             text: 'Done',
             handler: (val) => {
-              this.offenderReport.moon_id = parseInt(val.systemMapMoon.value, null);
+              this.offenderReport.moon_id = val.systemMapMoon.value;
             }
           }
         ],
@@ -355,23 +355,38 @@ export class AddUpdateOffenderReportComponent implements OnInit {
   }
 
   offenderSelectedSystem() {
-    return (this.offenderReport && this.offenderReport.system_id && this.systemData.find(x => x.id === this.offenderReport.system_id)) ? this.systemData.find(x => x.id === this.offenderReport.system_id).title : 'System';
+    return (this.offenderReport
+      && this.offenderReport.system_id
+      && this.systemData.find(x => x.id === this.offenderReport.system_id))
+      ? this.systemData.find(x => x.id === this.offenderReport.system_id).title : 'System';
   }
 
   offenderSelectedPlanet() {
-    return (this.offenderReport && this.offenderReport.planet_id && this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id)) ? this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id).title : 'Planet';
+    return (this.offenderReport
+      && this.offenderReport.planet_id
+      && this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id))
+      ? this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id).title : 'Planet';
   }
 
   offenderSelectedMoon() {
-    return (this.offenderReport && this.offenderReport.moon_id && this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id)) ? this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id).title : 'Moon';
+    return (this.offenderReport
+      && this.offenderReport.moon_id
+      && this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id))
+      ? this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id).title : 'Moon';
   }
 
   offenderSelectedViolenceRating() {
-    return (this.offenderReport && this.offenderReport.violence_rating_id && this.violenceRatings.find(x => x.id === this.offenderReport.violence_rating_id)) ? this.violenceRatings.find(x => x.id === this.offenderReport.violence_rating_id).title : 'None';
+    return (this.offenderReport
+      && this.offenderReport.violence_rating_id
+      && this.violenceRatings.find(x => x.id === this.offenderReport.violence_rating_id))
+      ? this.violenceRatings.find(x => x.id === this.offenderReport.violence_rating_id).title : 'None';
   }
 
   offenderSelectedShip() {
-    return (this.offenderReport && this.offenderReport.ship_id && this.shipData.find(x => x.id === this.offenderReport.ship_id)) ? this.shipData.find(x => x.id === this.offenderReport.ship_id).name : 'None';
+    return (this.offenderReport
+      && this.offenderReport.ship_id
+      && this.shipData.find(x => x.id === this.offenderReport.ship_id))
+      ? this.shipData.find(x => x.id === this.offenderReport.ship_id).name : 'None';
   }
 
   occuredWhenChanged(event) {

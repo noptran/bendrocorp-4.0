@@ -44,7 +44,17 @@ import { NewsDetailComponent } from './components/news-detail/news-detail.compon
     AddUpdateOffenderReportComponent,
     NewsDetailComponent
   ],
-  entryComponents: [],
+  entryComponents: [
+    // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
+    EventAddUpdateComponent,
+    CertifyEventComponent,
+    EventAddUpdateComponent,
+    CompleteJobComponent,
+    AddUpdateJobComponent,
+    AddUpdateFlightLogComponent,
+    AddUpdateOffenderReportComponent,
+    NewsDetailComponent
+  ],
   imports: [
     CommonModule,
     BrowserModule,

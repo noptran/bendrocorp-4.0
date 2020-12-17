@@ -109,3 +109,11 @@ export class Donation
     card_token?: string;
     created_at?: Date;
 }
+
+export class FactionAffiliation extends IdTitleDesc
+{
+    color?: string;
+    new_primary_image?: Base64Upload;
+    primary_image_url?: string;
+    primary_image_url_full?: string;
+}

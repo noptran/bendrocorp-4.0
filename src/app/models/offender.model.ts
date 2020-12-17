@@ -40,9 +40,9 @@ export class OffenderReport
     new_infractions?: Infraction[]; // only used when creating an offender report
     remove_infractions?: Infraction[];
 
-    system_id?: number;
-    planet_id?: number;
-    moon_id?: number;
+    system_id?: string;
+    planet_id?: string;
+    moon_id?: string;
 
     offender_report_approval_request?: OffenderReportApprovalRequest;
     ship_id?: number;
