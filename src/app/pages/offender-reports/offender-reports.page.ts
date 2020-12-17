@@ -49,7 +49,7 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
     this.router.navigate([offender.id], navigationExtras);
   }
 
-  openReportList(reports: OffenderReport[], reportListKind: 'mine'|'unanswered'|'all') {
+  openReportList(reports: OffenderReport[], reportListKind: 'admin'|'mine'|'unanswered'|'all') {
     // no reports guard
     if ((reportListKind === 'mine' || reportListKind === 'unanswered') && reports.length === 0) {
       if (reportListKind === 'mine') {

@@ -1,5 +1,5 @@
 export class Message
 {
-    type:number;
-    message:string;
+    type: number;
+    message: string;
 }

@@ -27,7 +27,7 @@ export class Claim {
 }
 
 export class User {
-    id?: number
+    id?: number;
     username?: string;
     rsi_handle?: string;
     main_character?: Character;
@@ -36,14 +36,14 @@ export class User {
 
 // deprecated?
 export class Role extends Claim {
-    name?: string
-    description?: string
-    nested_roles?: NestedRole[]
+    name?: string;
+    description?: string;
+    nested_roles?: NestedRole[];
 }
 
 export class NestedRole {
-    id?: number
-    role_id?: number
-    role_nested_id?: number
-    role_nested?: Role
+    id?: number;
+    role_id?: number;
+    role_nested_id?: number;
+    role_nested?: Role;
 }

@@ -26,6 +26,8 @@ import { CompleteJobComponent } from './components/jobs/complete-job/complete-jo
 import { AddUpdateJobComponent } from './components/jobs/add-update-job/add-update-job.component';
 import { AddUpdateFlightLogComponent } from './components/flight-logs/add-update-flight-log/add-update-flight-log.component';
 import { AddUpdateOffenderReportComponent } from './components/offender-reports/add-update-offender-report/add-update-offender-report.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { AddUpdateOffenderReportComponent } from './components/offender-reports/
     IonicModule.forRoot(),
     AppRoutingModule,
     QRCodeModule,
-    FormsModule
+    FormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     LoadingService,

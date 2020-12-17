@@ -21,6 +21,8 @@ export class ApprovalDetailsPage implements OnInit {
   approvalSubmitting: boolean;
   loadingIndicator: any;
 
+  hideThis = true; // just used to hide things
+
   constructor(
     private requestService: RequestsService,
     private userService: UserService,
@@ -62,12 +64,12 @@ export class ApprovalDetailsPage implements OnInit {
     }
   }
 
-  // openLinkedItem(uri: string) {
-  //   const options: InAppBrowserOptions = {
-  //     location: 'no'
-  //   };
-  //   const browser = this.iab.create(`https://my.bendrocorp.com/${uri}`, '_system', options);
-  // }
+  openLinkedItem(uri: string) {
+    // const options: InAppBrowserOptions = {
+    //   location: 'no'
+    // };
+    // const browser = this.iab.create(`https://my.bendrocorp.com/${uri}`, '_system', options);
+  }
 
   async submitApproval(typeId: number) {
     if (this.approval) {
