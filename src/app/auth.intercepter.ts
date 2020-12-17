@@ -32,14 +32,7 @@ constructor(private authService: AuthService) { }
                   event => {}, // tslint:disable-line
                   err => {
                       if (err instanceof HttpErrorResponse && err.status === 401) {
-                          // this.authService.redirectToLogin();
-                          // this.auth.clearCacheForScope(token);
-                          // this.broadcastService.broadcast("msal:notAuthorized", err.message);
-
-                          // redirect the user if the session error header is included
-                          // if (err.headers.get('X-UTPM-SESSION-ERROR')) {
-                          //     this.authService.redirectToLogin();
-                          // }
+                          console.log('401 error recieved from API');
                       } else {
                           throw err;
                       }
