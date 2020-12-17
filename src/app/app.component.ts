@@ -15,6 +15,7 @@ import { ConnectionService } from 'ng-connection-service';
 import { ProfileService } from './services/profile.service';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SettingsService } from './services/settings.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -24,12 +25,15 @@ import { SettingsService } from './services/settings.service';
 export class AppComponent implements OnInit, OnDestroy {
   public selectedIndex = 0;
   public appPages = [] as MenuItem[];
+  pendingApprovalCount: number;
 
   isAuthorized: boolean;
   authorizationSubscription: Subscription;
   navigationSubscription: Subscription;
   connectionSubscription: Subscription;
   profileSubscription: Subscription;
+  userServiceSubscription: Subscription;
+
   user: UserSessionResponse;
 
   constructor(
@@ -42,7 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private router: Router,
     private modalController: ModalController,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private userService: UserService
   ) {
     this.initializeApp();
 
@@ -53,38 +58,40 @@ export class AppComponent implements OnInit, OnDestroy {
     // });
   }
 
-  getAvatar(): string {
-    if (this.user) {
-      return this.user.avatar;
-    }
-  }
-
   initializeApp() {
     this.platform.ready().then(async () => {
       // intialize settings
       await this.settings.intializeConfig();
 
+      // create user sub
+      this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
+
+      });
+
       // create auth subscriber
       this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe(async (result) => {
         this.isAuthorized = await this.authService.isAuthorized();
+        await this.fetchUser();
+        await this.fetchMenu();
       });
 
       // profile subscriber
       this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(async () => {
         await this.authService.checkAndRefreshAccessToken(true);
-        this.user = await this.authService.retrieveUserSession();
+        await this.fetchUser();
       });
 
       this.isAuthorized = (await this.authService.checkAndRefreshAccessToken()) != null;
       if (!this.isAuthorized) {
         this.router.navigateByUrl('/auth');
       } else {
-        this.user = await this.authService.retrieveUserSession();
-        this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
+        await this.fetchUser();
+        await this.fetchMenu();
       }
 
       // get the initial menu selection
       this.selectMenuItem();
+      this.fetchApprovals();
 
       this.navigationSubscription = this.router.events
       .subscribe(event => {
@@ -105,6 +112,30 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.selectedIndex = 0;
     }
+  }
+
+  fetchApprovals() {
+    this.userService.fetchPendingApprovalsCount().subscribe((results) => {
+      this.pendingApprovalCount = results;
+    });
+  }
+
+  async fetchUser() {
+    this.user = await this.authService.retrieveUserSession();
+  }
+
+  openApprovals() {
+    this.router.navigate(['approvals']);
+  }
+
+  getAvatar(): string {
+    if (this.user) {
+      return this.user.avatar;
+    }
+  }
+
+  async fetchMenu() {
+    this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
   }
 
   async openSettingsModal() {
@@ -128,6 +159,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.connectionSubscription) {
       this.connectionSubscription.unsubscribe();
+    }
+
+    if (this.userServiceSubscription) {
+      this.userServiceSubscription.unsubscribe();
     }
   }
 }

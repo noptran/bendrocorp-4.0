@@ -54,6 +54,11 @@ const routes: Routes = [
     path: 'system-map',
     loadChildren: () => import('./pages/system-map/system-map.module').then( m => m.SystemMapPageModule)
   },
+  {
+    path: 'approvals',
+    loadChildren: () => import('./pages/approval/approval.module').then( m => m.ApprovalPageModule)
+  },
+
 ];
 
 @NgModule({

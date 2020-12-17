@@ -23,11 +23,24 @@
             <ion-label>
               <h2>{{user.first_name}} {{user.last_name}}</h2>
               <p>{{user.job_title}}</p>
-            </ion-label>
-            <ion-button (click)="openSettingsModal()" color="dark" slot="end">
-              <ion-icon name="cog-outline"></ion-icon>
-            </ion-button>
+            </ion-label>            
           </ion-item>
+          
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button (click)="openApprovals()" color="primary" expand="block">
+                  <ion-icon name="clipboard-outline"></ion-icon>
+                  <ion-badge *ngIf="pendingApprovalCount" color="danger">{{pendingApprovalCount}}</ion-badge>
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button (click)="openSettingsModal()" color="dark" expand="block">
+                  <ion-icon name="cog-outline"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
           <!-- Actual Menu -->
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
