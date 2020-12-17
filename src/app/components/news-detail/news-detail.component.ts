@@ -7,7 +7,7 @@ import { ILNewsStory } from 'src/app/models/news.model';
   templateUrl: './news-detail.component.html',
   styleUrls: ['./news-detail.component.scss'],
 })
-export class NewsDetailPage implements OnInit {
+export class NewsDetailComponent implements OnInit {
   newsItem: ILNewsStory;
   constructor(
     private modalController: ModalController
@@ -17,7 +17,7 @@ export class NewsDetailPage implements OnInit {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
-      'dismissed': true
+      dismissed: true
     });
   }
 

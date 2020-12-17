@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -28,6 +28,7 @@ import { AddUpdateFlightLogComponent } from './components/flight-logs/add-update
 import { AddUpdateOffenderReportComponent } from './components/offender-reports/add-update-offender-report/add-update-offender-report.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NewsDetailComponent } from './components/news-detail/news-detail.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { environment } from '../environments/environment';
     CompleteJobComponent,
     AddUpdateJobComponent,
     AddUpdateFlightLogComponent,
-    AddUpdateOffenderReportComponent
+    AddUpdateOffenderReportComponent,
+    NewsDetailComponent
   ],
   entryComponents: [],
   imports: [
@@ -70,6 +72,9 @@ import { environment } from '../environments/environment';
     ProfileService,
     RequestsService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class AppModule {}

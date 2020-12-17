@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
 import { interval, Observable, Subscription } from 'rxjs';
-import { NewsDetailPage } from 'src/app/components/news-detail/news-detail.component';
+import { NewsDetailComponent } from 'src/app/components/news-detail/news-detail.component';
 import { Event } from 'src/app/models/event.model';
 import { ILNewsStory } from 'src/app/models/news.model';
 import { UserSessionResponse } from 'src/app/models/user.model';
@@ -78,7 +78,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   async openNewsModal(newsItem: ILNewsStory) {
     const modal = await this.modalController.create({
-      component: NewsDetailPage,
+      component: NewsDetailComponent,
       componentProps: {
         newsItem
       }
