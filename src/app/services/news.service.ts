@@ -6,6 +6,7 @@ import { ILNewsStory } from '../models/news.model';
 import { tap, catchError } from 'rxjs/operators';
 import { StatusMessage } from '../models/misc.model';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,7 @@ export class NewsService {
    */
   list(): Observable<ILNewsStory[]> {
     return this.http.get<ILNewsStory[]>(`${environment.baseUrl}/news`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Found ${results.length} news stories!`)),
       catchError(this.errorService.handleError<any>('Fetch News'))
     );
@@ -38,6 +40,7 @@ export class NewsService {
 
   fetch(news_story_id: string): Observable<ILNewsStory> {
     return this.http.get<ILNewsStory>(`${environment.baseUrl}/news/${news_story_id}`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Found news story!`)),
       catchError(this.errorService.handleError<any>('Fetch News'))
     );
@@ -45,6 +48,7 @@ export class NewsService {
 
   create(news_story: ILNewsStory): Observable<ILNewsStory> {
     return this.http.post<ILNewsStory>(`${environment.baseUrl}/news`, { news_story }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Created ${results} news story!`)),
       catchError(this.errorService.handleError<any>('Fetch News'))
     );
@@ -52,6 +56,7 @@ export class NewsService {
 
   update(news_story: ILNewsStory): Observable<ILNewsStory> {
     return this.http.put<ILNewsStory>(`${environment.baseUrl}/news`, { news_story }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Updated ${results} news story!`)),
       catchError(this.errorService.handleError<any>('Fetch News'))
     );
@@ -59,6 +64,7 @@ export class NewsService {
 
   archive(news_story: ILNewsStory): Observable<StatusMessage> {
     return this.http.delete<ILNewsStory>(`${environment.baseUrl}/news`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Archived story ${news_story.id} news story!`)),
       catchError(this.errorService.handleError<any>('Fetch News'))
     );

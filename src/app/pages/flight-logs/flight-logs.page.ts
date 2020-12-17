@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavController, ModalController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { AddUpdateFlightLogComponent } from 'src/app/componenents/flight-logs/add-update-flight-log/add-update-flight-log.component';
+import { AddUpdateFlightLogComponent } from 'src/app/components/flight-logs/add-update-flight-log/add-update-flight-log.component';
 import { FlightLog } from 'src/app/models/flight-log.model';
 import { FlightLogService } from 'src/app/services/flight-log.service';
 import { Plugins } from '@capacitor/core';

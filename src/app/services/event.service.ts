@@ -6,6 +6,7 @@ import { ErrorService } from './error.service';
 import { Event, EventType, AttendenceType, EventBriefing, EventDebriefing, EventAttendence } from '../models/event.model';
 import { StatusMessage } from '../models/misc.model';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable()
 export class EventService {
@@ -51,6 +52,7 @@ export class EventService {
 
   list(): Observable<Event[]> {
     return this.http.get<Event[]>(`${environment.baseUrl}/events`).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved events!')),
       catchError(this.errorService.handleError('Fetch Events', []))
     );
@@ -58,6 +60,7 @@ export class EventService {
 
   list_expired(expired_count: number = 5): Observable<Event[]> {
     return this.http.get<Event[]>(`${environment.baseUrl}/events/expired/${expired_count}`).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved expired events!')),
       catchError(this.errorService.handleError('Fetch Expired Events', []))
     );
@@ -65,6 +68,7 @@ export class EventService {
 
   list_types(): Observable <EventType[]> {
     return this.http.get<EventType[]>(`${environment.baseUrl}/events/types`).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved expired events!')),
       catchError(this.errorService.handleError('Fetch Expired Events', []))
     );
@@ -72,6 +76,7 @@ export class EventService {
 
   list_attendence_types(): Observable<AttendenceType[]> {
     return this.http.get<AttendenceType[]>(`${environment.baseUrl}/events/attendence-types`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Retrieved ${results.length} attendence types!`)),
       catchError(this.errorService.handleError('Fetch Attendence Types', []))
     );
@@ -79,6 +84,7 @@ export class EventService {
 
   fetch(event_id: number): Observable<Event> {
     return this.http.get<Event>(`${environment.baseUrl}/events/${event_id}`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Retrieved event: ${results.id}!`)),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -86,6 +92,7 @@ export class EventService {
 
   create(event: Event): Observable<Event> {
     return this.http.post<Event>(`${environment.baseUrl}/events`, { event }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created event ${result.id}!`)),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -93,6 +100,7 @@ export class EventService {
 
   update(event: Event): Observable<Event> {
     return this.http.patch<Event>(`${environment.baseUrl}/events`, { event }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated event ${result.id}!`)),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -104,6 +112,7 @@ export class EventService {
    */
   archive(event: Event): Observable<StatusMessage> {
     return this.http.delete<StatusMessage>(`${environment.baseUrl}/events/${event.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived event ${event.id}!`)),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -116,6 +125,7 @@ export class EventService {
   publish(event: Event): Observable<Event> {
     const event_id = event.id;
     return this.http.post<Event>(`${environment.baseUrl}/events/publish`, { event_id }).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved expired events!')),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -128,6 +138,7 @@ export class EventService {
    */
   award(event_id: number, award_id: number): Observable<Event> {
     return this.http.post<Event>(`${environment.baseUrl}/events/award`, { event_id, award_id }).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved expired events!')),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -135,6 +146,7 @@ export class EventService {
 
   briefing(briefing: EventBriefing): Observable<EventBriefing> {
     return this.http.patch<EventBriefing>(`${environment.baseUrl}/events/briefing`, { briefing }).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Event briefing updated!')),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -142,6 +154,7 @@ export class EventService {
 
   debriefing(debriefing: EventDebriefing): Observable<EventDebriefing> {
     return this.http.patch<EventDebriefing>(`${environment.baseUrl}/events/debriefing`, { debriefing }).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Event debriefing updated!')),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -149,6 +162,7 @@ export class EventService {
 
   startCertification(event: Event): Observable<EventAttendence[]> {
     return this.http.get<EventAttendence[]>(`${environment.baseUrl}/events/${event.id}/certify`).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Retrieved expired events!')),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -157,6 +171,7 @@ export class EventService {
   certification(event_id: number, attendences: EventAttendence[], debriefing_text: string): Observable<Event> {
     const event = { id: event_id, attendences_attributes: attendences, debriefing_attributes: { text: debriefing_text }};
     return this.http.post<Event>(`${environment.baseUrl}/events/${event.id}/certify`, { event, attendences, debriefing_text }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Certified event: ${results.id}!`)),
       catchError(this.errorService.handleError<any>('Fetch Expired Events'))
     );
@@ -164,6 +179,7 @@ export class EventService {
 
   setAttendence(event_id: number, attendence_type_id: number): Observable<EventAttendence> {
     return this.http.post<EventAttendence>(`${environment.baseUrl}/events/attend`, { event_id, attendence_type_id }).pipe(
+      retryWithBackoff(),
       tap(results => console.log('Set event attendence!')),
       catchError(this.errorService.handleError<any>('Set Attendence'))
     );

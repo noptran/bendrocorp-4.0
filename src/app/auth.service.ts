@@ -12,6 +12,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import * as moment from 'moment';
 import { UserSessionResponse } from './models/user.model';
 import { Router } from '@angular/router';
+import { retryWithBackoff } from './helpers/retryWithBackoff.helper';
 const { Toast, Storage } = Plugins;
 
 @Injectable({
@@ -59,6 +60,7 @@ export class AuthService {
     const session = { grant_type, refresh_token };
 
     return this.http.post<TokenResponse>(`${environment.baseUrlRoot}/auth`, { session }).pipe(
+      retryWithBackoff(),
       tap(result => {
         console.log('Login refreshed!');
       }),
@@ -97,22 +99,6 @@ export class AuthService {
         }
       } else {
         this.redirectToLogin();
-        // error('Auth response is not present!');
-        // if null attempt to retrieve an auth token
-        // this.refreshAccessToken().subscribe((response) => {
-        //   if (!(response instanceof HttpErrorResponse)) {
-        //     const authResponseTwo = response.response;
-        //     this.storeAuthResponse(authResponseTwo);
-        //     this.announceAuthUpdate('LOGIN');
-        //     results(authResponseTwo.access_token);
-        //   } else {
-        //     response.headers.keys();
-        //     error(response);
-        //     if (response.headers.get('X-UTPM-SESSION-ERROR')) {
-        //       this.redirectToLogin();
-        //     }
-        //   }
-        // });
       }
     });
   }
@@ -185,7 +171,6 @@ export class AuthService {
 
   redirectToLogin() {
     this.preservePath();
-    // window.location.href = uri;
     this.router.navigateByUrl('/auth');
   }
 }

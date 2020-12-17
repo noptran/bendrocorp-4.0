@@ -7,6 +7,7 @@ import { AddRoleRequest, RemoveRoleRequest, PositionChangeRequest } from '../mod
 import { StatusMessage } from '../models/misc.model';
 import { MyApproval } from '../models/approval.model';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,13 @@ export class RequestsService {
    * Call this to signal all subscribers to refresh their data
    */
   refreshData() {
-    console.log("Requests service data refresh called!");
+    console.log('Requests service data refresh called!');
     this.dataRefreshSource.next();
   }
 
   addRoleRequest(role_request: AddRoleRequest): Observable<StatusMessage> {
     return this.http.post<StatusMessage>(`${environment.baseUrl}/requests/add-role`, { role_request }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Submitted Add Role Request `)),
       catchError(this.errorService.handleError<any>('Add Role Request '))
     );
@@ -35,13 +37,15 @@ export class RequestsService {
   removeRoleRequest(role_removal_request: RemoveRoleRequest): Observable<StatusMessage>
   {
     return this.http.post<StatusMessage>(`${environment.baseUrl}/requests/remove-role`, { role_removal_request }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Submitted Remove Role Request `)),
       catchError(this.errorService.handleError<any>('Remove Role Request '))
-    )
+    );
   }
 
   positionChangeRequest(position_change_request: PositionChangeRequest): Observable<StatusMessage> {
     return this.http.post<StatusMessage>(`${environment.baseUrl}/requests/position-change`, { position_change_request }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Submitted Remove Role Request `)),
       catchError(this.errorService.handleError<any>('Remove Role Request '))
     );
@@ -49,6 +53,7 @@ export class RequestsService {
 
   fetch_approval(approval_approver_id: number): Observable<MyApproval> {
     return this.http.get<MyApproval>(`${environment.baseUrl}/user/approval/${approval_approver_id}`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Fetched approval approver record # ${results.id}`)),
       catchError(this.errorService.handleError<any>('Fetch Single Approval Approver'))
     );
@@ -58,17 +63,20 @@ export class RequestsService {
     if (count && !isNaN(count)) {
       if (skip && !isNaN(skip)) {
         return this.http.get<MyApproval[]>(`${environment.baseUrl}/user/approvals/${count}/${skip}`).pipe(
+      retryWithBackoff(),
           tap(results => console.log(`Retrieved approvals`)),
           catchError(this.errorService.handleError('Fetch User Approvals', []))
         );
       } else {
         return this.http.get<MyApproval[]>(`${environment.baseUrl}/user/approvals/${count}`).pipe(
+      retryWithBackoff(),
           tap(results => console.log(`Retrieved approvals`)),
           catchError(this.errorService.handleError('Fetch User Approvals', []))
         );
       }
     } else {
       return this.http.get<MyApproval[]>(`${environment.baseUrl}/user/approvals`).pipe(
+      retryWithBackoff(),
         tap(results => console.log(`Retrieved approvals`)),
         catchError(this.errorService.handleError('Fetch User Approvals', []))
       );
@@ -77,6 +85,7 @@ export class RequestsService {
 
   submit_approval(approval_id: number, approval_type_id: number): Observable<StatusMessage> {
     return this.http.get<StatusMessage>(`${environment.baseUrl}/approvals/${approval_id}/${approval_type_id}`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Submitted approval change for approval #${approval_id}`)),
       catchError(this.errorService.handleError<any>('Submit Approval'))
     );

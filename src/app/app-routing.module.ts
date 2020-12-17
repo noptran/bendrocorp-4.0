@@ -58,6 +58,10 @@ const routes: Routes = [
     path: 'approvals',
     loadChildren: () => import('./pages/approval/approval.module').then( m => m.ApprovalPageModule)
   },
+  {
+    path: 'offline',
+    loadChildren: () => import('./app-offline/app-offline.module').then( m => m.AppOfflinePageModule)
+  },
 
 ];
 

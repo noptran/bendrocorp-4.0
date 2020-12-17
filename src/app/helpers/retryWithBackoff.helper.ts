@@ -6,11 +6,18 @@ import { delay, mergeMap, retryWhen } from 'rxjs/operators';
 const finalErrorMessage = (maxRetry: number) =>
   `Tried to load requested request ${maxRetry} times without success. Giving up!`;
 
+const DEFAULT_DELAY = 800;
 const DEFAULT_MAX_RETRIES = 5;
 const DEFAULT_BACKOFF = 1000;
 
+/**
+ * Rxjs helper method which provides exponential backoff
+ * @param delayMs The base delay between request attempts. (default: 800ms)
+ * @param maxRetry The maximum amount of times you want to retry. (default: 5)
+ * @param backoffMs The multiple of ms to use as a backoff. (default: 1000ms)
+ */
 export function retryWithBackoff(
-  delayMs: number,
+  delayMs = DEFAULT_DELAY,
   maxRetry = DEFAULT_MAX_RETRIES,
   backoffMs = DEFAULT_BACKOFF
 ) {
@@ -23,8 +30,10 @@ export function retryWithBackoff(
           if (retries-- > 0) {
             const backoffTime = delayMs + (maxRetry - retries) * backoffMs;
             return of(error).pipe(delay(backoffTime));
+          } else {
+            console.error(finalErrorMessage(maxRetry));
+            return throwError(error);
           }
-          return throwError(finalErrorMessage(maxRetry));
         })
       )
     ));

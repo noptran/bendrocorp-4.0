@@ -15,6 +15,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { StatusMessage } from '../models/misc.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class SystemMapService {
    */
   refreshData()
   {
-    console.log("System Map service data refresh called!");
+    console.log('System Map service data refresh called!');
     this.dataRefreshSource.next();
   }
 
@@ -42,8 +43,9 @@ export class SystemMapService {
 
   list(): Observable<StarSystem[]> {
     return this.http.get<StarSystem[]>(`${environment.baseUrl}/system-map`).pipe(
+      retryWithBackoff(),
       tap(result => {
-        console.log(`Fetched ${result.length} star systems!`)
+        console.log(`Fetched ${result.length} star systems!`);
         console.log(result);
       }),
       catchError(this.errorService.handleError('Fetch System Map', []))
@@ -53,6 +55,7 @@ export class SystemMapService {
   addSystem(system: StarSystem): Observable<StarSystem>
   {
     return this.http.post<StarSystem>(`${environment.baseUrl}/system-map`, { system }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created system!`)),
       catchError(this.errorService.handleError<any>('Create System'))
     );
@@ -63,6 +66,7 @@ export class SystemMapService {
     // system.jurisdiction_id = Number(`${system.jurisdiction_id}`)
 
     return this.http.put<StarSystem>(`${environment.baseUrl}/system-map`, { system }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated system!`)),
       catchError(this.errorService.handleError<any>('Update System'))
     );
@@ -70,188 +74,207 @@ export class SystemMapService {
 
   archiveSystem(): Observable<StatusMessage>
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
-  addPlanet(planet:Planet) : Observable<Planet>
+  addPlanet(planet: Planet): Observable<Planet>
   {
     return this.http.post<Planet>(`${environment.baseUrl}/system-map/planet`, { planet }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created planet!`)),
       catchError(this.errorService.handleError<any>('Create Planet'))
-    )
+    );
   }
 
-  updatePlanet(planet:Planet) : Observable<Planet>
+  updatePlanet(planet: Planet): Observable<Planet>
   {
     return this.http.patch<Planet>(`${environment.baseUrl}/system-map/planet`, { planet }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated planet!`)),
       catchError(this.errorService.handleError<any>('Update Planet'))
-    )
+    );
   }
 
-  archivePlanet(planet:Planet) : Observable<Planet>
+  archivePlanet(planet: Planet): Observable<Planet>
   {
     return this.http.delete<Planet>(`${environment.baseUrl}/system-map/planet/${planet.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived planet!`)),
       catchError(this.errorService.handleError<any>('Archive Planet'))
-    )
+    );
   }
 
-  addMoon(moon:Moon) : Observable<Moon>
+  addMoon(moon: Moon): Observable<Moon>
   {
     return this.http.post<Moon>(`${environment.baseUrl}/system-map/moon`, { moon }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created moon!`)),
       catchError(this.errorService.handleError<any>('Create Planet'))
-    )
+    );
   }
 
-  updateMoon(moon:Moon) : Observable<Moon>
+  updateMoon(moon: Moon): Observable<Moon>
   {
     return this.http.patch<Moon>(`${environment.baseUrl}/system-map/moon`, { moon }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated moon!`)),
       catchError(this.errorService.handleError<any>('Update Moon'))
-    )
+    );
   }
 
-  archiveMoon(moon:Moon) : Observable<Moon>
+  archiveMoon(moon: Moon): Observable<Moon>
   {
     return this.http.delete<Moon>(`${environment.baseUrl}/system-map/moon/${moon.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived moon!`)),
       catchError(this.errorService.handleError<any>('Archive Moon'))
-    )
+    );
   }
 
-  addSystemObject(system_object:SystemObject) : Observable<SystemObject>
+  addSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
     return this.http.post<SystemObject>(`${environment.baseUrl}/system-map/system-object`, { system_object }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created system object!`)),
       catchError(this.errorService.handleError<any>('Create System Object'))
-    )
+    );
   }
 
-  updateSystemObject(system_object:SystemObject) : Observable<SystemObject>
+  updateSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
     return this.http.patch<SystemObject>(`${environment.baseUrl}/system-map/system-object`, { system_object }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated system object!`)),
       catchError(this.errorService.handleError<any>('Update System Object'))
-    )
+    );
   }
 
-  archiveSystemObject(system_object:SystemObject) : Observable<SystemObject>
+  archiveSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
     return this.http.delete<SystemObject>(`${environment.baseUrl}/system-map/system-object/${system_object.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived system object!`)),
       catchError(this.errorService.handleError<any>('Archive System Object'))
-    )
+    );
   }
 
-  addSettlement(settlement:Settlement) : Observable<Settlement>
+  addSettlement(settlement: Settlement): Observable<Settlement>
   {
     return this.http.post<SystemObject>(`${environment.baseUrl}/system-map/settlement`, { settlement }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created settlement!`)),
       catchError(this.errorService.handleError<any>('Create Settlement'))
-    )
+    );
   }
 
-  updateSettlement(settlement:Settlement) : Observable<Settlement>
+  updateSettlement(settlement: Settlement): Observable<Settlement>
   {
     return this.http.patch<Settlement>(`${environment.baseUrl}/system-map/settlement`, { settlement }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated settlement!`)),
       catchError(this.errorService.handleError<any>('Update Settlement'))
-    )
+    );
   }
 
-  archiveSettlement(settlement:Settlement) : Observable<Settlement>
+  archiveSettlement(settlement: Settlement): Observable<Settlement>
   {
     return this.http.delete<Settlement>(`${environment.baseUrl}/system-map/settlement/${settlement.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived settlement!`)),
       catchError(this.errorService.handleError<any>('Archive Settlement'))
-    )
+    );
   }
 
-  addSystemImage(image:SystemImage) : Observable<SystemImage>
+  addSystemImage(image: SystemImage): Observable<SystemImage>
   {
     return this.http.post<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created image!`)),
       catchError(this.errorService.handleError<any>('Create Image'))
-    )
+    );
   }
 
-  updateSystemImage(image:SystemImage) : Observable<SystemImage>
+  updateSystemImage(image: SystemImage): Observable<SystemImage>
   {
     return this.http.patch<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated image!`)),
       catchError(this.errorService.handleError<any>('Update Image'))
-    )
+    );
   }
 
-  archiveSystemImage(image:SystemImage) : Observable<SystemImage>
+  archiveSystemImage(image: SystemImage): Observable<SystemImage>
   {
     return this.http.delete<SystemImage>(`${environment.baseUrl}/system-map/image/${image.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived imgage!`)),
       catchError(this.errorService.handleError<any>('Archive Image'))
-    )
+    );
   }
 
-  addLocation(location:SystemLocation) : Observable<SystemLocation>
+  addLocation(location: SystemLocation): Observable<SystemLocation>
   {
     return this.http.post<SystemLocation>(`${environment.baseUrl}/system-map/location`, { location }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created location!`)),
       catchError(this.errorService.handleError<any>('Create Location'))
-    )
+    );
   }
 
-  updateLocation(location:SystemLocation) : Observable<SystemLocation>
+  updateLocation(location: SystemLocation): Observable<SystemLocation>
   {
     return this.http.patch<SystemLocation>(`${environment.baseUrl}/system-map/location`, { location }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated location!`)),
       catchError(this.errorService.handleError<any>('Update Location'))
-    )
+    );
   }
 
-  archiveLocation(location:SystemLocation) : Observable<SystemLocation>
+  archiveLocation(location: SystemLocation): Observable<SystemLocation>
   {
     return this.http.delete<SystemLocation>(`${environment.baseUrl}/system-map/location/${location.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Archived location!`)),
       catchError(this.errorService.handleError<any>('Archive Location'))
-    )
+    );
   }
 
   addFlora()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   updateFlora()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   archiveFlora()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   addFauna()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   updateFauna()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   archiveFauna()
   {
-    throw "Not available!"
+    throw new Error("Not available!")
   }
 
   fetch_types(): Observable<SystemMapTypes>
   {
     return this.http.get<SystemMapTypes>(`${environment.baseUrl}/system-map/types`).pipe(
-      tap(results => console.log("Fetched System Map Types")),
+      retryWithBackoff(),
+      tap(results => console.log('Fetched System Map Types')),
       catchError(this.errorService.handleError<any>('Fetch System Map Types'))
-    )
+    );
   }
 }

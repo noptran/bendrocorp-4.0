@@ -7,6 +7,7 @@ import { FlightLog } from '../models/flight-log.model';
 import { catchError, tap } from 'rxjs/operators';
 import { StatusMessage } from '../models/misc.model';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,7 @@ export class FlightLogService {
    */
   list(): Observable<FlightLog[]> {
     return this.http.get<FlightLog[]>(`${environment.baseUrl}/flight-logs`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Fetched ${result.length} flight logs!`)),
       catchError(this.errorService.handleError('Fetch Flight Logs', []))
     );
@@ -65,6 +67,7 @@ export class FlightLogService {
    */
   list_ships(): Observable<OwnedShip[]> {
     return this.http.get<OwnedShip[]>(`${environment.baseUrl}/flight-logs/ships`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Fetched ${result.length} owned ships!`)),
       catchError(this.errorService.handleError('Fetch Owned Ships (FL)', []))
     );
@@ -72,6 +75,7 @@ export class FlightLogService {
 
   create(flight_log: FlightLog): Observable<FlightLog> {
     return this.http.post<FlightLog>(`${environment.baseUrl}/flight-logs/`, { flight_log }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Created flight log with id# ${result.id}!`)),
       catchError(this.errorService.handleError('Create Flight Log'))
     );
@@ -79,6 +83,7 @@ export class FlightLogService {
 
   update(flight_log: FlightLog): Observable<FlightLog> {
     return this.http.patch<FlightLog>(`${environment.baseUrl}/flight-logs/`, { flight_log }).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Updated flight log with id# ${result.id}!`)),
       catchError(this.errorService.handleError('Update Flight Log'))
     );
@@ -86,6 +91,7 @@ export class FlightLogService {
 
   delete(flight_log: FlightLog): Observable<StatusMessage> {
     return this.http.delete<StatusMessage>(`${environment.baseUrl}/flight-logs/${flight_log.id}`).pipe(
+      retryWithBackoff(),
       tap(result => console.log(`Deleted flight log with id# ${flight_log.id}!`)),
       catchError(this.errorService.handleError('Remove Flight Log'))
     );

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ErrorService } from './error.service';
 import { Job, Division } from '../models/character.model';
 import { environment } from '../../environments/environment';
+import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -23,20 +24,22 @@ export class JobsService {
    */
   refreshData()
   {
-    console.log("Jobs service data refresh called!");
+    console.log('Jobs service data refresh called!');
     this.dataRefreshSource.next();
   }
 
   list(): Observable<Job[]>
   {
     return this.http.get<Job[]>(`${environment.baseUrl}/job`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Fetched ${results.length} jobs`)),
       catchError(this.errorService.handleError('Fetch Jobs', []))
-    )
+    );
   }
 
   listDivisions(): Observable<Division[]> {
     return this.http.get<Division[]>(`${environment.baseUrl}/division`).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Fetched ${results.length} divisions`)),
       catchError(this.errorService.handleError('Fetch Jobs', []))
     );
@@ -44,15 +47,17 @@ export class JobsService {
 
   create(job: Job): Observable<Job> {
     return this.http.post<Job>(`${environment.baseUrl}/job`, { job }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Created job with id # ${results.id}`)),
       catchError(this.errorService.handleError('Fetch Jobs'))
-    )
+    );
   }
 
   update(job: Job): Observable<Job> {
     return this.http.put<Job>(`${environment.baseUrl}/job`, { job }).pipe(
+      retryWithBackoff(),
       tap(results => console.log(`Created job with id # ${results.id}`)),
       catchError(this.errorService.handleError('Fetch Jobs'))
-    )
+    );
   }
 }

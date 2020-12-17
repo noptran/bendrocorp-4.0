@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, ModalController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
-import { AddUpdateOffenderReportComponent } from 'src/app/componenents/offender-reports/add-update-offender-report/add-update-offender-report.component';
+import { AddUpdateOffenderReportComponent } from 'src/app/components/offender-reports/add-update-offender-report/add-update-offender-report.component';
 import { OffenderReport } from 'src/app/models/offender.model';
 import { OffenderService } from 'src/app/services/offender.service';
 

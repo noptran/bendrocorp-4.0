@@ -104,7 +104,9 @@ export class EventDetailsPage implements OnInit {
             event.target.complete();
           }
 
-          this.loading.dismiss();
+          if (this.loadingIndicator) {
+            this.loadingIndicator.dismiss();
+          }
         }
       });
     }
