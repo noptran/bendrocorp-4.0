@@ -17,6 +17,7 @@ const { Modals } = Plugins;
 export class SettingsComponent implements OnInit {
   config: AppConfig;
   qrData: string;
+  dataSubmitted: boolean;
 
   constructor(
     private settingsService: SettingsService,

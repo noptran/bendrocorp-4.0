@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Toast } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
 import { AuthService } from 'src/app/auth.service';
@@ -92,6 +93,31 @@ export class EventDetailsPage implements OnInit {
     this.modalController.dismiss({
       dismissed: true
     });
+  }
+
+  setAttendance(typeId: number) {
+    if (this.event) {
+      if (typeId === 1 || typeId === 2) {
+        this.eventService.setAttendence(this.event.id, typeId).subscribe(
+          (result) => {
+            if (!(result instanceof HttpErrorResponse)) {
+              if (this.event.attendences.find(x => x.id === result.id)) {
+                this.event.attendences[this.event.attendences.findIndex(x => x.id === result.id)] = result;
+              } else {
+                this.event.attendences.push(result);
+              }
+              this.eventService.refreshData();
+            }
+          }
+        );
+      } else {
+        console.error(`Provided attendence type ${typeId} out of accepted range!`);
+        Toast.show({
+          text: `Provided attendence type ${typeId} out of accepted range!`
+        });
+        // this.messageService.alert('Something went wrong. Please try again later!');
+      }
+    }
   }
 
   getEvent(event?: any) {

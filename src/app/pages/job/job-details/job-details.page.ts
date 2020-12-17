@@ -38,8 +38,11 @@ export class JobDetailsPage implements OnInit {
     }
   }
 
-  fetchJob(event?: any) {
+  parseInt(num: any): number {
+    return parseInt(num, null);
+  }
 
+  fetchJob(event?: any) {
     if (!this.job && this.eventId) {
       this.jobBoardService.fetch(this.eventId).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {

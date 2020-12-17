@@ -57,7 +57,7 @@
       </ion-grid>
     </ion-card-content>
 
-    <ion-button *ngIf="!isAcceptor() && !isExpired() && !parseInt(job.on_mission.length) >= parseInt(job.max_acceptors)" expand="full"
+    <ion-button *ngIf="!isAcceptor() && !isExpired() && !(parseInt(job.on_mission.length) >= parseInt(job.max_acceptors))" expand="full"
       color="success" (click)="acceptMission()">Accept Mission</ion-button>
     <ion-button *ngIf="isAcceptor() && !isExpired()" expand="full" color="danger" (click)="abandonMission()">Abandon
       Mission</ion-button>

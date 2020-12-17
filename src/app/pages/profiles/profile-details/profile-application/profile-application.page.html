@@ -38,7 +38,7 @@
     <ion-list-header>
       Application Comments
     </ion-list-header>
-    <ion-item *ngIf="character.application.comments == 0">No application comments</ion-item>
+    <ion-item *ngIf="character.application.comments.length == 0">No application comments</ion-item>
     <ion-item *ngFor="let comment of character.application.comments">
       <ion-avatar slot="start">
         <img src="{{comment.avatar_url}}" alt="">

@@ -2,6 +2,7 @@ import { OwnedShip } from './ship.models';
 import { Base64Upload } from './misc.model';
 import { ApprovalRequest } from './request.model';
 import { User } from './user.model';
+import { EventAttendence } from './event.model';
 
 export class Character {
     id?: number;
@@ -26,6 +27,8 @@ export class Character {
     application?: CharacterApplication;
 
     rsi_handle?: string;
+
+    attendences: EventAttendence[];
 }
 
 export class Job {
