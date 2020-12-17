@@ -71,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
-
+        this.fetchApprovals();
       });
 
       // create auth subscriber
