@@ -16,6 +16,8 @@ import { ProfileService } from './services/profile.service';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SettingsService } from './services/settings.service';
 import { UserService } from './services/user.service';
+import { CheckUpdateService } from './services/sw/check-update.service';
+import { LogUpdateService } from './services/sw/log-update.service';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +49,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private modalController: ModalController,
     private settings: SettingsService,
-    private userService: UserService
+    private userService: UserService,
+
+    // sw stuff
+    private checkUpdate: CheckUpdateService,
+    private logUpdate: LogUpdateService
   ) {
     this.initializeApp();
 
