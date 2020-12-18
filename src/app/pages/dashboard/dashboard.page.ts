@@ -68,6 +68,23 @@ export class DashboardPage implements OnInit, OnDestroy {
 
     this.fetchEvents();
     this.fetchNews();
+
+    // may not keep.....
+    // VANTA.NET({
+    //   el: 'ion-router-outlet',
+    //   mouseControls: false,
+    //   touchControls: false,
+    //   gyroControls: false,
+    //   minHeight: 200.00,
+    //   minWidth: 200.00,
+    //   scale: 1.00,
+    //   scaleMobile: 1.00,
+    //   color: 0x17b2ff,
+    //   backgroundAlpha: 0,
+    //   points: 6.00,
+    //   maxDistance: 25.00,
+    //   showDots: false
+    // });
   }
 
   ngOnDestroy() {

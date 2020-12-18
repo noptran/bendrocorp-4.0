@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <div style="text-align: center;">
+  <div class="qr-holder">
     <qrcode *ngIf="qrData" [qrdata]="qrData" [size]="256" [level]="'L'"></qrcode>
     <p>Your Profile Code</p>
   </div>

@@ -30,6 +30,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
 import { EventDetailsPage } from './pages/events/event-details/event-details.page';
+import { TopGreebleComponent } from './components/top-greeble/top-greeble.component';
 
 @NgModule({
   declarations: [

@@ -8,6 +8,7 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 import { CountdownChartComponent } from 'src/app/components/dashboard/countdown-chart/countdown-chart.component';
+import { TopGreebleComponent } from 'src/app/components/top-greeble/top-greeble.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,12 @@ import { CountdownChartComponent } from 'src/app/components/dashboard/countdown-
     IonicModule,
     DashboardPageRoutingModule,
     // CountdownChartComponent
+    // TopGreebleComponent
   ],
-  declarations: [DashboardPage, CountdownChartComponent]
+  declarations: [
+    DashboardPage,
+    CountdownChartComponent,
+    TopGreebleComponent
+  ]
 })
 export class DashboardPageModule {}

@@ -40,6 +40,17 @@ ion-card {
   box-shadow: 0px 0px 6px rgba($color: #000000, $alpha: .7);
 }
 
+ion-header {
+  border-bottom: solid 2px var(--ion-color-primary);
+  box-shadow: 0px .1px 4px rgba($color: #000000, $alpha: .7);
+}
+
+ion-menu {
+  // TODO: https://stackoverflow.com/questions/8835142/any-way-to-declare-a-size-partial-border-to-a-box
+  // border-right: solid 2px var(--ion-color-primary);
+  box-shadow: 6px 0px 4px rgba($color: #000000, $alpha: .7) !important;
+}
+
 /* width */
 body::-webkit-scrollbar {
   width: 10px;
@@ -61,9 +72,9 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 body {
-  background: url('./assets/app-background.png') !important;
-  background-color: none;
-  background-size: cover !important;
+  // background: url('./assets/app-background.png') !important;
+  // background-color: none;
+  // background-size: cover !important;
 }
 
 .notification-button {            

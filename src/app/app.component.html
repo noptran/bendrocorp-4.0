@@ -27,7 +27,8 @@
           </ion-item>
           
           <ion-grid>
-            <ion-row>
+            <!-- has approvals -->
+            <ion-row *ngIf="totalApprovalsCount > 0">
               <ion-col>
                 <div class="notification-button">
                   <ion-button (click)="openApprovals()" color="primary" expand="block">
@@ -36,6 +37,14 @@
                   <ion-badge *ngIf="pendingApprovalCount" color="danger">{{pendingApprovalCount}}</ion-badge>
                 </div>                
               </ion-col>
+              <ion-col>
+                <ion-button (click)="openSettingsModal()" color="dark" expand="block">
+                  <ion-icon name="cog-outline"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <!-- has never had approvals -->
+            <ion-row *ngIf="totalApprovalsCount == 0">
               <ion-col>
                 <ion-button (click)="openSettingsModal()" color="dark" expand="block">
                   <ion-icon name="cog-outline"></ion-icon>

@@ -37,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   userServiceSubscription: Subscription;
 
   user: UserSessionResponse;
+  totalApprovalsCount: number;
 
   constructor(
     private platform: Platform,
@@ -121,6 +122,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   fetchApprovals() {
+    // TODO: Promisify this...
+    this.userService.fetchTotalApprovalCount().subscribe((results) => {
+      this.totalApprovalsCount = results;
+    });
+
     this.userService.fetchPendingApprovalsCount().subscribe((results) => {
       this.pendingApprovalCount = results;
     });
