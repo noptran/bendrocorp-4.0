@@ -29,6 +29,7 @@ import { AddUpdateOffenderReportComponent } from './components/offender-reports/
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
+import { EventDetailsPage } from './pages/events/event-details/event-details.page';
 
 @NgModule({
   declarations: [
@@ -42,18 +43,19 @@ import { NewsDetailComponent } from './components/news-detail/news-detail.compon
     AddUpdateJobComponent,
     AddUpdateFlightLogComponent,
     AddUpdateOffenderReportComponent,
-    NewsDetailComponent
+    NewsDetailComponent,
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
-    EventAddUpdateComponent,
-    CertifyEventComponent,
-    EventAddUpdateComponent,
-    CompleteJobComponent,
-    AddUpdateJobComponent,
-    AddUpdateFlightLogComponent,
-    AddUpdateOffenderReportComponent,
-    NewsDetailComponent
+    // EventAddUpdateComponent,
+    // CertifyEventComponent,
+    // EventAddUpdateComponent,
+    // CompleteJobComponent,
+    // AddUpdateJobComponent,
+    // AddUpdateFlightLogComponent,
+    // AddUpdateOffenderReportComponent,
+    // NewsDetailComponent,
+    // EventDetailsPage
   ],
   imports: [
     CommonModule,
