@@ -62,7 +62,6 @@ const routes: Routes = [
     path: 'offline',
     loadChildren: () => import('./app-offline/app-offline.module').then( m => m.AppOfflinePageModule)
   },
-
 ];
 
 @NgModule({
