@@ -94,6 +94,11 @@ export class ApprovalDetailsPage implements OnInit {
             if (!(results instanceof HttpErrorResponse)) {
               this.fetchApprovalDetails();
               this.userService.refreshData();
+            } else {
+              Modals.alert({
+                title: 'Error',
+                message: 'Approval could not be processed!'
+              });
             }
             this.approvalSubmitting = false;
           }
