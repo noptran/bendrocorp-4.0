@@ -70,6 +70,10 @@ ion-menu.md ion-item ion-label {
   font-weight: 500;
 }
 
+ion-menu.ios ion-item.selected {
+  --background: rgba(var(--ion-color-primary-rgb), 0.14);
+}
+
 ion-menu.ios ion-content {
   --padding-bottom: 20px;
 }
