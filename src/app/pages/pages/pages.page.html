@@ -5,9 +5,12 @@
     </ion-buttons>
     <ion-title>Pages</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="!searchFilter">
   <ion-card>
     <div class="pages-topper"></div>
     <ion-card-header>
