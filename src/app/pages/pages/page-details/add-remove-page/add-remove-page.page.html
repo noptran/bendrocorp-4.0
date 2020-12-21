@@ -9,6 +9,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="page">
+  <ion-item>
+    <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-input required placeholder="Page Title" [(ngModel)]="page.title"
+      name="page_title"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Subtitle <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-input required placeholder="Page Subtitle" [(ngModel)]="page.subtitle" name="page_subtitle"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Categories <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-select multiple okText="Select" cancelText="Cancel" [(ngModel)]="formCategoryIds">
+      <ion-select-option *ngFor="let category of pageCategories" [value]="category.id">{{category.title}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Tags</ion-label>
+    <ion-input required placeholder="Page Tags" [(ngModel)]="page.tags" name="page_tags"></ion-input>
+    <small>Enter tags as a comma seperated list</small>
+  </ion-item>
+  <ion-item>
+    {{page.content}}
+  </ion-item>
 </ion-content>

@@ -13,7 +13,7 @@ import { AddRemovePagePage } from './add-remove-page.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AddRemovePagePageRoutingModule
+    AddRemovePagePageRoutingModule,
   ],
   declarations: [AddRemovePagePage]
 })
