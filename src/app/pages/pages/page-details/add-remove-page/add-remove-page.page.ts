@@ -7,6 +7,8 @@ import { FieldDescriptor } from 'src/app/models/field.model';
 import { Page } from 'src/app/models/page.model';
 import { PageService } from 'src/app/services/page.service';
 import { environment } from 'src/environments/environment';
+import { Plugins } from '@capacitor/core';
+const { Toast } = Plugins;
 
 @Component({
   selector: 'app-add-remove-page',
@@ -27,13 +29,8 @@ export class AddRemovePagePage implements OnInit {
 
   // this is for the form only
   formCategoryIds: string[];
-  editorConfig: {
-    placeholder: string; tabsize: number; height: string;
-    // for the initial roll out we are going to skip this and put images inline
-    // TODO: The initial idea for this is not going to cut it, we can use image_uploads but they need a many to many
-    // relationship with the pages
-    uploadImagePath: string; toolbar: (string | string[])[][]; fontNames: string[]; // we dont want any special fonts
-  };
+  editorConfig: any;
+  dataSubmitted: boolean;
 
   constructor(
     private pageService: PageService,
@@ -67,13 +64,14 @@ export class AddRemovePagePage implements OnInit {
           ['para', ['style', 'ul', 'ol', 'paragraph']],
           ['insert', ['table', 'picture', 'link', 'video', 'hr']]
       ],
-      fontNames: ['Univia-Pro'] // we dont want any special fonts
+      fontNames: ['Univia-Pro'], // we dont want any special fonts
     };
   }
 
   async getPage() {
     if (this.pageId) {
-      this.pageService.pageSearch(this.pageId).subscribe(async (results) => {
+      this.pageService.pageSearch(this.pageId)
+      .subscribe(async (results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.page = results[0] as Page;
           this.pageUri = `${this.page.id.split('-')[0]}-${this.page.title.toLowerCase().split(' ').join('-')}`;
@@ -93,9 +91,14 @@ export class AddRemovePagePage implements OnInit {
 
   updatePage() {
     if (this.page && this.page.id) {
+      this.dataSubmitted = true;
       this.pageService.updatePage(this.page).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
           console.log('updated!');
+          Toast.show({
+            text: 'Page updated!'
+          });
+          this.dataSubmitted = false;
         }
       });
     }
@@ -115,10 +118,11 @@ export class AddRemovePagePage implements OnInit {
   }
 
   initParseIdsToCatArray() {
-    this.formCategoryIds = this.page.categories.map((infraction) => {
-      return infraction.id;
-    });
-
+    if (this.page && this.page.categories) {
+      this.formCategoryIds = this.page.categories.map((category) => {
+        return category.id;
+      });
+    }
   }
 
   async ngOnInit() {
@@ -143,7 +147,9 @@ export class AddRemovePagePage implements OnInit {
       this.getPage();
     } else {
       console.log('page passed from parent');
+
       await this.setConfig();
+
       this.initParseIdsToCatArray();
     }
   }

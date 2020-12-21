@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
+import { retryWithBackoff } from './helpers/retryWithBackoff.helper';
 import { MenuItem } from './models/misc.model';
 import { ErrorService } from './services/error.service';
 
@@ -20,6 +21,7 @@ export class MenuService {
   {
     return new Promise (async (success, error) => {
       this.http.get<MenuItem[]>(`${environment.baseUrl}/menu`).pipe(
+        retryWithBackoff(),
         tap(results => console.log('Fetched the menu')),
         catchError(this.errorService.handleError('Fetch Menu', []))
       ).subscribe((result) => {

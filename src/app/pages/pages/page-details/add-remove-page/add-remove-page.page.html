@@ -6,6 +6,10 @@
       <ion-back-button *ngIf="page" defaultHref="pages/{{pageUri}}"></ion-back-button>
     </ion-buttons>
     <ion-title>Edit Page</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="updatePage()"
+        [disabled]="dataSubmitted">Update</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -34,9 +38,7 @@
     <ion-input required placeholder="Page Tags" [(ngModel)]="page.tags" name="page_tags"></ion-input>
     <small>Enter tags as a comma seperated list</small>
   </ion-item>
-  <ion-item>
-    <div class="editor" [ngxSummernote]="editorConfig" [(ngModel)]="page.content"></div>
-  </ion-item>
+  <div class="editor" *ngIf="editorConfig" [ngxSummernote]="editorConfig" [(ngModel)]="page.content"></div>
   <ion-item>
     <ion-label>Published</ion-label>
     <ion-toggle [(ngModel)]="page.published"></ion-toggle>
