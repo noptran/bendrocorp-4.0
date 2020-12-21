@@ -35,6 +35,10 @@
     <small>Enter tags as a comma seperated list</small>
   </ion-item>
   <ion-item>
-    {{page.content}}
+    <div class="editor" [ngxSummernote]="editorConfig" [(ngModel)]="page.content"></div>
+  </ion-item>
+  <ion-item>
+    <ion-label>Published</ion-label>
+    <ion-toggle [(ngModel)]="page.published"></ion-toggle>
   </ion-item>
 </ion-content>

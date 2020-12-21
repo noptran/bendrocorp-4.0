@@ -89,6 +89,7 @@ export class PageDetailsPage implements OnInit {
             Toast.show({
               text: 'Page archived!'
             });
+            this.pageService.refreshData();
             this.router.navigateByUrl('/pages');
           }
         });

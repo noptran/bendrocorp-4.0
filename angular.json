@@ -33,6 +33,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
+              "node_modules/summernote/dist/summernote-lite.min.css",
               {
                 "input": "src/theme/variables.scss"
               },
@@ -40,7 +41,10 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/summernote/dist/summernote-lite.min.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/auth.service';
 import { FieldDescriptor } from 'src/app/models/field.model';
 import { Page } from 'src/app/models/page.model';
 import { PageService } from 'src/app/services/page.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-remove-page',
@@ -26,6 +27,13 @@ export class AddRemovePagePage implements OnInit {
 
   // this is for the form only
   formCategoryIds: string[];
+  editorConfig: {
+    placeholder: string; tabsize: number; height: string;
+    // for the initial roll out we are going to skip this and put images inline
+    // TODO: The initial idea for this is not going to cut it, we can use image_uploads but they need a many to many
+    // relationship with the pages
+    uploadImagePath: string; toolbar: (string | string[])[][]; fontNames: string[]; // we dont want any special fonts
+  };
 
   constructor(
     private pageService: PageService,
@@ -42,14 +50,36 @@ export class AddRemovePagePage implements OnInit {
     }
   }
 
-  getPage() {
+  async setConfig() {
+    this.editorConfig = {
+      placeholder: '',
+      tabsize: 2,
+      height: '200px',
+      // for the initial roll out we are going to skip this and put images inline
+      // TODO: The initial idea for this is not going to cut it, we can use image_uploads but they need a many to many
+      // relationship with the pages
+      uploadImagePath: `${environment.baseUrl}/pages/${this.page.id}/images?access_token=${await this.authService.checkAndRefreshAccessToken()}`,
+      toolbar: [
+          ['misc', ['codeview', 'undo', 'redo']],
+          ['style', ['bold', 'italic', 'underline', 'clear']],
+          ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['para', ['style', 'ul', 'ol', 'paragraph']],
+          ['insert', ['table', 'picture', 'link', 'video', 'hr']]
+      ],
+      fontNames: ['Univia-Pro'] // we dont want any special fonts
+    };
+  }
+
+  async getPage() {
     if (this.pageId) {
-      this.pageService.pageSearch(this.pageId).subscribe((results) => {
+      this.pageService.pageSearch(this.pageId).subscribe(async (results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.page = results[0] as Page;
           this.pageUri = `${this.page.id.split('-')[0]}-${this.page.title.toLowerCase().split(' ').join('-')}`;
 
           this.initParseIdsToCatArray();
+          await this.setConfig();
 
           if (this.loadingIndicator) {
             this.loadingIndicator.dismiss();
@@ -113,6 +143,7 @@ export class AddRemovePagePage implements OnInit {
       this.getPage();
     } else {
       console.log('page passed from parent');
+      await this.setConfig();
       this.initParseIdsToCatArray();
     }
   }

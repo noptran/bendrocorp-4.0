@@ -11,6 +11,13 @@
 </ion-header>
 
 <ion-content *ngIf="!searchFilter && initialDataLoaded">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingText="Pull to refresh"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  
   <ion-card>
     <div class="pages-topper"></div>
     <ion-card-header>

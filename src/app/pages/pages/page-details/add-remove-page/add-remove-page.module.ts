@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddRemovePagePageRoutingModule } from './add-remove-page-routing.module';
 
 import { AddRemovePagePage } from './add-remove-page.page';
+import { NgxSummernoteModule } from 'ngx-summernote';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { AddRemovePagePage } from './add-remove-page.page';
     FormsModule,
     IonicModule,
     AddRemovePagePageRoutingModule,
+    NgxSummernoteModule,
   ],
   declarations: [AddRemovePagePage]
 })

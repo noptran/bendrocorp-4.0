@@ -5,10 +5,14 @@
           <ion-badge class="pub-badge" color="danger">Unpublished</ion-badge>
         </span>
       </ion-card-title>
-      <ion-card-subtitle>{{page.subtitle}}</ion-card-subtitle>
+      <ion-card-subtitle>
+        <span *ngIf="page.subtitle">{{page.subtitle}}</span>
+        <span *ngIf="!page.subtitle">&nbsp;</span>
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <app-page-tag [tags]="page.tags"></app-page-tag>
+      <app-page-tag *ngIf="page.tags" [tags]="page.tags"></app-page-tag>
+      <span *ngIf="!page.tags">&nbsp;</span>
       <p>By: {{page.creator.main_character_full_name}}</p>
     </ion-card-content>
   </ion-card>

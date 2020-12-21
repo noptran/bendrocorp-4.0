@@ -36,7 +36,7 @@ export class PagesPage implements OnInit, OnDestroy {
   otherPages: Page[] = [];
 
   // subscription
-  subscription: Subscription;
+  pageSubscription: Subscription;
 
   //
   searchFilter: string;
@@ -66,6 +66,10 @@ export class PagesPage implements OnInit, OnDestroy {
     private router: Router,
     private settingsService: SettingsService
   ) {
+    this.pageSubscription = this.pageService.dataRefreshAnnounced$.subscribe((results) => {
+      this.fetchPagesAndCategories();
+    });
+
     this.settingsSubscription = this.settingsService.dataRefreshAnnounced$.subscribe(async () => {
       console.log('pages settings update');
 
@@ -116,7 +120,11 @@ export class PagesPage implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/pages/${page.id}/edit`);
   }
 
-  async fetchPagesAndCategories() {
+  doRefresh(event: any) {
+    this.fetchPagesAndCategories(event);
+  }
+
+  async fetchPagesAndCategories(event?: any) {
     this.pageService.listPages().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.pages = results;
@@ -127,7 +135,13 @@ export class PagesPage implements OnInit, OnDestroy {
           }
         });
 
-        // ?
+        // re-init the categories
+        this.featuredPages = [];
+        this.guidePages = [];
+        this.policyPages = [];
+        this.otherPages = [];
+
+        //
         this.pages.forEach((page) => {
           if (page.categories.filter(x => x.id === this.pageService.featuredCategoryId).length > 0 && page) {
             this.featuredPages.push(page);
@@ -147,6 +161,10 @@ export class PagesPage implements OnInit, OnDestroy {
 
         // show data as loaded
         this.initialDataLoaded = true;
+
+        if (event) {
+          event.target.complete();
+        }
 
         // debug logging
         console.log(this.pages);
@@ -209,8 +227,8 @@ export class PagesPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.pageSubscription) {
+      this.pageSubscription.unsubscribe();
     }
 
     if (this.searchSubscription) {
