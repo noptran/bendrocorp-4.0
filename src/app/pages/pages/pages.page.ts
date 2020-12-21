@@ -18,7 +18,7 @@ const { Toast, Modals } = Plugins;
 })
 export class PagesPage implements OnInit, OnDestroy {
 
-  readonly slideOps = {
+  readonly slideOpts = {
     slidesPerView: 2
   };
 

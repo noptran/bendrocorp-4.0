@@ -8,6 +8,7 @@ import { PagesPageRoutingModule } from './pages-routing.module';
 
 import { PagesPage } from './pages.page';
 import { PageSnippetComponent } from 'src/app/components/pages/page-snippet/page-snippet.component';
+import { PageTagComponent } from 'src/app/components/pages/page-tag/page-tag.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { PageSnippetComponent } from 'src/app/components/pages/page-snippet/page
   ],
   declarations: [
     PagesPage,
-    PageSnippetComponent
+    PageSnippetComponent,
+    PageTagComponent,
   ]
 })
 export class PagesPageModule {}

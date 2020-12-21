@@ -31,6 +31,7 @@ export class User {
     username?: string;
     rsi_handle?: string;
     main_character?: Character;
+    main_character_full_name?: string;
     roles?: Role[];
 }
 

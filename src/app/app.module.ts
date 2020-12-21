@@ -31,7 +31,6 @@ import { environment } from '../environments/environment';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
 import { EventDetailsPage } from './pages/events/event-details/event-details.page';
 import { TopGreebleComponent } from './components/top-greeble/top-greeble.component';
-import { PageTagComponent } from './components/pages/page-tag/page-tag.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,6 @@ import { PageTagComponent } from './components/pages/page-tag/page-tag.component
     AddUpdateFlightLogComponent,
     AddUpdateOffenderReportComponent,
     NewsDetailComponent,
-    PageTagComponent,
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
