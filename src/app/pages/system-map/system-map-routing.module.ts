@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: SystemMapPage
+  },
+  {
+    path: ':id',
+    loadChildren: () => import('./system-map-details/system-map-details.module').then( m => m.SystemMapDetailsPageModule)
   }
 ];
 

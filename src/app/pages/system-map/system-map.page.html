@@ -5,6 +5,9 @@
     </ion-buttons>
     <ion-title>System Map</ion-title>
   </ion-toolbar>
+  <ion-toolbar *ngIf="initialDataLoaded">
+    <ion-searchbar (keyup)="onSearchKeyUp()" [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -18,11 +21,17 @@
       System Map represents the knowledge of BendroCorp about the 'verse.
     </ion-card-content>
   </ion-card>
+  <ion-item>
+    <ion-label style="text-align: right;">
+      Map View
+    </ion-label>
+    <ion-toggle slot="end" color="primary" disabled></ion-toggle>
+  </ion-item>
 
+  <!-- card to be be replaced by categorical sliders -->
   <ion-card>
     <ion-card-content>
-      <ion-item class="sm-menu" detail>Search View</ion-item>
-      <ion-item class="sm-menu" detail>Map View</ion-item>
+      System Map content cards will go here! :)
     </ion-card-content>
   </ion-card>
 </ion-content>
