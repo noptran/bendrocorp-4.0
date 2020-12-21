@@ -1,9 +1,40 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>PageDetails</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="pages"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Page Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="page">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{page.title}}<span *ngIf="!page.published">
+          <ion-badge class="pub-badge" color="danger">Unpublished</ion-badge>
+        </span>
+      </ion-card-title>
+      <ion-card-subtitle>{{page.subtitle}}</ion-card-subtitle>
+      <app-page-tag [tags]="page.tags"></app-page-tag>
+      <p>By: {{page.creator.main_character_full_name}}</p>
+    </ion-card-header>
+    <ion-card-content>
+      <div [innerHTML]="sanitizedContent"></div>
+    </ion-card-content>
+  </ion-card>
 
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="archivePage()" color="danger">
+        <ion-icon name="archive-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="editPage()" color="light">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

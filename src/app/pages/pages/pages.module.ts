@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { PagesPageRoutingModule } from './pages-routing.module';
 
 import { PagesPage } from './pages.page';
+import { PageSnippetComponent } from 'src/app/components/pages/page-snippet/page-snippet.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { PagesPage } from './pages.page';
     IonicModule,
     PagesPageRoutingModule
   ],
-  declarations: [PagesPage]
+  declarations: [
+    PagesPage,
+    PageSnippetComponent
+  ]
 })
 export class PagesPageModule {}

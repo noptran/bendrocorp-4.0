@@ -1,0 +1,15 @@
+<div *ngIf="page">
+  <ion-card class="page-snippet-card">
+    <ion-card-header>
+      <ion-card-title>{{page.title}}<span *ngIf="!page.published">
+          <ion-badge class="pub-badge" color="danger">Unpublished</ion-badge>
+        </span>
+      </ion-card-title>
+      <ion-card-subtitle>{{page.subtitle}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <app-page-tag [tags]="page.tags"></app-page-tag>
+      <p>By: {{page.creator.main_character_full_name}}</p>
+    </ion-card-content>
+  </ion-card>
+</div>

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
 import { PageService } from 'src/app/services/page.service';
@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Page, PageCategory } from 'src/app/models/page.model';
+import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 const { Toast, Modals } = Plugins;
 
 @Component({
@@ -16,6 +17,12 @@ const { Toast, Modals } = Plugins;
   styleUrls: ['./pages.page.scss'],
 })
 export class PagesPage implements OnInit, OnDestroy {
+
+  readonly slideOps = {
+    slidesPerView: 2
+  };
+
+  config: AppConfig;
 
   // general vars
   pages: Page[] = [];
@@ -48,13 +55,26 @@ export class PagesPage implements OnInit, OnDestroy {
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
 
+  //
+  settingsSubscription: Subscription;
+
   constructor(
     private loading: LoadingController,
     private authService: AuthService,
     private pageService: PageService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+    private settingsService: SettingsService
+  ) {
+    this.settingsSubscription = this.settingsService.dataRefreshAnnounced$.subscribe(async () => {
+      console.log('pages settings update');
+
+      await this.getSettings();
+
+      console.log(`pages slide hints: ${this.config.slideHints}`);
+
+    });
+  }
 
   async createPage() {
     if (this.isEditor || this.isAdmin) {
@@ -75,8 +95,21 @@ export class PagesPage implements OnInit, OnDestroy {
     }
   }
 
+  async getSettings() {
+    this.config = await this.settingsService.getConfig();
+  }
+
   openPage(page: Page) {
-    this.router.navigateByUrl(`/pages/${page.id.split('-')[0]}-${page.title.toLowerCase().replace(' ', '-')}`);
+    console.log(page);
+
+    const navigationExtras: NavigationExtras = {
+      relativeTo: this.route,
+      state: {
+        page
+      }
+    };
+
+    this.router.navigate([`${page.id.split('-')[0]}-${page.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
   }
 
   openEditPage(page: Page) {
@@ -135,7 +168,11 @@ export class PagesPage implements OnInit, OnDestroy {
         x.content.toLowerCase().includes(searchText.toLowerCase())
       );
 
+      console.log(this.filteredPages);
+
       this.isFiltering = false;
+    } else {
+      this.filteredPages = [];
     }
   }
 
@@ -149,6 +186,9 @@ export class PagesPage implements OnInit, OnDestroy {
       message: 'Loading'
     });
     await this.loadingIndicator.present();
+
+    // get setting
+    await this.getSettings();
 
     // get the user id
     this.userId = (await this.authService.retrieveUserSession()).id;
@@ -175,6 +215,10 @@ export class PagesPage implements OnInit, OnDestroy {
 
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
+    }
+
+    if (this.settingsSubscription) {
+      this.settingsSubscription.unsubscribe();
     }
   }
 

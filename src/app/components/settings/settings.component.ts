@@ -18,6 +18,7 @@ export class SettingsComponent implements OnInit {
   config: AppConfig;
   qrData: string;
   dataSubmitted: boolean;
+  initialDataLoaded: boolean;
 
   constructor(
     private settingsService: SettingsService,
@@ -29,6 +30,7 @@ export class SettingsComponent implements OnInit {
   async updateConfig() {
     await this.settingsService.setConfig(this.config);
     console.log('updated settings');
+    this.settingsService.refreshData();
   }
 
   async logout() {

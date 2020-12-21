@@ -5,12 +5,12 @@
     </ion-buttons>
     <ion-title>Pages</ion-title>
   </ion-toolbar>
-  <ion-toolbar>
-    <ion-searchbar [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+  <ion-toolbar *ngIf="initialDataLoaded">
+    <ion-searchbar (keyup)="onSearchKeyUp()" [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="!searchFilter">
+<ion-content *ngIf="!searchFilter && initialDataLoaded">
   <ion-card>
     <div class="pages-topper"></div>
     <ion-card-header>
@@ -21,8 +21,61 @@
       Here you will find a set of informational pages designed to provide you with vital information to working within BendroCorp and for surviving in the verse.
     </ion-card-content>
   </ion-card>
-  <!-- pages content here -->
-  <div>
-    
+  <!-- Featured -->
+  <div *ngIf="featuredPages && featuredPages.length > 0">
+    <h3 class="outer-title">Featured</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let page of featuredPages" (click)="openPage(page)">
+        <app-page-snippet [page]="page"></app-page-snippet>
+      </ion-slide>
+    </ion-slides>
   </div>
+
+  <!-- Guides -->
+  <div *ngIf="guidePages && guidePages.length > 0">
+    <h3 class="outer-title">Guides</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let page of guidePages" (click)="openPage(page)">
+        <app-page-snippet [page]="page"></app-page-snippet>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <!-- Policy -->
+  <div *ngIf="policyPages && policyPages.length > 0">
+    <h3 class="outer-title">Policy</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let page of policyPages" (click)="openPage(page)">
+        <app-page-snippet [page]="page"></app-page-snippet>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <!-- Other -->
+  <div *ngIf="otherPages && otherPages.length > 0">
+    <h3 class="outer-title">Other</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let page of otherPages" (click)="openPage(page)">
+        <app-page-snippet [page]="page"></app-page-snippet>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createPage()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-content *ngIf="searchFilter && initialDataLoaded">
+  <div *ngFor="let item of filteredPages">
+    {{item.title}}
+  </div>
+
+  <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createPage()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

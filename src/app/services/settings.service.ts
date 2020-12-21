@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { Subject } from 'rxjs';
 
 const { Storage } = Plugins;
 
@@ -10,6 +11,16 @@ export class SettingsService {
 
   private configKeyName = 'app:config';
   constructor() { }
+
+  private dataRefreshSource = new Subject();
+  dataRefreshAnnounced$ = this.dataRefreshSource.asObservable();
+  /**
+   * Call this to signal all subscribers to refresh their data
+   */
+  refreshData() {
+    console.log('Settings data refresh called!');
+    this.dataRefreshSource.next();
+  }
 
   async intializeConfig()
   {

@@ -1,23 +1,20 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
 import { Page } from 'src/app/models/page.model';
 import { PageService } from 'src/app/services/page.service';
-import { Plugins } from '@capacitor/core';
-
-const { Modals, Toast } = Plugins;
 
 @Component({
-  selector: 'app-page-details',
-  templateUrl: './page-details.page.html',
-  styleUrls: ['./page-details.page.scss'],
+  selector: 'app-add-remove-page',
+  templateUrl: './add-remove-page.page.html',
+  styleUrls: ['./add-remove-page.page.scss'],
 })
-export class PageDetailsPage implements OnInit {
-  page: Page;
+export class AddRemovePagePage implements OnInit {
   readonly pageId: string;
+  pageUri: string;
+  page: Page;
   userId: number;
   isEditor: boolean;
   isAdmin: boolean;
@@ -25,22 +22,18 @@ export class PageDetailsPage implements OnInit {
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
 
-  // other
-  sanitizedContent: SafeHtml;
-
   constructor(
     private pageService: PageService,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
     private loading: LoadingController,
-    private domSanitizer: DomSanitizer
   ) {
     this.pageId = this.route.snapshot.paramMap.get('id').split('-')[0];
 
     if (this.router.getCurrentNavigation()?.extras.state?.page) {
-      this.page = this.router.getCurrentNavigation().extras.state.page;
-      this.sanitizedContent = this.domSanitizer.bypassSecurityTrustHtml(this.page.content);
+      this.page = this.router.getCurrentNavigation().extras.state.page as Page;
+      this.pageUri = this.page.getUri();
     }
   }
 
@@ -48,8 +41,8 @@ export class PageDetailsPage implements OnInit {
     if (this.pageId) {
       this.pageService.pageSearch(this.pageId).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
-          this.page = results[0];
-          this.sanitizedContent = this.domSanitizer.bypassSecurityTrustHtml(this.page.content);
+          this.page = results[0] as Page;
+          this.pageUri = `${this.page.id.split('-')[0]}-${this.page.title.toLowerCase().split(' ').join('-')}`;
 
           if (this.loadingIndicator) {
             this.loadingIndicator.dismiss();
@@ -59,45 +52,6 @@ export class PageDetailsPage implements OnInit {
         }
       });
     }
-  }
-
-  editPage() {
-    if (this.isEditor || this.isAdmin) {
-      const navigationExtras: NavigationExtras = {
-        relativeTo: this.route,
-        state: {
-          page: this.page
-        }
-      };
-
-      this.router.navigate(['edit'], navigationExtras);
-    }
-  }
-
-  async archivePage() {
-    if (this.isAdmin) {
-      // confirm this is what the user wants to do
-      const confirmRet = await Modals.confirm({
-        title: 'Confirm',
-        message: 'Are you sure you want to archive this page?'
-      });
-
-      // check the results
-      if (confirmRet.value) {
-        this.pageService.archivePage(this.page).subscribe((results) => {
-          if (!(results instanceof HttpErrorResponse)) {
-            Toast.show({
-              text: 'Page archived!'
-            });
-            this.router.navigateByUrl('/pages');
-          }
-        });
-      }
-    }
-  }
-
-  authCheck() {
-
   }
 
   async ngOnInit() {

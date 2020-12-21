@@ -15,6 +15,8 @@ import { PageDetailsPage } from './page-details.page';
     IonicModule,
     PageDetailsPageRoutingModule
   ],
-  declarations: [PageDetailsPage]
+  declarations: [
+    PageDetailsPage
+  ]
 })
 export class PageDetailsPageModule {}

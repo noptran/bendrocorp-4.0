@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'edit',
-    loadChildren: () => import('../add-remove-page/add-remove-page.module').then(m => m.AddRemovePagePageModule)
+    loadChildren: () => import('./add-remove-page/add-remove-page.module').then(m => m.AddRemovePagePageModule)
   }
 ];
 

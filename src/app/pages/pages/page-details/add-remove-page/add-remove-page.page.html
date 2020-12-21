@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button *ngIf="!page" defaultHref="pages"></ion-back-button>
+      <ion-back-button *ngIf="page" defaultHref="pages/{{pageUri}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Page</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+</ion-content>

@@ -21,6 +21,10 @@ export class Page {
   remove_categories?: FieldDescriptor[];
   creator?: User;
   archived?: boolean;
+
+  getUri(): string {
+    return `${this.id.split('-')[0]}-${this.title.toLowerCase().split(' ').join('-')}`;
+  }
 }
 
 // DEPRECATED
