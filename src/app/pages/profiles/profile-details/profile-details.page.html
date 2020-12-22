@@ -19,7 +19,7 @@
             <div>
               <!-- editable bade (ie you have the rights) -->
               <div class="editable-avatar" *ngIf="canEdit">
-                <img (click)="updateAvatar()" style="border-radius: 50%; max-height: 200px; cursor: pointer;" src="{{character.avatar_url}}">
+                <img (click)="updateAvatar()" style="border-radius: 50%; max-height: 200px; cursor: pointer;" src="{{character.avatar_url}}" onerror="this.src='../../../../assets/imgs/missing-avatar.png'">
                 <div>
                   <small>Tap to update avatar</small>
                 </div>

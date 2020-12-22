@@ -1,0 +1,32 @@
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-system-map-detail-tags',
+  templateUrl: './system-map-detail-tags.component.html',
+  styleUrls: ['./system-map-detail-tags.component.scss'],
+})
+export class SystemMapDetailTagsComponent {
+
+  // input is a comma seperated list of tags
+  @Input() tags: string;
+
+  constructor() { }
+
+  tagRestricted(tagText: string) {
+    return (tagText.toLowerCase() === 'restricted');
+  }
+
+  parsedTags() {
+    if (this.tags) {
+      // tslint:disable-next-line:prefer-const
+      let tagArray = this.tags.split(',');
+      // trim the array items
+      for (let index = 0; index < tagArray.length; index++) {
+        tagArray[index] = tagArray[index].trim();
+      }
+      // return tags
+      return tagArray;
+    }
+  }
+
+}

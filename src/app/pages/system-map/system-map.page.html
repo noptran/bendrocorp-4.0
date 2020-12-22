@@ -31,21 +31,21 @@
     </ion-item>
     
     <h3 class="outer-title">Star Systems</h3>
-    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+    <ion-slides #slidesSystems *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('star system')" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>
     </ion-slides>
     
     <h3 class="outer-title">People</h3>
-    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+    <ion-slides #slidesPeople *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('mission giver')" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>
     </ion-slides>
     
     <h3 class="outer-title">Locations</h3>
-    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+    <ion-slides #slidesLocations *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('location')" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>
@@ -62,7 +62,7 @@
 
     <h3 class="outer-title" *ngIf="searchList.length == 0">No results found.</h3>
 
-    <ion-slides *ngIf="searchList" [pager]="config.slideHints" [options]="slideOpts">
+    <ion-slides #slidesSearch *ngIf="searchList && showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of searchList" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>

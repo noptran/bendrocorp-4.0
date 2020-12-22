@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SystemMapDetailsPageRoutingModule } from './system-map-details-routing.module';
 
 import { SystemMapDetailsPage } from './system-map-details.page';
+import { SystemMapDetailTagsComponent } from 'src/app/components/system-map/system-map-detail-tags/system-map-detail-tags.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { SystemMapDetailsPage } from './system-map-details.page';
     IonicModule,
     SystemMapDetailsPageRoutingModule
   ],
-  declarations: [SystemMapDetailsPage]
+  declarations: [
+    SystemMapDetailsPage,
+    SystemMapDetailTagsComponent
+  ]
 })
 export class SystemMapDetailsPageModule {}

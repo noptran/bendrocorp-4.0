@@ -1,9 +1,167 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>SystemMapDetails</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="system-map"></ion-back-button>
+    </ion-buttons>
+    <ion-title>System Map Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="selectedItem">
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col style="text-align: center; vertical-align: middle;">
+            <img src="{{selectedItem.primary_image_url}}" alt="">
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label text-wrap>
+                {{selectedItem.title}} ({{selectedItem.kind}})
+                <!-- <p>{{selectedItem.tags}}</p> -->
+                <app-system-map-detail-tags [tags]="selectedItem.tags"></app-system-map-detail-tags>
+                <p>{{selectedItem.description}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <!-- Parent -->
+      <ion-item *ngIf="selectedItem.parent">
+        <strong>Parent:&nbsp;</strong><a [routerLink]="['/system-map', parseObjectLink(selectedItem.parent)]">{{selectedItem.parent.title}}</a>
+      </ion-item>
+      <!-- Object Type -->
+      <ion-item>
+        <strong>Object Type:&nbsp;</strong>{{selectedItem.kind}}
+      </ion-item>
+      <!-- Faction -->
+      <ion-item *ngIf="selectedItem.faction_affiliation">
+        <strong>Faction:&nbsp;</strong>{{selectedItem.faction_affiliation.title}}
+      </ion-item>
+      <!-- Jurisdiction -->
+      <ion-item *ngIf="selectedItem.jurisdiction">
+        <strong>Jurisdiction:&nbsp;</strong>{{selectedItem.jurisdiction.title}}
+      </ion-item>
+      <!-- Planets -->
+      <ion-item *ngIf="selectedItem.planets && selectedItem.planets.length > 0">
+        <span><strong>Planets:&nbsp;</strong></span>
+        <span *ngFor="let item of selectedItem.planets; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.planets.length">, </span></span>
+      </ion-item>
+      <!-- Moons -->
+      <ion-item *ngIf="selectedItem.moons && selectedItem.moons.length > 0">
+        <span><strong>Moons:&nbsp;</strong></span>
+        <span *ngFor="let item of selectedItem.moons; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.moons.length">, </span></span>
+      </ion-item>
+      <!-- Settlement -->
+      <ion-item *ngIf="selectedItem.settlements && selectedItem.settlements.length > 0">
+        <span><strong>Settlements:&nbsp;</strong></span>
+        <span *ngFor="let item of selectedItem.settlements; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.settlements.length">, </span></span>
+      </ion-item>
+      <!-- Locations -->
+      <ion-item *ngIf="selectedItem.locations && selectedItem.locations.length > 0">
+        <span><strong>Locations:&nbsp;</strong></span>
+        <span *ngFor="let item of selectedItem.locations; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.locations.length">, </span></span>
+      </ion-item>
+      <!-- Mission Givers -->
+      <ion-item *ngIf="selectedItem.mission_givers && selectedItem.mission_givers.length > 0">
+        <span><strong>Mission Givers:&nbsp;</strong></span>
+        <span *ngFor="let item of selectedItem.mission_givers; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.mission_givers.length">, </span></span>
+      </ion-item>
+      <!-- TODO: System map images here -->
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<!-- Here as a reference from the old app -->
+<!-- <div>
+  <h3>
+    <span>{{selectedItem.title}} <small>({{selectedItem.kind}})</small></span>
+    <span *ngIf="isEditor" style="padding-left: 4px;">
+      <add-update-system-modal *ngIf="selectedItem.kind == 'Star System'" [starSystem]="selectedItem"></add-update-system-modal>
+      <add-update-jump-point-modal *ngIf="selectedItem.kind == 'Jump Point'" [jumpPoint]="selectedItem"></add-update-jump-point-modal>
+      <add-update-system-modal *ngIf="selectedItem.kind == 'System'" [starSystem]="selectedItem"></add-update-system-modal>
+      <add-update-planet-modal *ngIf="selectedItem.kind == 'Planet'" [planet]="selectedItem"></add-update-planet-modal>
+      <add-update-moon-modal *ngIf="selectedItem.kind == 'Moon'" [moon]="selectedItem"></add-update-moon-modal>
+      <add-update-settlement-modal *ngIf="selectedItem.kind == 'Settlement'" [systemSettlement]="selectedItem"></add-update-settlement-modal>
+      <add-update-location-modal *ngIf="selectedItem.kind == 'Location'" [systemLocation]="selectedItem"></add-update-location-modal>
+      <add-update-mission-giver-modal *ngIf="selectedItem.kind == 'Mission Giver'" [missionGiver]="selectedItem"></add-update-mission-giver-modal>
+      <add-update-system-object-modal *ngIf="selectedItem.kind == 'System Object'" [systemObject]="selectedItem"></add-update-system-object-modal>
+    </span>
+  </h3>
+  <system-map-tag *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></system-map-tag>
+  <p>{{selectedItem.description}}</p>
+  <p *ngIf="selectedItem.parent"><strong>Parent: </strong><a [routerLink]="['/system-map', parseObjectLink(selectedItem.parent)]">{{selectedItem.parent.title}}</a></p>
+  <p><strong>Object Type: </strong>{{selectedItem.kind}}</p>
+</div> -->
+<!-- Faction -->
+<!-- <div *ngIf="selectedItem.faction_affiliation">
+  <p><strong>Faction: </strong>{{selectedItem.faction_affiliation.title}}</p>
+</div> -->
+<!-- Jurisdiction -->
+<!-- <div *ngIf="selectedItem.jurisdiction">
+  <p><strong>Jurisdiction: </strong>{{selectedItem.jurisdiction.title}}</p>
+</div> -->
+<!-- Planets -->
+<!-- <div *ngIf="selectedItem.planets && selectedItem.planets.length > 0">
+  <p>
+    <span><strong>Planets: </strong></span>
+    <span *ngFor="let item of selectedItem.planets; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.planets.length">, </span></span>
+  </p>
+</div> -->
+<!-- Moons -->
+<!-- <div *ngIf="selectedItem.moons && selectedItem.moons.length > 0">
+  <p>
+    <span><strong>Moons: </strong></span>
+    <span *ngFor="let item of selectedItem.moons; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.moons.length">, </span></span>
+  </p>
+</div> -->
+<!-- Settlements -->
+<!-- <div *ngIf="selectedItem.settlements && selectedItem.settlements.length > 0">
+  <p>
+    <span><strong>Settlements: </strong></span>
+    <span *ngFor="let item of selectedItem.settlements; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.settlements.length">, </span></span>
+  </p>
+</div> -->
+<!-- Locations -->
+<!-- <div *ngIf="selectedItem.locations && selectedItem.locations.length > 0">
+  <p>
+    <span><strong>Locations: </strong></span>
+    <span *ngFor="let item of selectedItem.locations; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.locations.length">, </span></span>
+  </p>
+</div> -->
+<!-- Mission Givers -->
+<!-- <div *ngIf="selectedItem.mission_givers && selectedItem.mission_givers.length > 0">
+  <p>
+    <span><strong>Mission Givers: </strong></span>
+    <span *ngFor="let item of selectedItem.mission_givers; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.mission_givers.length">, </span></span>
+  </p>
+</div> -->
+<!-- Jump Points -->
+<!-- <div *ngIf="selectedItem.jump_points && selectedItem.jump_points.length > 0">
+  <p>
+    <span><strong>Jump Points: </strong></span>
+    <span *ngFor="let item of selectedItem.jump_points; let i = index"><a [routerLink]="['/system-map', parseObjectLink(item)]">{{item.title}}</a><span *ngIf="(i + 1) < selectedItem.mission_givers.length">, </span></span>
+  </p>
+</div> -->
+<!-- Images -->
+<!-- <div *ngIf="selectedItem.system_map_images">
+  <h6>
+    <span>Images</span>
+    <span *ngIf="isEditor">&nbsp;
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'Planet'" [systemPlanet]="selectedItem"></add-update-system-image-modal>
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'Moon'" [systemMoon]="selectedItem"></add-update-system-image-modal>
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'System Object'" [systemObject]="selectedItem"></add-update-system-image-modal>
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'Settlement'" [systemSettlement]="selectedItem"></add-update-system-image-modal>
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'Location'" [systemLocation]="selectedItem"></add-update-system-image-modal>
+      <add-update-system-image-modal *ngIf="selectedItem.kind === 'Mission Giver'" [missionGiver]="selectedItem"></add-update-system-image-modal>
+    </span>
+  </h6> -->
+  <!-- <p *ngIf="selectedItem.system_map_images.length == 0">No current images.</p>
+  <div style="display:inline-block; border: 1px solid #666" *ngFor="let image of selectedItem.system_map_images">
+      <image-view-modal [title]="image.title" [description]="image.description"
+        [thumbnailUri]="image.image_url_thumbnail" [imageUri]="image.image_url"
+        [createdBy]="image.created_by.main_character"></image-view-modal>
+    </div>
+</div> -->

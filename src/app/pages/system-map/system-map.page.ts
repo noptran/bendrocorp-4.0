@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { LoadingController, Platform, IonSlides } from '@ionic/angular';
 import { from, merge, Observable, Subject, Subscription } from 'rxjs';
 import { concat, concatAll, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
@@ -15,13 +15,20 @@ import { SystemMapService } from 'src/app/services/system-map.service';
   styleUrls: ['./system-map.page.scss'],
 })
 export class SystemMapPage implements OnInit, OnDestroy {
-  readonly slideOpts = {
-    slidesPerView: 4
+  slideOpts = {
+    slidesPerView: 0
   };
 
+  // meta
   initialDataLoaded: boolean = false;
   filterRestricted = true;
   searchFilter: string;
+
+  // sliders
+  @ViewChild('slidesSystems') slidesSystems: IonSlides;
+  @ViewChild('slidesPeople') slidesPeople: IonSlides;
+  @ViewChild('slidesLocations') slidesLocations: IonSlides;
+  @ViewChild('slidesSearch') slidesSearch: IonSlides;
 
   // seperated object arrays
   systems: StarSystem[];
@@ -37,6 +44,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
   searchList: SystemMapSearchItem[] = [];
   recentItems: SystemMapSearchItem[] = [];
   isFiltering: boolean = false;
+  showSlides = true;
 
   // limits the number of characters shown in the item boxes
   listItemTextLimit = 150;
@@ -54,6 +62,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
 
   // subscriptions
   settingsSubscription: Subscription;
+  resizeSubscription: Subscription;
 
   constructor(
     private systemMapService: SystemMapService,
@@ -62,10 +71,15 @@ export class SystemMapPage implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private loading: LoadingController,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private platform: Platform
   ) {
     this.settingsSubscription = this.settingsService.dataRefreshAnnounced$.subscribe(() => {
       this.getSettings();
+    });
+
+    this.resizeSubscription = this.platform.resize.subscribe(() => {
+      this.determineSlideCount();
     });
   }
 
@@ -105,8 +119,15 @@ export class SystemMapPage implements OnInit, OnDestroy {
   }
 
   selectListItem(listItem: SystemMapSearchItem) {
-    this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
-    this.router.navigate(['system-map', `${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().replace(' ', '-')}`], { state: { systemMapItem: JSON.stringify(listItem) } })
+    // this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
+    const navigationExtras: NavigationExtras = {
+      relativeTo: this.route,
+      state: {
+        smObject: listItem
+      }
+    };
+
+    this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().replace(' ', '-')}`], navigationExtras);
     // this.selectedListItem = listItem;
   }
 
@@ -231,6 +252,8 @@ export class SystemMapPage implements OnInit, OnDestroy {
     // fetch the config
     await this.getSettings();
 
+    this.determineSlideCount();
+
     // fetch the recent items
     this.recentItems = this.systemMapService.recentSelectedListItems();
 
@@ -245,9 +268,38 @@ export class SystemMapPage implements OnInit, OnDestroy {
     });
   }
 
+  private determineSlideCount() {
+    const platWidth = this.platform.width();
+    console.log(platWidth);
+    const big = 4;
+    const small = 2;
+
+    if (platWidth < 600) { // this.platform.is('mobile') ||
+      this.slideOpts.slidesPerView = small;
+      // if (this.slidesSearch) {
+      //   this.slidesSearch.options.slidesPerView = small;
+      // }
+      // this.slidesPeople.options.slidesPerView = small;
+      // this.slidesLocations.options.slidesPerView = small;
+      // this.slidesSystems.options.slidesPerView = small;
+    } else {
+      this.slideOpts.slidesPerView = big;
+      // if (this.slidesSearch) {
+      //   this.slidesSearch.options.slidesPerView = big;
+      // }
+      // this.slidesPeople.options.slidesPerView = big;
+      // this.slidesLocations.options.slidesPerView = big;
+      // this.slidesSystems.options.slidesPerView = big;
+    }
+  }
+
   ngOnDestroy() {
     if (this.settingsSubscription) {
       this.settingsSubscription.unsubscribe();
+    }
+
+    if (this.resizeSubscription) {
+      this.resizeSubscription.unsubscribe();
     }
   }
 
