@@ -6,7 +6,7 @@ import { Base64Upload } from 'src/app/models/misc.model';
 import { ProfileService } from 'src/app/services/profile.service';
 import { AuthService } from 'src/app/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
-const { FileSelector, Toast } = Plugins;
+const { Toast } = Plugins;
 
 @Component({
   selector: 'app-update-avatar',
@@ -60,17 +60,19 @@ export class UpdateAvatarComponent implements OnInit {
   // for web need to fall back to a look alike button
   // https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
 
-    if (this.isMobile) { // TODO: https://github.com/hinddeep/capacitor-file-selector
-      const ext = ['images'];
-      const selectedFile = await FileSelector.fileSelector({
-        ext,
-        multiple_selection: false
-      });
+    // if (this.isMobile) { // TODO: https://github.com/hinddeep/capacitor-file-selector
+    //   const ext = ['images'];
+    //   const selectedFile = await FileSelector.fileSelector({
+    //     ext,
+    //     multiple_selection: false
+    //   });
 
-      console.log(selectedFile);
-    } else {
-      this.selectAvatarWeb();
-    }
+    //   console.log(selectedFile);
+    // } else {
+    //   this.selectAvatarWeb();
+    // }
+
+    this.selectAvatarWeb();
   }
 
   async updateAvatar()
