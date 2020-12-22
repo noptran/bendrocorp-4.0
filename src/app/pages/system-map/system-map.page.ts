@@ -107,7 +107,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
   selectListItem(listItem: SystemMapSearchItem) {
     this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
     this.router.navigate(['system-map', `${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().replace(' ', '-')}`], { state: { systemMapItem: JSON.stringify(listItem) } })
-    this.selectedListItem = listItem;
+    // this.selectedListItem = listItem;
   }
 
   fetchSystemObjects() {
