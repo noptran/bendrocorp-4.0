@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { from, merge, Observable, Subject } from 'rxjs';
+import { from, merge, Observable, Subject, Subscription } from 'rxjs';
 import { concat, concatAll, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
 import { StarSystem, Planet, Moon, SystemObject, Settlement, SystemLocation, MissionGiver, SystemMapSearchItem } from 'src/app/models/system-map.model';
@@ -14,12 +14,13 @@ import { SystemMapService } from 'src/app/services/system-map.service';
   templateUrl: './system-map.page.html',
   styleUrls: ['./system-map.page.scss'],
 })
-export class SystemMapPage implements OnInit {
+export class SystemMapPage implements OnInit, OnDestroy {
   readonly slideOpts = {
     slidesPerView: 4
   };
 
   initialDataLoaded: boolean = false;
+  filterRestricted = true;
   searchFilter: string;
 
   // seperated object arrays
@@ -51,6 +52,9 @@ export class SystemMapPage implements OnInit {
   loadingIndicator: HTMLIonLoadingElement;
   config: AppConfig;
 
+  // subscriptions
+  settingsSubscription: Subscription;
+
   constructor(
     private systemMapService: SystemMapService,
     private authService: AuthService,
@@ -59,7 +63,11 @@ export class SystemMapPage implements OnInit {
     private route: ActivatedRoute,
     private loading: LoadingController,
     private settingsService: SettingsService
-  ) { }
+  ) {
+    this.settingsSubscription = this.settingsService.dataRefreshAnnounced$.subscribe(() => {
+      this.getSettings();
+    });
+  }
 
   filterItems() {
     // console.log('filter me');
@@ -235,6 +243,12 @@ export class SystemMapPage implements OnInit {
     ).subscribe(() => {
       this.filterItems();
     });
+  }
+
+  ngOnDestroy() {
+    if (this.settingsSubscription) {
+      this.settingsSubscription.unsubscribe();
+    }
   }
 
 }
