@@ -29,6 +29,10 @@ jobs:
           npm run build-prod
           npx cap sync android
 
+      - name: Switch to Android Directory
+        run: |
+          cd ./android
+
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
