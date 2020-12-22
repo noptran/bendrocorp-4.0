@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { concat, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
@@ -45,12 +46,16 @@ export class SystemMapPage implements OnInit {
   selectedListItemId: string;
   selectedListItem: SystemMapSearchItem;
 
+  // loading indicator
+  loadingIndicator: HTMLIonLoadingElement;
+
   constructor(
     private systemMapService: SystemMapService,
     private authService: AuthService,
     // private spinnerService: SpinnerService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loading: LoadingController
   ) { }
 
   filterItems() {
@@ -62,7 +67,7 @@ export class SystemMapPage implements OnInit {
       let filtered = [];
       filtered = this.fullList.filter(it => {
         // console.log(it);
-        return it.title.toLowerCase().includes(this.searchFilter.toLowerCase()) 
+        return it.title.toLowerCase().includes(this.searchFilter.toLowerCase())
         || (it.description && it.description.toLowerCase().includes(this.searchFilter.toLowerCase()))
         || (it.tags && it.tags.toLowerCase().includes(this.searchFilter.toLowerCase()))
         || (it.parent && it.parent.title && it.parent.title.toLowerCase().includes(this.searchFilter.toLowerCase()))
@@ -111,7 +116,7 @@ export class SystemMapPage implements OnInit {
         // concat results into the full list
         let objectResult = results.map(x => {
           // the search object represents all of the possible fields that could be in System Map
-          let searchObject = { 
+          let searchObject = {
             // things everything will have that may even be potentially searchable
             id: x.id,
             title: x.title,
@@ -166,7 +171,9 @@ export class SystemMapPage implements OnInit {
           this.fullList = this.fullList.flat();
 
           // stop the spinner
-          this.spinnerService.spin(false);
+          if (this.loadingIndicator) {
+            this.loadingIndicator.dismiss();
+          }
 
           // loaded
           this.initialDataLoaded = true;
@@ -185,9 +192,13 @@ export class SystemMapPage implements OnInit {
     this.searchSubject.next();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     // spin the spinner
-    this.spinnerService.spin(true);
+    // setup the loading indicator
+    this.loadingIndicator = await this.loading.create({
+      message: 'Loading'
+    });
+    await this.loadingIndicator.present();
     // fetch the recent items
     this.recentItems = this.systemMapService.recentSelectedListItems();
     // fetch all of the system objects

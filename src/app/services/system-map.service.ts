@@ -26,7 +26,10 @@ import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
 })
 export class SystemMapService {
 
-  constructor(private http: HttpClient, private errorService: ErrorService, private globals: Globals) { }
+  constructor(
+    private http: HttpClient,
+    private errorService: ErrorService
+  ) { }
 
   private dataRefreshSource = new Subject();
   private fullDataRefreshSource = new Subject();
@@ -37,7 +40,7 @@ export class SystemMapService {
    */
   refreshData()
   {
-    console.log('System Map service data refresh called!')
+    console.log('System Map service data refresh called!');
     this.dataRefreshSource.next();
   }
 
@@ -49,7 +52,7 @@ export class SystemMapService {
   fetchViewSelection(): number {
     const smv = localStorage.getItem('system-map-view-selection');
     if (smv) {
-      return parseInt(smv);
+      return parseInt(smv, null);
     } else {
       localStorage.setItem('system-map-view-selection', '1');
       return 1;
@@ -69,10 +72,10 @@ export class SystemMapService {
     // make sure all of the items are unique
     const uniqResults = [];
     const map = new Map();
-    for (const item of recents.reverse()) {
-        if (!map.has(item.id)){
-            map.set(item.id, true);    // set any value to Map
-            uniqResults.push(item);
+    for (const itemInner of recents.reverse()) {
+      if (!map.has(itemInner.id)){
+          map.set(itemInner.id, true);    // set any value to Map
+          uniqResults.push(itemInner);
         }
     }
 
@@ -106,7 +109,7 @@ export class SystemMapService {
    */
   listSystems(): Observable<StarSystem[]>
   {
-    return this.http.get<StarSystem[]>(`${this.globals.baseUrl}/system-map`).pipe(
+    return this.http.get<StarSystem[]>(`${environment.baseUrl}/system-map`).pipe(
       tap(result => {
         console.log(`Fetched ${result.length} star systems!`);
         console.log(result);
@@ -117,7 +120,7 @@ export class SystemMapService {
 
   listSystemsWithDetails(): Observable<StarSystem[]>
   {
-    return this.http.get<StarSystem[]>(`${this.globals.baseUrl}/system-map/details`).pipe(
+    return this.http.get<StarSystem[]>(`${environment.baseUrl}/system-map/details`).pipe(
       tap(result => {
         console.log(`Fetched ${result.length} star systems!`);
         console.log(result);
@@ -128,7 +131,7 @@ export class SystemMapService {
 
   addSystem(system: StarSystem): Observable<StarSystem>
   {
-    return this.http.post<StarSystem>(`${this.globals.baseUrl}/system-map`, { system }).pipe(
+    return this.http.post<StarSystem>(`${environment.baseUrl}/system-map`, { system }).pipe(
       tap(result => console.log(`Created system!`)),
       catchError(this.errorService.handleError<any>('Create System'))
     );
@@ -138,7 +141,7 @@ export class SystemMapService {
   {
     // system.jurisdiction_id = Number(`${system.jurisdiction_id}`)
 
-    return this.http.put<StarSystem>(`${this.globals.baseUrl}/system-map`, { system }).pipe(
+    return this.http.put<StarSystem>(`${environment.baseUrl}/system-map`, { system }).pipe(
       tap(result => console.log(`Updated system!`)),
       catchError(this.errorService.handleError<any>('Update System'))
     );
@@ -146,7 +149,7 @@ export class SystemMapService {
 
   archiveSystem(system: StarSystem): Observable<StatusMessage>
   {
-    return this.http.delete<StatusMessage>(`${this.globals.baseUrl}/system-map/${system.id}`).pipe(
+    return this.http.delete<StatusMessage>(`${environment.baseUrl}/system-map/${system.id}`).pipe(
       tap(result => console.log(`Archived system!`)),
       catchError(this.errorService.handleError<any>('Archive System'))
     );
@@ -161,7 +164,7 @@ export class SystemMapService {
   }
 
   updateGravityWell(gravity_well: GravityWell): Observable<GravityWell> {
-    return this.http.put<GravityWell>(`${this.globals.baseUrl}/system-map/gravity-well`, { gravity_well }).pipe(
+    return this.http.put<GravityWell>(`${environment.baseUrl}/system-map/gravity-well`, { gravity_well }).pipe(
       tap(result => console.log(`Updated gravity well!`)),
       catchError(this.errorService.handleError<any>('Update Gravity Well'))
     );
@@ -172,7 +175,7 @@ export class SystemMapService {
   }
 
   listPlanets(): Observable<Planet[]> {
-    return this.http.get<Planet[]>(`${this.globals.baseUrl}/system-map/planet`).pipe(
+    return this.http.get<Planet[]>(`${environment.baseUrl}/system-map/planet`).pipe(
       tap(result => console.log(`Fetched ${result.length} planets!`)),
       catchError(this.errorService.handleError<any>('List Planets'))
     );
@@ -180,7 +183,7 @@ export class SystemMapService {
 
   addPlanet(planet: Planet): Observable<Planet>
   {
-    return this.http.post<Planet>(`${this.globals.baseUrl}/system-map/planet`, { planet }).pipe(
+    return this.http.post<Planet>(`${environment.baseUrl}/system-map/planet`, { planet }).pipe(
       tap(result => console.log(`Created planet!`)),
       catchError(this.errorService.handleError<any>('Create Planet'))
     );
@@ -188,7 +191,7 @@ export class SystemMapService {
 
   updatePlanet(planet: Planet): Observable<Planet>
   {
-    return this.http.put<Planet>(`${this.globals.baseUrl}/system-map/planet`, { planet }).pipe(
+    return this.http.put<Planet>(`${environment.baseUrl}/system-map/planet`, { planet }).pipe(
       tap(result => console.log(`Updated planet!`)),
       catchError(this.errorService.handleError<any>('Update Planet'))
     );
@@ -196,14 +199,14 @@ export class SystemMapService {
 
   archivePlanet(planet: Planet): Observable<Planet>
   {
-    return this.http.delete<Planet>(`${this.globals.baseUrl}/system-map/planet/${planet.id}`).pipe(
+    return this.http.delete<Planet>(`${environment.baseUrl}/system-map/planet/${planet.id}`).pipe(
       tap(result => console.log(`Archived planet!`)),
       catchError(this.errorService.handleError<any>('Archive Planet'))
     );
   }
 
   listMoons(): Observable<Moon[]> {
-    return this.http.get<Moon[]>(`${this.globals.baseUrl}/system-map/moon`).pipe(
+    return this.http.get<Moon[]>(`${environment.baseUrl}/system-map/moon`).pipe(
       tap(result => console.log(`Fetched ${result.length} moons!`)),
       catchError(this.errorService.handleError<any>('List Moons'))
     );
@@ -211,7 +214,7 @@ export class SystemMapService {
 
   addMoon(moon: Moon): Observable<Moon>
   {
-    return this.http.post<Moon>(`${this.globals.baseUrl}/system-map/moon`, { moon }).pipe(
+    return this.http.post<Moon>(`${environment.baseUrl}/system-map/moon`, { moon }).pipe(
       tap(result => console.log(`Created moon!`)),
       catchError(this.errorService.handleError<any>('Create Planet'))
     );
@@ -219,7 +222,7 @@ export class SystemMapService {
 
   updateMoon(moon: Moon): Observable<Moon>
   {
-    return this.http.put<Moon>(`${this.globals.baseUrl}/system-map/moon`, { moon }).pipe(
+    return this.http.put<Moon>(`${environment.baseUrl}/system-map/moon`, { moon }).pipe(
       tap(result => console.log(`Updated moon!`)),
       catchError(this.errorService.handleError<any>('Update Moon'))
     );
@@ -227,14 +230,14 @@ export class SystemMapService {
 
   archiveMoon(moon: Moon): Observable<Moon>
   {
-    return this.http.delete<Moon>(`${this.globals.baseUrl}/system-map/moon/${moon.id}`).pipe(
+    return this.http.delete<Moon>(`${environment.baseUrl}/system-map/moon/${moon.id}`).pipe(
       tap(result => console.log(`Archived moon!`)),
       catchError(this.errorService.handleError<any>('Archive Moon'))
     );
   }
 
   listSystemObjects(): Observable<SystemObject[]> {
-    return this.http.get<SystemObject[]>(`${this.globals.baseUrl}/system-map/system-object`).pipe(
+    return this.http.get<SystemObject[]>(`${environment.baseUrl}/system-map/system-object`).pipe(
       tap(result => console.log(`Fetched ${result.length} system objects!`)),
       catchError(this.errorService.handleError<any>('List Settlements'))
     );
@@ -242,7 +245,7 @@ export class SystemMapService {
 
   addSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
-    return this.http.post<SystemObject>(`${this.globals.baseUrl}/system-map/system-object`, { system_object }).pipe(
+    return this.http.post<SystemObject>(`${environment.baseUrl}/system-map/system-object`, { system_object }).pipe(
       tap(result => console.log(`Created system object!`)),
       catchError(this.errorService.handleError<any>('Create System Object'))
     );
@@ -250,7 +253,7 @@ export class SystemMapService {
 
   updateSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
-    return this.http.put<SystemObject>(`${this.globals.baseUrl}/system-map/system-object`, { system_object }).pipe(
+    return this.http.put<SystemObject>(`${environment.baseUrl}/system-map/system-object`, { system_object }).pipe(
       tap(result => console.log(`Updated system object!`)),
       catchError(this.errorService.handleError<any>('Update System Object'))
     );
@@ -258,14 +261,14 @@ export class SystemMapService {
 
   archiveSystemObject(system_object: SystemObject): Observable<SystemObject>
   {
-    return this.http.delete<SystemObject>(`${this.globals.baseUrl}/system-map/system-object/${system_object.id}`).pipe(
+    return this.http.delete<SystemObject>(`${environment.baseUrl}/system-map/system-object/${system_object.id}`).pipe(
       tap(result => console.log(`Archived system object!`)),
       catchError(this.errorService.handleError<any>('Archive System Object'))
     );
   }
 
   listSettlements(): Observable<Settlement[]> {
-    return this.http.get<Settlement[]>(`${this.globals.baseUrl}/system-map/settlement`).pipe(
+    return this.http.get<Settlement[]>(`${environment.baseUrl}/system-map/settlement`).pipe(
       tap(result => console.log(`List Settlements`)),
       catchError(this.errorService.handleError<any>('List Settlements'))
     );
@@ -273,7 +276,7 @@ export class SystemMapService {
 
   addSettlement(settlement: Settlement): Observable<Settlement>
   {
-    return this.http.post<Settlement>(`${this.globals.baseUrl}/system-map/settlement`, { settlement }).pipe(
+    return this.http.post<Settlement>(`${environment.baseUrl}/system-map/settlement`, { settlement }).pipe(
       tap(result => console.log(`Created settlement!`)),
       catchError(this.errorService.handleError<any>('Create Settlement'))
     );
@@ -281,7 +284,7 @@ export class SystemMapService {
 
   updateSettlement(settlement: Settlement): Observable<Settlement>
   {
-    return this.http.put<Settlement>(`${this.globals.baseUrl}/system-map/settlement`, { settlement }).pipe(
+    return this.http.put<Settlement>(`${environment.baseUrl}/system-map/settlement`, { settlement }).pipe(
       tap(result => console.log(`Updated settlement!`)),
       catchError(this.errorService.handleError<any>('Update Settlement'))
     );
@@ -289,7 +292,7 @@ export class SystemMapService {
 
   archiveSettlement(settlement: Settlement): Observable<Settlement>
   {
-    return this.http.delete<Settlement>(`${this.globals.baseUrl}/system-map/settlement/${settlement.id}`).pipe(
+    return this.http.delete<Settlement>(`${environment.baseUrl}/system-map/settlement/${settlement.id}`).pipe(
       tap(result => console.log(`Archived settlement!`)),
       catchError(this.errorService.handleError<any>('Archive Settlement'))
     );
@@ -297,7 +300,7 @@ export class SystemMapService {
 
   addSystemImage(image: SystemImage): Observable<SystemImage>
   {
-    return this.http.post<SystemImage>(`${this.globals.baseUrl}/system-map/image`, { image }).pipe(
+    return this.http.post<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
       tap(result => console.log(`Created image!`)),
       catchError(this.errorService.handleError<any>('Create Image'))
     );
@@ -305,7 +308,7 @@ export class SystemMapService {
 
   updateSystemImage(image: SystemImage): Observable<SystemImage>
   {
-    return this.http.put<SystemImage>(`${this.globals.baseUrl}/system-map/image`, { image }).pipe(
+    return this.http.put<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
       tap(result => console.log(`Updated image!`)),
       catchError(this.errorService.handleError<any>('Update Image'))
     );
@@ -313,14 +316,14 @@ export class SystemMapService {
 
   archiveSystemImage(image: SystemImage): Observable<SystemImage>
   {
-    return this.http.delete<SystemImage>(`${this.globals.baseUrl}/system-map/image/${image.id}`).pipe(
+    return this.http.delete<SystemImage>(`${environment.baseUrl}/system-map/image/${image.id}`).pipe(
       tap(result => console.log(`Archived imgage!`)),
       catchError(this.errorService.handleError<any>('Archive Image'))
     );
   }
 
   listLocations(): Observable<SystemLocation[]> {
-    return this.http.get<SystemLocation[]>(`${this.globals.baseUrl}/system-map/location`).pipe(
+    return this.http.get<SystemLocation[]>(`${environment.baseUrl}/system-map/location`).pipe(
       tap(result => console.log(`Fetched ${result.length} locations!`)),
       catchError(this.errorService.handleError<any>('List Locations'))
     );
@@ -328,7 +331,7 @@ export class SystemMapService {
 
   addLocation(location: SystemLocation): Observable<SystemLocation>
   {
-    return this.http.post<SystemLocation>(`${this.globals.baseUrl}/system-map/location`, { location }).pipe(
+    return this.http.post<SystemLocation>(`${environment.baseUrl}/system-map/location`, { location }).pipe(
       tap(result => console.log(`Created location!`)),
       catchError(this.errorService.handleError<any>('Create Location'))
     );
@@ -336,7 +339,7 @@ export class SystemMapService {
 
   updateLocation(location: SystemLocation): Observable<SystemLocation>
   {
-    return this.http.put<SystemLocation>(`${this.globals.baseUrl}/system-map/location`, { location }).pipe(
+    return this.http.put<SystemLocation>(`${environment.baseUrl}/system-map/location`, { location }).pipe(
       tap(result => console.log(`Updated location!`)),
       catchError(this.errorService.handleError<any>('Update Location'))
     );
@@ -344,21 +347,21 @@ export class SystemMapService {
 
   archiveLocation(location: SystemLocation): Observable<SystemLocation>
   {
-    return this.http.delete<SystemLocation>(`${this.globals.baseUrl}/system-map/location/${location.id}`).pipe(
+    return this.http.delete<SystemLocation>(`${environment.baseUrl}/system-map/location/${location.id}`).pipe(
       tap(result => console.log(`Archived location!`)),
       catchError(this.errorService.handleError<any>('Archive Location'))
     );
   }
 
   listMissionGivers(): Observable<MissionGiver[]> {
-    return this.http.get<MissionGiver[]>(`${this.globals.baseUrl}/system-map/mission-giver`).pipe(
+    return this.http.get<MissionGiver[]>(`${environment.baseUrl}/system-map/mission-giver`).pipe(
       tap(result => console.log(`Fetched ${result.length} mission givers!`)),
       catchError(this.errorService.handleError<any>('Create Mission Giver'))
     );
   }
 
   getMissionGiver(mission_giver_id: string): Observable<MissionGiver[]> {
-    return this.http.get<MissionGiver>(`${this.globals.baseUrl}/system-map/mission-giver/${mission_giver_id}`).pipe(
+    return this.http.get<MissionGiver>(`${environment.baseUrl}/system-map/mission-giver/${mission_giver_id}`).pipe(
       tap(result => console.log(`Created mission giver!`)),
       catchError(this.errorService.handleError<any>('Create Mission Giver'))
     );
@@ -366,7 +369,7 @@ export class SystemMapService {
 
   addMissionGiver(mission_giver: MissionGiver): Observable<MissionGiver>
   {
-    return this.http.post<MissionGiver>(`${this.globals.baseUrl}/system-map/mission-giver`, { mission_giver }).pipe(
+    return this.http.post<MissionGiver>(`${environment.baseUrl}/system-map/mission-giver`, { mission_giver }).pipe(
       tap(result => console.log(`Created mission giver!`)),
       catchError(this.errorService.handleError<any>('Create Mission Giver'))
     );
@@ -374,7 +377,7 @@ export class SystemMapService {
 
   updateMissionGiver(mission_giver: MissionGiver): Observable<MissionGiver>
   {
-    return this.http.put<MissionGiver>(`${this.globals.baseUrl}/system-map/mission-giver`, { mission_giver }).pipe(
+    return this.http.put<MissionGiver>(`${environment.baseUrl}/system-map/mission-giver`, { mission_giver }).pipe(
       tap(result => console.log(`Updated mission giver!`)),
       catchError(this.errorService.handleError<any>('Update Mission Giver'))
     );
@@ -382,7 +385,7 @@ export class SystemMapService {
 
   archiveMissionGiver(mission_giver: MissionGiver): Observable<MissionGiver>
   {
-    return this.http.delete<StatusMessage>(`${this.globals.baseUrl}/system-map/mission-giver/${mission_giver.id}`).pipe(
+    return this.http.delete<StatusMessage>(`${environment.baseUrl}/system-map/mission-giver/${mission_giver.id}`).pipe(
       tap(result => console.log(`Archived mission giver!`)),
       catchError(this.errorService.handleError<any>('Archive Mission Giver'))
     );
@@ -390,36 +393,36 @@ export class SystemMapService {
 
   addFlora()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   updateFlora()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   archiveFlora()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   addFauna()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   updateFauna()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   archiveFauna()
   {
-    throw new Error("Not available!")
+    throw new Error('Not available!');
   }
 
   listJumpPoints(): Observable<JumpPoint[]> {
-    return this.http.get<JumpPoint[]>(`${this.globals.baseUrl}/system-map/jump-point`).pipe(
+    return this.http.get<JumpPoint[]>(`${environment.baseUrl}/system-map/jump-point`).pipe(
       tap(result => console.log(`Fetched ${result.length} jump points!`)),
       catchError(this.errorService.handleError<any>('List Jump Points'))
     );
@@ -427,7 +430,7 @@ export class SystemMapService {
 
   addJumpPoint(jump_point: JumpPoint): Observable<JumpPoint>
   {
-    return this.http.post<JumpPoint>(`${this.globals.baseUrl}/system-map/jump-point`, { jump_point }).pipe(
+    return this.http.post<JumpPoint>(`${environment.baseUrl}/system-map/jump-point`, { jump_point }).pipe(
       tap(result => console.log(result)),
       catchError(this.errorService.handleError<any>('Create Jump Point'))
     );
@@ -435,7 +438,7 @@ export class SystemMapService {
 
   updateJumpPoint(jump_point: JumpPoint): Observable<JumpPoint>
   {
-    return this.http.put<JumpPoint>(`${this.globals.baseUrl}/system-map/jump-point`, { jump_point }).pipe(
+    return this.http.put<JumpPoint>(`${environment.baseUrl}/system-map/jump-point`, { jump_point }).pipe(
       tap(result => console.log(result)),
       catchError(this.errorService.handleError<any>('Update Jump Point'))
     );
@@ -443,7 +446,7 @@ export class SystemMapService {
 
   archiveJumpPoint(jump_point: JumpPoint): Observable<JumpPoint>
   {
-    return this.http.delete<StatusMessage>(`${this.globals.baseUrl}/system-map/jump-point/${jump_point.id}`).pipe(
+    return this.http.delete<StatusMessage>(`${environment.baseUrl}/system-map/jump-point/${jump_point.id}`).pipe(
       tap(result => console.log(result)),
       catchError(this.errorService.handleError<any>('Archive Jump Point'))
     );
@@ -451,7 +454,7 @@ export class SystemMapService {
 
   // fetch_types() : Observable<SystemMapTypes>
   // {
-  //   return this.http.get<SystemMapTypes>(`${this.globals.baseUrl}/system-map/types`).pipe(
+  //   return this.http.get<SystemMapTypes>(`${environment.baseUrl}/system-map/types`).pipe(
   //     tap(results => console.log("Fetched System Map Types")),
   //     catchError(this.errorService.handleError<any>('Fetch System Map Types'))
   //   )
