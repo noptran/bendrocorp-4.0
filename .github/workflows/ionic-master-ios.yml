@@ -1,0 +1,48 @@
+name: build-ios
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - notarealbranch
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: macos-latest
+    timeout-minutes: 30 # sometimes we have to wait for this to be available since they are actual machines
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js environment
+    
+      uses: actions/setup-node@v2.1.1
+      #with:
+      #    node-version: $
+
+    # Runs a single command using the runners shell
+    - name: npm install and npm run build
+      run: |
+        npm install
+        npm run build-prod
+        npx cap sync ios
+
+    - uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.CERTIFICATES_FILE_BASE64 }}
+        p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
+    - uses: Apple-Actions/download-provisioning-profiles@v1
+      with:
+        bundle-id: com.bendrocorp.app
+        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+    - name: "#️⃣ Generate Build Number"
+      id: buildnumber
+      uses: einaregilsson/build-number@v2
+      with:
+        token: ${{ secrets.github_token }}
+    - run: ./Build
+    - uses: Apple-Actions/upload-testflight-build@master
+      with:
+        app-path: .build/Artifacts/App.ipa/App.ipa
+        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
