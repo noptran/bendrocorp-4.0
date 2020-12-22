@@ -9,6 +9,9 @@
       </ion-item> -->
       <ion-content>
         <ion-label>
+          <ion-button *ngIf="updateAvailable" (click)="doUpdate()" style="float: right;" color="light" slot="end">
+            <ion-icon color="success" name="push-outline"></ion-icon>
+          </ion-button>
           <img src="../assets/bendrocorp-final.png" style="max-height: 50px; float: left; padding-right: 10px;" alt="">
           <h1>BendroCorp</h1>
           <p>Expanding the frontier...</p>

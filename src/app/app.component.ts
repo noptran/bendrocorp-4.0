@@ -18,6 +18,8 @@ import { SettingsService } from './services/settings.service';
 import { UserService } from './services/user.service';
 import { CheckUpdateService } from './services/sw/check-update.service';
 import { LogUpdateService } from './services/sw/log-update.service';
+import { SwUpdate } from '@angular/service-worker';
+import { PromptUpdateService } from './services/sw/prompt-update.service';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +37,13 @@ export class AppComponent implements OnInit, OnDestroy {
   connectionSubscription: Subscription;
   profileSubscription: Subscription;
   userServiceSubscription: Subscription;
+  updateSubscription: Subscription;
 
   user: UserSessionResponse;
   totalApprovalsCount: number;
+
+  // updates
+  updateAvailable: boolean;
 
   constructor(
     private platform: Platform,
@@ -54,7 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // sw stuff
     private checkUpdate: CheckUpdateService,
-    private logUpdate: LogUpdateService
+    private logUpdate: LogUpdateService,
+
+    // updates
+    private promptUpdate: PromptUpdateService,
+    private update: SwUpdate
   ) {
     this.initializeApp();
 
@@ -73,6 +83,13 @@ export class AppComponent implements OnInit, OnDestroy {
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
         this.fetchApprovals();
+      });
+
+      // update subscription
+      this.updateSubscription = this.promptUpdate.updateAnnounced$.subscribe((result) => {
+        if (result === 'UPDATE') {
+          this.updateAvailable = true;
+        }
       });
 
       // create auth subscriber
@@ -119,6 +136,10 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.selectedIndex = 0;
     }
+  }
+
+  doUpdate() {
+    this.update.activateUpdate().then(() => document.location.reload());
   }
 
   fetchApprovals() {
@@ -175,6 +196,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.userServiceSubscription) {
       this.userServiceSubscription.unsubscribe();
+    }
+
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
     }
   }
 }
