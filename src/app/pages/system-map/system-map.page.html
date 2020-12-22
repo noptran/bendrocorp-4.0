@@ -10,28 +10,62 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card>
-    <div class="sm-topper"></div>
-    <ion-card-header>
-      <ion-card-title>System Map</ion-card-title>
-    </ion-card-header>
-  
-    <ion-card-content>
-      System Map represents the knowledge of BendroCorp about the 'verse.
-    </ion-card-content>
-  </ion-card>
-  <ion-item>
-    <ion-label style="text-align: right;">
-      Map View
-    </ion-label>
-    <ion-toggle slot="end" color="primary" disabled></ion-toggle>
-  </ion-item>
+<ion-content *ngIf="initialDataLoaded">
+  <!-- Regular View -->
+  <div *ngIf="!searchFilter">
+    <ion-card>
+      <div class="sm-topper"></div>
+      <ion-card-header>
+        <ion-card-title>System Map</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        System Map represents the knowledge of BendroCorp about the 'verse.
+      </ion-card-content>
+    </ion-card>
+    <ion-item>
+      <ion-label style="text-align: right;">
+        Map View
+      </ion-label>
+      <ion-toggle slot="end" color="primary" disabled></ion-toggle>
+    </ion-item>
+    
+    <h3 class="outer-title">Star Systems</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let mg of fetchTypeOfItem('star system')" (click)="openPage(page)">
+        <app-system-map-list-card [smObject]="mg"></app-system-map-list-card>
+      </ion-slide>
+    </ion-slides>
+    
+    <h3 class="outer-title">People</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let mg of fetchTypeOfItem('mission giver')" (click)="openPage(page)">
+        <app-system-map-list-card [smObject]="mg"></app-system-map-list-card>
+      </ion-slide>
+    </ion-slides>
+    
+    <h3 class="outer-title">Locations</h3>
+    <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let mg of fetchTypeOfItem('location')" (click)="openPage(page)">
+        <app-system-map-list-card [smObject]="mg"></app-system-map-list-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
 
-  <!-- card to be be replaced by categorical sliders -->
-  <ion-card>
-    <ion-card-content>
-      System Map content cards will go here! :)
-    </ion-card-content>
-  </ion-card>
+  <!-- Search Results view -->
+  <div *ngIf="searchFilter">
+    <ion-item>
+      <ion-label>
+        System Map Search Results
+      </ion-label>
+    </ion-item>
+
+    <h3 class="outer-title" *ngIf="searchList.length == 0">No results found.</h3>
+
+    <ion-slides *ngIf="searchList" [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let item of searchList" (click)="openPage(page)">
+        <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
 </ion-content>

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SystemMapPageRoutingModule } from './system-map-routing.module';
 
 import { SystemMapPage } from './system-map.page';
+import { SystemMapListCardComponent } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { SystemMapPage } from './system-map.page';
     IonicModule,
     SystemMapPageRoutingModule
   ],
-  declarations: [SystemMapPage]
+  declarations: [
+    SystemMapPage,
+    SystemMapListCardComponent
+  ]
 })
 export class SystemMapPageModule {}

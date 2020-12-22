@@ -2,10 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { Subject } from 'rxjs';
-import { concat, debounceTime } from 'rxjs/operators';
+import { from, merge, Observable, Subject } from 'rxjs';
+import { concat, concatAll, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
 import { StarSystem, Planet, Moon, SystemObject, Settlement, SystemLocation, MissionGiver, SystemMapSearchItem } from 'src/app/models/system-map.model';
+import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
 
 @Component({
@@ -48,6 +49,7 @@ export class SystemMapPage implements OnInit {
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
+  config: AppConfig;
 
   constructor(
     private systemMapService: SystemMapService,
@@ -55,7 +57,8 @@ export class SystemMapPage implements OnInit {
     // private spinnerService: SpinnerService,
     private router: Router,
     private route: ActivatedRoute,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private settingsService: SettingsService
   ) { }
 
   filterItems() {
@@ -83,6 +86,16 @@ export class SystemMapPage implements OnInit {
     }
   }
 
+  fetchTypeOfItem(itemType: string) {
+    if (this.fullList) {
+      return this.fullList.filter(x => x.kind.toLowerCase() === itemType.toLowerCase());
+    }
+  }
+
+  async getSettings() {
+    this.config = await this.settingsService.getConfig();
+  }
+
   selectListItem(listItem: SystemMapSearchItem) {
     this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
     this.router.navigate(['system-map', `${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().replace(' ', '-')}`], { state: { systemMapItem: JSON.stringify(listItem) } })
@@ -106,8 +119,12 @@ export class SystemMapPage implements OnInit {
     objectRequests.push(this.systemMapService.listJumpPoints());
 
     // concat and execute
-    let doObjectRequests = concat.apply(this, objectRequests);
-    doObjectRequests.subscribe((results) => {
+    // const doObjectRequests = concat.apply(this, objectRequests);
+    // let doObjectRequests = concat(objectRequests);
+    // const doObjectRequests = merge(objectRequests);
+    const doObjectRequests = from(objectRequests);
+    doObjectRequests.pipe(concatAll())
+    .subscribe((results: any) => {
       if (!(results instanceof HttpErrorResponse)) {
         completed += 1;
         // console.log(completed);
@@ -177,6 +194,9 @@ export class SystemMapPage implements OnInit {
 
           // loaded
           this.initialDataLoaded = true;
+
+          console.log(this.fullList);
+
         }
       } else {
         console.error('uh oh...something went wrong..');
@@ -199,10 +219,16 @@ export class SystemMapPage implements OnInit {
       message: 'Loading'
     });
     await this.loadingIndicator.present();
+
+    // fetch the config
+    await this.getSettings();
+
     // fetch the recent items
     this.recentItems = this.systemMapService.recentSelectedListItems();
+
     // fetch all of the system objects
     this.fetchSystemObjects();
+
     // setup the filter debounce
     this.searchSubject.pipe(
       debounceTime(300)

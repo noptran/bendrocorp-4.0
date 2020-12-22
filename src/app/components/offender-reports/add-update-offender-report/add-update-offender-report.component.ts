@@ -425,7 +425,9 @@ export class AddUpdateOffenderReportComponent implements OnInit {
     } else {
       return (
         this.offenderReport &&
-        (!this.offenderReport.offender_attributes || (this.offenderReport.offender_attributes.offender_handle && this.offenderReport.offender_attributes.offender_handle.length > 1)) &&
+        (!this.offenderReport.offender_attributes
+          || (this.offenderReport.offender_attributes.offender_handle
+            && this.offenderReport.offender_attributes.offender_handle.length > 1)) &&
         (this.offenderReport.description && this.offenderReport.description.length > 20) &&
         (this.offenderReport.occured_when_ms) &&
         // (this.offenderReport.system_id) &&
@@ -443,7 +445,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.systemMapService.list().subscribe((results) => {
+    this.systemMapService.listDeep().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.systemData = results;
 
