@@ -3,6 +3,7 @@
   <img src="{{smObject.primary_image_url}}" alt="">
   <ion-card-subtitle>{{smObject.title}}</ion-card-subtitle>
   <ion-card-content>
-    {{smObject.tags}}
+    <p *ngIf="!smObject.tags">&nbsp;</p>
+    <app-system-map-list-tags *ngIf="smObject.tags" [tags]="smObject.tags"></app-system-map-list-tags>
   </ion-card-content>
 </ion-card>
