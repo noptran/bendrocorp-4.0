@@ -22,11 +22,17 @@ jobs:
     
         uses: actions/setup-node@v2.1.1
 
+      - name: Allow unsecure commands 🤦
+        run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
+
       # Runs a single command using the runners shell
       - name: npm install and npm run build
         run: |
           npm install
           npm run build-prod
+
+      - name: ionic sync android
+        run: |
           npx cap sync android
 
       - name: Switch to Android Directory
@@ -68,7 +74,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
-          packageName: com.package
+          packageName: com.bendrocorp.app
           releaseFile: app/build/outputs/bundle/release/app-release.aab
           track: beta
           whatsNewDirectory: whatsnew/
