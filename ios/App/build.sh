@@ -23,6 +23,9 @@ DERIVED_DATA_PATH=${DERIVED_DATA_PATH:-${BUILD_DIR}/DerivedData}
 CURRENT_PROJECT_VERSION=${BUILD_NUMBER:-0}
 EXPORT_OPTIONS_FILE="Support/ExportOptions.plist"
 
+echo "Build Version:"
+echo $CURRENT_PROJECT_VERSION
+
 rm -rf .build
 
 xcrun xcodebuild \
