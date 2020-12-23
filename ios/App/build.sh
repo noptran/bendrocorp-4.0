@@ -28,6 +28,8 @@ echo $CURRENT_PROJECT_VERSION
 
 rm -rf .build
 
+# TODO: sed out the version number ./ios/App/App.xcodeprod/project.pbxproj
+
 xcrun xcodebuild \
     -workspace "${WORKSPACE}" \
     -scheme "${SCHEME}" \

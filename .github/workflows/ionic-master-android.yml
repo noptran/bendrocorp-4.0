@@ -35,31 +35,27 @@ jobs:
         run: |
           npx cap sync android
 
-      - name: Switch to Android Directory
-        run: |
-          cd ./android
-
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
       - name: Grant rights
-        run: chmod +x build.gradle
+        run: chmod +x ./android/build.gradle
 
       - name: Build with Gradle
         id: build
-        run: ./gradlew build
+        run: ./android/gradlew build
 
       - name: Build Release AAB
         id: buildRelease
-        run: ./gradlew bundleRelease
+        run: ./android/gradlew bundleRelease
 
       - name: Sign AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: ./android/app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -69,12 +65,12 @@ jobs:
         id: createServiceAccount
         run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
-      - name: Deploy to Play Store (BETA)
+      - name: Deploy to Play Store
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
           packageName: com.bendrocorp.app
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
           track: beta
           whatsNewDirectory: whatsnew/
