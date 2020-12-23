@@ -23,6 +23,17 @@ DERIVED_DATA_PATH=${DERIVED_DATA_PATH:-${BUILD_DIR}/DerivedData}
 CURRENT_PROJECT_VERSION=${BUILD_NUMBER:-0}
 EXPORT_OPTIONS_FILE="Support/ExportOptions.plist"
 
+# decrypt the provisioning profile
+gpg -d --pinentry-mode=loopback --passphrase "${PROV_KEY}" -o provisioning.mobileprovision provisioning.mobileprovision.gpg
+
+# install it
+for PROVISION in `ls ./*.mobileprovision`
+do
+  UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+  cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+done
+
+# do the export
 xcrun xcodebuild \
     -exportArchive \
     -exportOptionsPlist "${EXPORT_OPTIONS_FILE}" \
