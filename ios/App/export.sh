@@ -24,17 +24,17 @@ CURRENT_PROJECT_VERSION=${BUILD_NUMBER:-0}
 EXPORT_OPTIONS_FILE="Support/ExportOptions.plist"
 
 # create the provision directory if its not there
-mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+# mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
 
 # decrypt the provisioning profile
-gpg -d --pinentry-mode=loopback --passphrase "${PROV_KEY}" -o provisioning.mobileprovision provisioning.mobileprovision.gpg
+# gpg -d --pinentry-mode=loopback --passphrase "${PROV_KEY}" -o provisioning.mobileprovision provisioning.mobileprovision.gpg
 
 # install it
-for PROVISION in `ls ./*.mobileprovision`
-do
-  UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
-  cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
-done
+# for PROVISION in `ls ./*.mobileprovision`
+# do
+#   UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+#   cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+# done
 
 # do the export
 xcrun xcodebuild \

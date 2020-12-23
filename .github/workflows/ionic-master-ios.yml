@@ -46,7 +46,7 @@ jobs:
     - name: Dev Provisioning Profile
       uses: Apple-Actions/download-provisioning-profiles@v1
       with:
-        profile-type: IOS_APP_DEVELOPMENT
+        # profile-type: IOS_APP_DEVELOPMENT
         bundle-id: com.bendrocorp.app
         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
         api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
