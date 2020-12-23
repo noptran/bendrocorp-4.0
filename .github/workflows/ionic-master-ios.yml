@@ -52,8 +52,9 @@ jobs:
     
     - name: Run iOS Build
       run: |
-        chmod +x ./ios/App/build.sh
-        ./ios/App/build.sh
+        cd ./ios/App/
+        chmod +x ./build.sh
+        ./build.sh
     
     - uses: Apple-Actions/upload-testflight-build@master
       with:
