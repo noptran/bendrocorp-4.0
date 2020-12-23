@@ -85,6 +85,8 @@ jobs:
         cd ./ios/App/
         chmod +x ./export.sh
         ./export.sh
+        ls -la ./ios/App/.build/Artifacts/
+        ls -la ./ios/App/.build/Artifacts/App.ipa
     
     - uses: Apple-Actions/upload-testflight-build@master
       with:
