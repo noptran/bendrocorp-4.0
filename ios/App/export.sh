@@ -23,18 +23,11 @@ DERIVED_DATA_PATH=${DERIVED_DATA_PATH:-${BUILD_DIR}/DerivedData}
 CURRENT_PROJECT_VERSION=${BUILD_NUMBER:-0}
 EXPORT_OPTIONS_FILE="Support/ExportOptions.plist"
 
-rm -rf "${RESULT_BUNDLE_PATH}"
-
 xcrun xcodebuild \
-    -workspace "${WORKSPACE}" \
-    -scheme "${SCHEME}" \
-    -configuration "${CONFIGURATION}" \
-    -sdk "${SDK}" \
-    -parallelizeTargets \
-    -showBuildTimingSummary \
-    -disableAutomaticPackageResolution \
-    -derivedDataPath "${DERIVED_DATA_PATH}" \
+    -exportArchive \
+    -exportOptionsPlist "${EXPORT_OPTIONS_FILE}" \
     -archivePath "${ARCHIVE_PATH}" \
-    -resultBundlePath "${RESULT_BUNDLE_PATH}" \
-    CURRENT_PROJECT_VERSION="${CURRENT_PROJECT_VERSION}" \
-    archive
+    -exportPath "${ARTIFACT_PATH}/${SCHEME}.ipa"
+
+# Zip up the Xcode Archive into Artifacts folder.
+ditto -c -k --sequesterRsrc --keepParent "${ARCHIVE_PATH}" "${ARTIFACT_PATH}/${SCHEME}.xcarchive.zip"
