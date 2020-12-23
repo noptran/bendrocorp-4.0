@@ -6,6 +6,7 @@ set -o pipefail
 function finish() {
   # ditto -c -k --sequesterRsrc --keepParent "${RESULT_BUNDLE_PATH}" "${RESULT_BUNDLE_PATH}.zip"
   # rm -rf "${RESULT_BUNDLE_PATH}"
+  echo "la la la"
 }
 
 trap finish EXIT
