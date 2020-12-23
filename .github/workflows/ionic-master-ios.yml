@@ -51,7 +51,9 @@ jobs:
         token: ${{ secrets.github_token }}
     
     - name: Run iOS Build
-      run: ./ios/App/build.sh
+      run: |
+        chmod +x ./ios/App/build.sh
+        ./ios/App/build.sh
     
     - uses: Apple-Actions/upload-testflight-build@master
       with:
