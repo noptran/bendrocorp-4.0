@@ -4,8 +4,8 @@ set -xeu
 set -o pipefail
 
 function finish() {
-  ditto -c -k --sequesterRsrc --keepParent "${RESULT_BUNDLE_PATH}" "${RESULT_BUNDLE_PATH}.zip"
-  rm -rf "${RESULT_BUNDLE_PATH}"
+  # ditto -c -k --sequesterRsrc --keepParent "${RESULT_BUNDLE_PATH}" "${RESULT_BUNDLE_PATH}.zip"
+  # rm -rf "${RESULT_BUNDLE_PATH}"
 }
 
 trap finish EXIT
@@ -44,4 +44,4 @@ xcrun xcodebuild \
     -exportPath "${ARTIFACT_PATH}/${SCHEME}.ipa"
 
 # Zip up the Xcode Archive into Artifacts folder.
-ditto -c -k --sequesterRsrc --keepParent "${ARCHIVE_PATH}" "${ARTIFACT_PATH}/${SCHEME}.xcarchive.zip"
+# ditto -c -k --sequesterRsrc --keepParent "${ARCHIVE_PATH}" "${ARTIFACT_PATH}/${SCHEME}.xcarchive.zip"
