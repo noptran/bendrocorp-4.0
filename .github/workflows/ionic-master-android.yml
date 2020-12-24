@@ -46,11 +46,15 @@ jobs:
 
       - name: Build with Gradle
         id: build
-        run: ./android/gradlew build
+        run: |
+          ./android/
+          ./gradlew build
 
       - name: Build Release AAB
         id: buildRelease
-        run: ./android/gradlew bundleRelease
+        run:  |
+          ./android/
+          ./gradlew bundleRelease
 
       - name: Sign AAB
         id: sign
