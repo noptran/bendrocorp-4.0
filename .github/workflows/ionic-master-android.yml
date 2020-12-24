@@ -76,12 +76,12 @@ jobs:
         run: |
           ls -la ./android/app/build/outputs/bundle/release/
 
-      - name: Deploy to Play Store
+      - name: Deploy to Play Store (Beta)
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
           packageName: com.bendrocorp.app
-          releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: beta
           # whatsNewDirectory: whatsnew/
