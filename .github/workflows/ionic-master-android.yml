@@ -83,5 +83,5 @@ jobs:
           serviceAccountJson: service_account.json
           packageName: com.bendrocorp.app
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: beta
+          track: internal
           # whatsNewDirectory: whatsnew/
