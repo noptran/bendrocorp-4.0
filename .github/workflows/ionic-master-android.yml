@@ -3,11 +3,12 @@ name: ci-android
 on:
   push:
     branches:
-      - notarealbranch
+      - master
 
 jobs:
   build-android:
 
+    # https://medium.com/@niraj_prajapati/automate-android-app-publishing-on-play-store-using-github-actions-554de7801c36
     runs-on: ubuntu-latest
 
     # env:
@@ -56,14 +57,20 @@ jobs:
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+          signingKeyBase64: ${{ secrets.GPLAY_SIGNING_KEY }}
+          alias: ${{ secrets.GPLAY_ALIAS }}
+          keyStorePassword: ${{ secrets.GPLAY_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.GPLAY_KEY_PASSWORD }}
 
+      # Follow instructions. The update is that access is granted from the play console
+      # The service account must also be assigned a role within the project or it will not appear in the play console
       - name: Create service_account.json
         id: createServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+        run: echo '${{ secrets.GPLAY_SERVICE_ACCOUNT_JSON }}' > service_account.json
+
+      - name: Check Output
+        run: |
+          ls -la ./android/app/build/outputs/bundle/release/
 
       - name: Deploy to Play Store
         id: deploy
@@ -73,4 +80,4 @@ jobs:
           packageName: com.bendrocorp.app
           releaseFile: ./android/app/build/outputs/bundle/release/app-release.aab
           track: beta
-          whatsNewDirectory: whatsnew/
+          # whatsNewDirectory: whatsnew/

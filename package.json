@@ -1,8 +1,8 @@
 {
   "name": "bendrocorp-4.0",
   "version": "1.0.0",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Dale Myszewski <dale@bubblelabs.dev>",
+  "homepage": "https://bendrocorp.com",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
