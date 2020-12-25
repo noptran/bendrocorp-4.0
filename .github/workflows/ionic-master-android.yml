@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
 jobs:
   build-android:
 
@@ -47,6 +51,14 @@ jobs:
         with:
           prefix: android
           token: ${{ secrets.github_token }}
+
+      - name: Write Version File (testing)
+        run: |
+          echo vi${{ steps.buildnumber.outputs.build_number }} > VERSION
+
+      - name: Show VERSION file
+        run: |
+          cat VERSION
 
       - name: Grant rights
         run: chmod +x ./android/build.gradle
