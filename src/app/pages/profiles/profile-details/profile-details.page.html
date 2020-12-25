@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
       <ion-back-button defaultHref="profiles"></ion-back-button>
     </ion-buttons>
-    <ion-title>Profile Details<span *ngIf="character"> - {{character.full_name}}</span></ion-title>
+    <ion-title>Profile Details<span *ngIf="character && showNameInDetailsHeader"> - {{character.full_name}}</span></ion-title>
   </ion-toolbar>
 </ion-header>
 

@@ -32,9 +32,13 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
 
   // subscriptions
   profileSubscription: Subscription;
+  resizeSubscription: Subscription;
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
+
+  // other
+  showNameInDetailsHeader: boolean;
 
   constructor(
     private profileService: ProfileService,
@@ -48,6 +52,10 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   ) {
     this.profileSubscription = this.profileService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchCharacter();
+    });
+
+    this.resizeSubscription = this.platform.resize.subscribe(() => {
+      this.checkScreenSize();
     });
   }
 
@@ -164,12 +172,18 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     }
   }
 
+  checkScreenSize() {
+    this.showNameInDetailsHeader = this.platform.width() > 500;
+  }
+
   async Initialize()
   {
     this.loadingIndicator = await this.loading.create({
       message: 'Loading'
     });
     await this.loadingIndicator.present();
+
+    this.checkScreenSize();
 
     this.ceoRights = await this.authService.hasClaim(9);
     this.hrRights = await (this.authService.hasClaim(12) || this.authService.hasClaim(9));
