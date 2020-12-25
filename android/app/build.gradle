@@ -6,7 +6,7 @@ android {
         applicationId "com.bendrocorp.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode  = file('VERSION_CODE').text.trim()
         versionName = file('../../VERSION').text.trim()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
