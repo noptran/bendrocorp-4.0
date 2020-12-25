@@ -41,6 +41,13 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: "#️⃣ Generate Build Number"
+        id: buildnumber
+        uses: einaregilsson/build-number@v2
+        with:
+          prefix: android
+          token: ${{ secrets.github_token }}
+
       - name: Grant rights
         run: chmod +x ./android/build.gradle
 
@@ -84,4 +91,5 @@ jobs:
           packageName: com.bendrocorp.app
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: internal
+          releaseName: vi${{ steps.buildnumber.outputs.build_number }}
           # whatsNewDirectory: whatsnew/
