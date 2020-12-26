@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{formAction}} System Map Object</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="submitForm()" [disabled]="dataSubmitted || !valid()">{{formAction}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="starObject">
+  <!-- Type Selection -->
+  <div>
+    <ion-item class="picker" (click)="showObjectTypePicker()">
+      <ion-label>
+        <span>Object Type </span><ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-label slot="end">{{showObjectTypeSelection() || "Select Type"}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-text *ngIf="!starObject.id" color="danger"><small>* Note that once you create the object the type cannot be changed.</small></ion-text>
+    </ion-item>
+  </div>
+  <!-- Basic Form -->
+  <div *ngIf="starObject.object_type_id">
+    <!-- Primary Image -->
+    <app-select-avatar [avatarData]="starObject?.primary_image_url" [avatarTitle]="'Primary Image'"
+    (avatarUpdatedEvent)="setPrimaryImage($event)"></app-select-avatar>
+
+    <!-- Title -->
+    <ion-item>
+      <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required placeholder="Location Title" [(ngModel)]="starObject.title"
+        name="star_object_title"></ion-input>
+    </ion-item>
+
+    <!-- Description -->
+    <ion-item>
+      <ion-label>Description <ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the object"
+        rows="10" name="star_object_description"></ion-textarea>
+    </ion-item>
+
+    <!-- Tags -->
+    <ion-item>
+      <ion-label position="floating">Tags</ion-label>
+      <ion-input required placeholder="Tags" [(ngModel)]="starObject.tags" name="star_object_tags">
+      </ion-input>
+      <p><small>Enter tags as a comma seperated list</small></p>
+    </ion-item>
+
+    <!-- Parent Specification -->
+    <ion-item class="picker">
+      <ion-label (click)="showParentPicker()">
+        <span>Parent</span>
+      </ion-label>
+      <ion-label (click)="showParentPicker()" slot="end">{{showParentSelection() || "Select Parent"}}</ion-label>
+      <ion-button slot="end" (click)="clearParentSelection()" *ngIf="starObject.parent_id">Clear</ion-button>
+    </ion-item>
+    <ion-item>
+      <p><small>While specifiying a parent is optional, almost all objects have parents.</small></p>
+    </ion-item>
+  </div>
+
+  <!-- TBD: Fields -->
+</ion-content>

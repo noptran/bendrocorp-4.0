@@ -16,7 +16,7 @@ const { Toast } = Plugins;
 export class UpdateAvatarComponent implements OnInit {
   // this just might be better than the old one... ¯\_(ツ)_/¯
 
-  @ViewChild('webAvatarPicker', { static: true }) inputField: HTMLInputElement;
+  // @ViewChild('webAvatarPicker', { static: true }) inputField: HTMLInputElement;
 
   character: Character;
   avatarData: string;
@@ -56,7 +56,7 @@ export class UpdateAvatarComponent implements OnInit {
     this.canEdit = this.hrRights || this.userIsOwner || this.ceoRights;
   }
 
-  async selectAvatarMobile() {
+  // async selectAvatarMobile() {
   // for web need to fall back to a look alike button
   // https://stackoverflow.com/questions/16215771/how-to-open-select-file-dialog-via-js
 
@@ -72,7 +72,11 @@ export class UpdateAvatarComponent implements OnInit {
     //   this.selectAvatarWeb();
     // }
 
-    this.selectAvatarWeb();
+    // this.selectAvatarWeb();
+  // }
+
+  selectedAvatar(event: Base64Upload) {
+    this.newAvatar = event;
   }
 
   async updateAvatar()
@@ -97,52 +101,52 @@ export class UpdateAvatarComponent implements OnInit {
         }
       );
     } else {
-      Toast.show({ text: 'You are not authorized to edit this character1' });
+      Toast.show({ text: 'You are not authorized to edit this character!' });
     }
   }
 
-  selectAvatarWeb() {
-    // this.inputField.click();
-    document.getElementById('webAvatarPicker').click();
-  }
+  // selectAvatarWeb() {
+  //   // this.inputField.click();
+  //   document.getElementById('webAvatarPicker').click();
+  // }
 
-  async handleAvatarFileInput(files: FileList)
-  {
-    console.log(files);
-    // fetch file data on file to uploads
-    const file = files.item(0);
+  // async handleAvatarFileInput(files: FileList)
+  // {
+  //   console.log(files);
+  //   // fetch file data on file to uploads
+  //   const file = files.item(0);
 
-    if (file) {
-      // add the avatar information to the user object so it can be uploaded
-      const base64Result = await this.getBase64(file);
+  //   if (file) {
+  //     // add the avatar information to the user object so it can be uploaded
+  //     const base64Result = await this.getBase64(file);
 
-      this.newAvatar = { name: file.name, type: file.type, size: file.size, base64: base64Result } as Base64Upload;
+  //     this.newAvatar = { name: file.name, type: file.type, size: file.size, base64: base64Result } as Base64Upload;
 
-      if (this.newAvatar.type === 'image/jpeg') {
-        // fix the type
-        this.newAvatar.type = 'image/jpg';
+  //     if (this.newAvatar.type === 'image/jpeg') {
+  //       // fix the type
+  //       this.newAvatar.type = 'image/jpg';
 
-        // fix the file name
-        this.newAvatar.name = this.newAvatar.name.replace('jpeg', 'jpg');
+  //       // fix the file name
+  //       this.newAvatar.name = this.newAvatar.name.replace('jpeg', 'jpg');
 
-        // fix the base64
-        this.newAvatar.base64 = this.newAvatar.base64.replace('jpeg', 'jpg');
-      }
+  //       // fix the base64
+  //       this.newAvatar.base64 = this.newAvatar.base64.replace('jpeg', 'jpg');
+  //     }
 
-      console.log(this.newAvatar);
+  //     console.log(this.newAvatar);
 
-      this.avatarData = base64Result as string;
-    }
-  }
+  //     this.avatarData = base64Result as string;
+  //   }
+  // }
 
-  getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
+  // getBase64(file) {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = error => reject(error);
+  //   });
+  // }
 
   dismiss() {
     this.modalController.dismiss();

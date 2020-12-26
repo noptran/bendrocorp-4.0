@@ -32,6 +32,12 @@ import { NewsDetailComponent } from './components/news-detail/news-detail.compon
 import { EventDetailsPage } from './pages/events/event-details/event-details.page';
 import { TopGreebleComponent } from './components/top-greeble/top-greeble.component';
 import { NgxSummernoteModule } from 'ngx-summernote';
+import { SelectAvatarComponent } from './components/misc/select-avatar/select-avatar.component';
+// tslint:disable-next-line:max-line-length
+// import { AddSystemMapGravityWellComponent } from './components/system-map/add-system-map-gravity-well/add-system-map-gravity-well.component';
+// import { AddSystemMapJumpPointComponent } from './components/system-map/add-system-map-jump-point/add-system-map-jump-point.component';
+import { AddUpdateStarObjectComponent } from './components/system-map/add-update-star-object/add-update-star-object.component';
+import { SystemMapListTagsComponent } from './components/system-map/system-map-list-tags/system-map-list-tags.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +52,9 @@ import { NgxSummernoteModule } from 'ngx-summernote';
     AddUpdateFlightLogComponent,
     AddUpdateOffenderReportComponent,
     NewsDetailComponent,
+    SelectAvatarComponent,
+    AddUpdateStarObjectComponent,
+    // SystemMapListTagsComponent
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
@@ -69,6 +78,8 @@ import { NgxSummernoteModule } from 'ngx-summernote';
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
+  exports: [
+  ],
   providers: [
     LoadingService,
     AuthInterceptor,
@@ -88,7 +99,7 @@ import { NgxSummernoteModule } from 'ngx-summernote';
   ],
   bootstrap: [AppComponent],
   schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
+    CUSTOM_ELEMENTS_SCHEMA // this can sometimes suppress issues. If there is confusion about a component issues comment this out
   ]
 })
 export class AppModule {}

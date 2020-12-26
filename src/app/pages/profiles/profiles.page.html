@@ -24,7 +24,7 @@
   
         <ion-item class="profile-item" detail *ngFor="let member of sortDivision(division)" (click)="openProfileDetails(member)">
           <ion-avatar slot="start">
-            <img src="{{member.avatar_url}}">
+            <img src="{{member.avatar_url}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'">
           </ion-avatar>
           <ion-label>
             <h2>{{member.full_name}}</h2>

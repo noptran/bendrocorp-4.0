@@ -32,7 +32,7 @@
     
     <h3 class="outer-title">Star Systems</h3>
     <ion-slides #slidesSystems *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
-      <ion-slide *ngFor="let item of fetchTypeOfItem('star system')" (click)="selectListItem(item)">
+      <ion-slide *ngFor="let item of fetchTypeOfItem('system')" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>
     </ion-slides>
@@ -68,4 +68,11 @@
       </ion-slide>
     </ion-slides>
   </div>
+
+  <!-- System Map Form FAB -->
+  <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addStarObject()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
