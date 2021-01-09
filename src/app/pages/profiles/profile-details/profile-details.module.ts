@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProfileDetailsPageRoutingModule } from './profile-details-routing.module';
 
 import { ProfileDetailsPage } from './profile-details.page';
+import { SelectAvatarComponent } from 'src/app/components/misc/select-avatar/select-avatar.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { ProfileDetailsPage } from './profile-details.page';
     IonicModule,
     ProfileDetailsPageRoutingModule
   ],
-  declarations: [ProfileDetailsPage]
+  declarations: [
+    ProfileDetailsPage,
+    // SelectAvatarComponent
+  ]
 })
 export class ProfileDetailsPageModule {}

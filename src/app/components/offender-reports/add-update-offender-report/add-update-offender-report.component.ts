@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ModalController, PickerController, LoadingController } from '@ionic/angular';
 import { OffenderReport, ViolenceRating, Infraction, ForceLevel, Offender } from 'src/app/models/offender.model';
 import { Ship } from 'src/app/models/ship.models';
-import { StarSystem, Planet, Moon } from 'src/app/models/system-map.model';
+import { StarObject } from 'src/app/models/system-map.model';
 import { OffenderService } from 'src/app/services/offender.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
@@ -26,9 +26,9 @@ export class AddUpdateOffenderReportComponent implements OnInit {
   submitForApproval: boolean = false;
 
   // type arrays
-  systemData: StarSystem[] = [];
-  systemDataPlanets: Planet[] = [];
-  systemDataMoon: Moon[] = [];
+  systemData: StarObject[] = [];
+  // systemDataPlanets: StarObject[] = [];
+  // systemDataMoon: StarObject[] = [];
   shipData: Ship[] = [];
   violenceRatings: ViolenceRating[] = [];
   infractions: Infraction[];
@@ -253,7 +253,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
       columns: [
         {
           name: 'systemMapSystem',
-          options: this.systemData.map((system) => {
+          options: this.systemData.filter(f => f.object_type_id === this.systemMapService.systemTypeGuid).map((system) => {
             return {
               text: system.title,
               value: system.id.toString(),
@@ -289,7 +289,10 @@ export class AddUpdateOffenderReportComponent implements OnInit {
         columns: [
           {
             name: 'systemMapPlanet',
-            options: this.systemDataPlanets.filter(x => x.orbits_system_id === this.offenderReport.system_id).map((planet) => {
+            options: this.systemData
+              .filter(f => f.object_type_id === this.systemMapService.planetTypeGuid
+              && f.parent_id === this.offenderReport.system_id)
+              .map((planet) => {
               return {
                 text: planet.title,
                 value: planet.id.toString(),
@@ -331,7 +334,10 @@ export class AddUpdateOffenderReportComponent implements OnInit {
         columns: [
           {
             name: 'systemMapMoon',
-            options: this.systemDataMoon.filter(x => x.orbits_planet_id === this.offenderReport.planet_id).map((moon) => {
+            options: this.systemData
+            .filter(f => f.object_type_id === this.systemMapService.moonTypeGuid
+              && f.parent_id === this.offenderReport.planet_id)
+              .map((moon) => {
               return {
                 text: moon.title,
                 value: moon.id.toString(),
@@ -364,15 +370,15 @@ export class AddUpdateOffenderReportComponent implements OnInit {
   offenderSelectedPlanet() {
     return (this.offenderReport
       && this.offenderReport.planet_id
-      && this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id))
-      ? this.systemDataPlanets.find(x => x.id === this.offenderReport.planet_id).title : 'Planet';
+      && this.systemData.find(x => x.id === this.offenderReport.planet_id))
+      ? this.systemData.find(x => x.id === this.offenderReport.planet_id).title : 'Planet';
   }
 
   offenderSelectedMoon() {
     return (this.offenderReport
       && this.offenderReport.moon_id
-      && this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id))
-      ? this.systemDataMoon.find(x => x.id === this.offenderReport.moon_id).title : 'Moon';
+      && this.systemData.find(x => x.id === this.offenderReport.moon_id))
+      ? this.systemData.find(x => x.id === this.offenderReport.moon_id).title : 'Moon';
   }
 
   offenderSelectedViolenceRating() {
@@ -445,30 +451,30 @@ export class AddUpdateOffenderReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.systemMapService.listDeep().subscribe((results) => {
+    this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.systemData = results;
-
-        let tempPlanetArray = [];
-        let tempMoonArray = [];
-        this.systemData.forEach(element => {
-          tempPlanetArray.push(tempPlanetArray.concat(element.planets));
-          element.planets.forEach(elementTwo => {
-            tempMoonArray.push(tempMoonArray.concat(elementTwo.moons));
-          });
-        });
-
-        // this is some awesome fun here
-        this.systemDataPlanets = tempPlanetArray.flat(Infinity).filter((obj: Planet, pos, arr) => {
-          return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
-        });
-        this.systemDataMoon = tempMoonArray.flat(Infinity).filter((obj: Moon, pos, arr) => {
-          return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
-        });
-
-        console.log(this.systemDataPlanets);
-        console.log(this.systemDataMoon);
       }
+      //   let tempPlanetArray = [];
+      //   let tempMoonArray = [];
+      //   this.systemData.forEach(element => {
+      //     tempPlanetArray.push(tempPlanetArray.concat(element.planets));
+      //     element.planets.forEach(elementTwo => {
+      //       tempMoonArray.push(tempMoonArray.concat(elementTwo.moons));
+      //     });
+      //   });
+
+      //   // this is some awesome fun here
+      //   this.systemDataPlanets = tempPlanetArray.flat(Infinity).filter((obj: Planet, pos, arr) => {
+      //     return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
+      //   });
+      //   this.systemDataMoon = tempMoonArray.flat(Infinity).filter((obj: Moon, pos, arr) => {
+      //     return arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos;
+      //   });
+
+      //   console.log(this.systemDataPlanets);
+      //   console.log(this.systemDataMoon);
+      // }
     });
 
     this.offenderService.list_rating().subscribe(

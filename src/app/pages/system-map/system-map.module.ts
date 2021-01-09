@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,6 +9,7 @@ import { SystemMapPageRoutingModule } from './system-map-routing.module';
 import { SystemMapPage } from './system-map.page';
 import { SystemMapListCardComponent } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.component';
 import { SystemMapListTagsComponent } from 'src/app/components/system-map/system-map-list-tags/system-map-list-tags.component';
+import { SelectAvatarComponent } from 'src/app/components/misc/select-avatar/select-avatar.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { SystemMapListTagsComponent } from 'src/app/components/system-map/system
     SystemMapPage,
     SystemMapListCardComponent,
     SystemMapListTagsComponent
-  ]
+  ],
 })
 export class SystemMapPageModule {}

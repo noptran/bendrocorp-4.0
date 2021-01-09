@@ -11,7 +11,8 @@
 </ion-header>
 
 <ion-content>
-  <div style="text-align: center;">
+  <app-select-avatar [avatarData]="avatarData" (avatarUpdatedEvent)="selectedAvatar($event)"></app-select-avatar>
+  <!-- <div style="text-align: center;">
     <img style="border-radius: 50%; max-height: 200px;" src="{{avatarData}}">
     <br><br>
     <div>
@@ -27,5 +28,5 @@
       <ion-button (click)="webAvatarPicker.click()" color="primary" expand="block"><span>Select <span *ngIf="!newAvatar">New</span> <span *ngIf="newAvatar">Another</span> Avatar</span></ion-button>
       <input #webAvatarPicker class="custom-file-input" style="display: none;" type="file" id="webAvatarPicker" accept="image/x-png,image/jpg" (change)="handleAvatarFileInput($event.target.files)">
     </div>
-  </div>
+  </div> -->
 </ion-content>

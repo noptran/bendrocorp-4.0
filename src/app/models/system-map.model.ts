@@ -1,9 +1,31 @@
-import { Jurisdiction } from "./law.model";
-import { Base64Upload, FactionAffiliation, IdTitleDesc, IdTitleDescOrd } from "./misc.model";
-import { User } from "./user.model";
+import { FieldDescriptor } from './field.model';
+import { Jurisdiction } from './law.model';
+import { Base64Upload, FactionAffiliation, IdTitleDesc, IdTitleDescOrd } from './misc.model';
+import { User } from './user.model';
 
+export class StarObject {
+    id?: string;
+    title?: string;
+    description?: string;
+    tags?: string;
+    object_type_id: string;
+    kind: string;
+    new_primary_image?: Base64Upload;
+    primary_image_url?: string;
+    primary_image_url_full?: string;
+    draft: boolean;
+    parent_id: string;
+    parent: StarObject;
+    children: StarObject[];
+    object_type: IdTitleDesc;
+}
 
-export class StarSystem 
+export class StarObjectRule {
+    parent_id: string;
+    child_id: string;
+}
+/*
+export class StarSystem
 {
     id?: string;
     title?: string;
@@ -32,11 +54,13 @@ export class GravityWell
     new_primary_image?: Base64Upload;
     primary_image_url?: string;
     primary_image_url_full?: string;
-    luminosity_class_id?: number;
-    luminosity_class?: IdTitleDesc;
-    gravity_well_type_id?: number;
-    gravity_well_type?: IdTitleDesc;
+    luminosity_class_id?: string;
+    luminosity_class?: FieldDescriptor;
+    gravity_well_type_id?: string;
+    gravity_well_type?: FieldDescriptor;
     system_map_images?: SystemImage[];
+    system_id: string;
+    system: StarSystem;
 }
 
 export class Planet
@@ -262,4 +286,4 @@ export class SystemMapSearchItem {
     type?: 'Planet'|'Moon'|'System Object'|'Location'|'Settlement'|'Mission Giver'
     hasPlanetParent?: boolean; // for locations, settlements and mission givers
     hasMoonParent?: boolean; // for locations, settlements and mission givers
-  }
+  }*/

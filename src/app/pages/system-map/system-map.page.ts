@@ -1,11 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { LoadingController, Platform, IonSlides } from '@ionic/angular';
+import { Toast } from '@capacitor/core';
+import { LoadingController, Platform, IonSlides, ModalController } from '@ionic/angular';
 import { from, merge, Observable, Subject, Subscription } from 'rxjs';
 import { concat, concatAll, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
-import { StarSystem, Planet, Moon, SystemObject, Settlement, SystemLocation, MissionGiver, SystemMapSearchItem } from 'src/app/models/system-map.model';
+import { AddUpdateStarObjectComponent } from 'src/app/components/system-map/add-update-star-object/add-update-star-object.component';
+import { StarObject} from 'src/app/models/system-map.model';
 import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
 
@@ -19,6 +21,8 @@ export class SystemMapPage implements OnInit, OnDestroy {
     slidesPerView: 0
   };
 
+  isAdmin: boolean;
+
   // meta
   initialDataLoaded: boolean = false;
   filterRestricted = true;
@@ -31,18 +35,18 @@ export class SystemMapPage implements OnInit, OnDestroy {
   @ViewChild('slidesSearch') slidesSearch: IonSlides;
 
   // seperated object arrays
-  systems: StarSystem[];
-  planets: Planet[];
-  moons: Moon[];
-  systemObjects: SystemObject[];
-  settlements: Settlement[];
-  locations: SystemLocation[];
-  missionGivers: MissionGiver[];
+  // systems: StarSystem[];
+  // planets: Planet[];
+  // moons: Moon[];
+  // systemObjects: SystemObject[];
+  // settlements: Settlement[];
+  // locations: SystemLocation[];
+  // missionGivers: MissionGiver[];
 
   // search stuff
-  fullList: SystemMapSearchItem[] = [];
-  searchList: SystemMapSearchItem[] = [];
-  recentItems: SystemMapSearchItem[] = [];
+  fullList: StarObject[] = [];
+  searchList: StarObject[] = [];
+  recentItems: StarObject[] = [];
   isFiltering: boolean = false;
   showSlides = true;
 
@@ -54,7 +58,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
 
   // detail panel
   selectedListItemId: string;
-  selectedListItem: SystemMapSearchItem;
+  selectedListItem: StarObject;
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
@@ -72,7 +76,8 @@ export class SystemMapPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private loading: LoadingController,
     private settingsService: SettingsService,
-    private platform: Platform
+    private platform: Platform,
+    private modalController: ModalController
   ) {
     this.settingsSubscription = this.settingsService.dataRefreshAnnounced$.subscribe(() => {
       this.getSettings();
@@ -118,123 +123,35 @@ export class SystemMapPage implements OnInit, OnDestroy {
     this.config = await this.settingsService.getConfig();
   }
 
-  selectListItem(listItem: SystemMapSearchItem) {
+  selectListItem(listItem: StarObject) {
     // this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
     const navigationExtras: NavigationExtras = {
       relativeTo: this.route,
-      state: {
-        smObject: listItem
-      }
+      // state: {
+      //   smObject: listItem
+      // }
     };
 
-    this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().replace(' ', '-')}`], navigationExtras);
+    this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
     // this.selectedListItem = listItem;
   }
 
   fetchSystemObjects() {
-    // collection for all of the requests
-    // this.fullList = [];
-    var objectRequests = [];
-    let completed = 0;
-
-    // requests
-    objectRequests.push(this.systemMapService.listSystems());
-    objectRequests.push(this.systemMapService.listPlanets());
-    objectRequests.push(this.systemMapService.listMoons());
-    objectRequests.push(this.systemMapService.listSystemObjects());
-    objectRequests.push(this.systemMapService.listLocations());
-    objectRequests.push(this.systemMapService.listSettlements());
-    objectRequests.push(this.systemMapService.listMissionGivers());
-    objectRequests.push(this.systemMapService.listJumpPoints());
-
-    // concat and execute
-    // const doObjectRequests = concat.apply(this, objectRequests);
-    // let doObjectRequests = concat(objectRequests);
-    // const doObjectRequests = merge(objectRequests);
-    const doObjectRequests = from(objectRequests);
-    doObjectRequests.pipe(concatAll())
-    .subscribe((results: any) => {
+    this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
-        completed += 1;
-        // console.log(completed);
-        // console.log(results);
+        this.fullList = results;
+        this.initialDataLoaded = true;
+      }
 
-        // concat results into the full list
-        let objectResult = results.map(x => {
-          // the search object represents all of the possible fields that could be in System Map
-          let searchObject = {
-            // things everything will have that may even be potentially searchable
-            id: x.id,
-            title: x.title,
-            description: x.description,
-            tags: x.tags,
-            kind: x.kind,
-            primary_image_url: x.primary_image_url,
-            primary_image_url_full: x.primary_image_url_full,
-            // specific items below this
-            planets: x.planets,
-            moons: x.moons,
-            locations: x.locations,
-            settlements: x.settlements,
-            mission_givers: x.mission_givers,
-            faction_affiliation: x.faction_affiliation,
-            faction_affiliation_id: x.faction_affiliation_id,
-            jurisdiction: x.jurisdiction,
-            jurisdiction_id: x.jurisdiction_id,
-            object_type: x.object_type,
-            object_type_id: x.object_type_id,
-            location_type: x.location_type,
-            location_type_id: x.location_type_id,
-            system_map_images: x.system_map_images,
-            atmospheric_height: x.atmospheric_height,
-            general_radiation: x.general_radiation,
-            economic_rating: x.economic_rating,
-            population_density: x.population_density,
-            minimum_criminality_rating: x.minimum_criminality_rating
-          } as SystemMapSearchItem;
-
-          // parent
-          if (x.parent) {
-            searchObject.parent_id = x.parent.id;
-            searchObject.parent = x.parent;
-          }
-
-          // image
-          if (x.primary_image_one_url) {
-            searchObject.primary_image_url = x.primary_image_one_url;
-          } else {
-            searchObject.primary_image_url = x.primary_image_url;
-          }
-
-          return searchObject;
-        }); // end results concat
-
-        // push the results
-        this.fullList.push(objectResult);
-
-        // if completed, stop the spinner and flatten the list
-        if (completed >= objectRequests.length) {
-          this.fullList = this.fullList.flat();
-
-          // stop the spinner
-          if (this.loadingIndicator) {
-            this.loadingIndicator.dismiss();
-          }
-
-          // loaded
-          this.initialDataLoaded = true;
-
-          console.log(this.fullList);
-
-        }
-      } else {
-        console.error('uh oh...something went wrong..');
+      // stop the spinner
+      if (this.loadingIndicator) {
+        this.loading.dismiss();
       }
     });
   }
 
   clearRecents() {
-    this.recentItems = this.systemMapService.clearRecentSelectedListItems();
+    // this.recentItems = this.systemMapService.clearRecentSelectedListItems();
   }
 
   onSearchKeyUp(){
@@ -249,13 +166,16 @@ export class SystemMapPage implements OnInit, OnDestroy {
     });
     await this.loadingIndicator.present();
 
+    // system map admin
+    this.isAdmin = await this.authService.hasClaim(23);
+
     // fetch the config
     await this.getSettings();
 
     this.determineSlideCount();
 
     // fetch the recent items
-    this.recentItems = this.systemMapService.recentSelectedListItems();
+    // this.recentItems = this.systemMapService.recentSelectedListItems();
 
     // fetch all of the system objects
     this.fetchSystemObjects();
@@ -270,7 +190,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
 
   private determineSlideCount() {
     const platWidth = this.platform.width();
-    console.log(platWidth);
+    // console.log(platWidth);
     const big = 4;
     const small = 2;
 
@@ -291,6 +211,13 @@ export class SystemMapPage implements OnInit, OnDestroy {
       // this.slidesLocations.options.slidesPerView = big;
       // this.slidesSystems.options.slidesPerView = big;
     }
+  }
+
+  async addStarObject() {
+    const modal = await this.modalController.create({
+      component: AddUpdateStarObjectComponent
+    });
+    return await modal.present();
   }
 
   ngOnDestroy() {
