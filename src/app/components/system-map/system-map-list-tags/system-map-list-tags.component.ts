@@ -25,7 +25,12 @@ export class SystemMapListTagsComponent {
         tagArray[index] = tagArray[index].trim();
       }
       // return tags
-      return tagArray;
+      if (tagArray.length > 3) {
+        tagArray.length = 3;
+        return tagArray;
+      } else {
+        return tagArray;
+      }
     }
   }
 
