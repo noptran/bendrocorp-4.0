@@ -241,6 +241,10 @@ export class SystemMapPage implements OnInit, OnDestroy {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
     }
+
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
+    }
   }
 
 }
