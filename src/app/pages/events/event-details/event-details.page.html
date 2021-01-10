@@ -50,7 +50,17 @@
         </ion-row>
       </ion-grid>
     </ion-card-content>
-    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 2) && !isExpired()" expand="block" color="success" (click)="setAttendance(1)">Attending</ion-button>
-    <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 1) && !isExpired()" expand="block" color="danger" (click)="setAttendance(2)">Not Attending</ion-button>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-md="6" size-sm="6" size-xs="12">
+          <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 2) && !isExpired()" expand="block" color="success"
+            (click)="setAttendance(1)">Attending</ion-button>
+        </ion-col>
+        <ion-col size-md="6" size-sm="6" size-xs="12">
+          <ion-button *ngIf="(!checkCurrentStatus() || checkCurrentStatus() == 1) && !isExpired()" expand="block" color="danger"
+            (click)="setAttendance(2)">Not Attending</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-card>  
 </ion-content>
