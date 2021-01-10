@@ -54,7 +54,11 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     });
   }
 
-  fetchSystemObjectsAndSelect() {
+  doRefresh(event: any) {
+    this.fetchSystemObjectsAndSelect(event);
+  }
+
+  fetchSystemObjectsAndSelect(event?: any) {
     this.systemMapService.searchByUUID(this.routePartialObjectId).subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         if (results.length === 1) { // we found found it
@@ -75,6 +79,10 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
         // stop the spinner
         if (this.loadingIndicator) {
           this.loading.dismiss();
+        }
+
+        if (event) {
+          event.target.complete();
         }
       }
     });

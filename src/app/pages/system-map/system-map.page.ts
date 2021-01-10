@@ -67,6 +67,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
   // subscriptions
   settingsSubscription: Subscription;
   resizeSubscription: Subscription;
+  updateSubscription: Subscription;
 
   constructor(
     private systemMapService: SystemMapService,
@@ -85,6 +86,10 @@ export class SystemMapPage implements OnInit, OnDestroy {
 
     this.resizeSubscription = this.platform.resize.subscribe(() => {
       this.determineSlideCount();
+    });
+
+    this.updateSubscription = this.systemMapService.dataRefreshAnnounced$.subscribe(() => {
+      this.fetchSystemObjects();
     });
   }
 
@@ -136,7 +141,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
     // this.selectedListItem = listItem;
   }
 
-  fetchSystemObjects() {
+  fetchSystemObjects(event?: any) {
     this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.fullList = results;
@@ -147,7 +152,15 @@ export class SystemMapPage implements OnInit, OnDestroy {
       if (this.loadingIndicator) {
         this.loading.dismiss();
       }
+
+      if (event) {
+        event.target.complete();
+      }
     });
+  }
+
+  doRefresh(event: any) {
+    this.fetchSystemObjects(event);
   }
 
   clearRecents() {

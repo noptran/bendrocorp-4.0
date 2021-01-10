@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalController, PickerController } from '@ionic/angular';
+import { LoadingController, ModalController, PickerController } from '@ionic/angular';
 import { StarObject, StarObjectRule } from 'src/app/models/system-map.model';
 import { FieldService } from 'src/app/services/field.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
@@ -29,11 +29,15 @@ export class AddUpdateStarObjectComponent implements OnInit {
   starObjects: StarObject[] = [];
   mappableItems: any[] = [];
 
+  // loading indicator
+  loadingIndicator: HTMLIonLoadingElement;
+
   constructor(
     private systemMapService: SystemMapService,
     private fieldService: FieldService,
     private modalController: ModalController,
-    private pickerController: PickerController
+    private pickerController: PickerController,
+    private loading: LoadingController
   ) {
   }
 
@@ -186,11 +190,20 @@ export class AddUpdateStarObjectComponent implements OnInit {
     }
   }
 
-  submitForm() {
+  async submitForm() {
+    this.dataSubmitted = true;
+
+    this.loadingIndicator = await this.loading.create({
+      message: 'Loading'
+    });
+    await this.loadingIndicator.present();
+
     if (this.starObject.id) {
       this.systemMapService.updateStarObject(this.starObject).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
+          this.dataSubmitted = false;
+          this.loading.dismiss();
           this.modalController.dismiss();
         }
       });
@@ -198,6 +211,8 @@ export class AddUpdateStarObjectComponent implements OnInit {
       this.systemMapService.addStarObject(this.starObject).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
+          this.dataSubmitted = false;
+          this.loading.dismiss();
           this.modalController.dismiss();
         }
       });

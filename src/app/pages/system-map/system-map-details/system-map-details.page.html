@@ -9,6 +9,10 @@
 </ion-header>
 
 <ion-content *ngIf="selectedItem">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-card>
     <ion-card-content>
       <ion-grid>
