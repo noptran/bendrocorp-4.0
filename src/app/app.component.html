@@ -7,14 +7,16 @@
           <p>Expanding the frontier...</p>
         </ion-label>
       </ion-item> -->
-      <ion-content class="menu-content">
+      <ion-content>
         <ion-label>
           <ion-button *ngIf="updateAvailable" (click)="doUpdate()" style="float: right;" color="light" slot="end">
             <ion-icon color="success" name="push-outline"></ion-icon>
           </ion-button>
-          <img src="../assets/bendrocorp-final.png" style="max-height: 50px; float: left; padding-right: 10px;" alt="">
-          <h1>BendroCorp</h1>
-          <p>Expanding the frontier...</p>
+          <div>
+            <img src="../assets/bendrocorp-final.png" style="max-height: 50px; float: left; padding-right: 10px;" alt="">
+            <h1>BendroCorp</h1>
+            <p>Expanding the frontier...</p>
+          </div>
         </ion-label>
         <hr />
         <ion-list id="inbox-list">
