@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Funding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="initialDataLoad">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-card>
+    <div class="funding-topper"></div>
+    <ion-card-header>
+      <ion-card-title>Funding</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      This page lists various funding goals and real-life expenses for BendroCorp.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+       <ion-grid>
+         <ion-row>
+           <ion-col size-md="4" size-sm="4" size-xs="12" style="text-align: center;">
+             <img src="../../../assets/badges/supporter-badge.png" style="max-width: 100%;" alt="">
+           </ion-col>
+           <ion-col size-md="8" size-sm="8" size-xs="12">
+            <ion-card-title>Supporter Program</ion-card-title>
+             <h2></h2>
+             <p>Interested in helping to deal with BendroCorp’s real life expenses but don’t want to have to remember? Then the supporter program is for you!</p>
+             <br />
+             <p>The supporter program is $5 a month. All funds go towards operating expenses exclusively. Any annual overages will show separately and will be displayed here on the funding page. For being a supporter you will recieve the supporter badge and the intense appreciation of the leadership team of BendroCorp.</p>
+             <br />
+             <h4>Coming soon!</h4>
+             <div>
+               <ion-button (click)="becomeSupporter()" *ngIf="!isNativeiOS" style="float: right;">Become a Supporter ></ion-button>
+             </div>
+           </ion-col>
+         </ion-row>
+       </ion-grid>
+     </ion-card-content>
+   </ion-card>
+
+  <ion-card *ngIf="donationItems.length == 0">
+   <ion-card-content>
+      There are currently no items to contribute towards. Please check back later!
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let item of donationItems">
+    <ion-card-header>
+      <ion-card-title>
+        <span>{{item.title}}</span>
+        <span>
+          <ion-button *ngIf="!item.is_completed" (click)="makeDonation(item)" style="float: right; margin-bottom: 10px;">Donate ></ion-button>
+          <ion-button *ngIf="isAdmin && !isNativeiOS" (click)="addUpdateDonationItem(item)" color="dark" style="float: right;">Edit</ion-button>
+        </span>        
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <small class="text-muted">${{item.total_donations}} of ${{item.goal}} raised.<span *ngIf="item.is_completed"> Woot! Thanks everyone! :)</span></small>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" [ngClass]="{ 'bg-success': item.is_completed }" [ngStyle]="{'width.%': itemWidth(item) }"></div>
+      </div>
+      <div style="white-space: pre-wrap;">{{item.description}}</div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="userDonations && userDonations.length > 0">
+    <ion-list-header>
+      <ion-label>My Funding Donations</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let item of userDonations">
+      <ion-label>
+        {{item.summary_text}}
+        <p>${{item.amount}}</p>
+        <p>{{item.created_at | date}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addUpdateDonationItem()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

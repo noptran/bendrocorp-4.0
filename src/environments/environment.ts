@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrlRoot: 'https://api.bendrocorp.com',
-  baseUrl: 'https://api.bendrocorp.com/api',
-  wssUri: 'wss://api.bendrocorp.com/cable',
+  baseUrlRoot: 'httpx://localhost:3000',
+  baseUrl: 'http://localhost:3000/api',
+  wssUri: 'wss://localhost:3000/cable',
   userQRBase: 'https://bendrocorp.app/profiles/'
 };
 

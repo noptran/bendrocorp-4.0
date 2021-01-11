@@ -38,6 +38,9 @@ import { SelectAvatarComponent } from './components/misc/select-avatar/select-av
 // import { AddSystemMapJumpPointComponent } from './components/system-map/add-system-map-jump-point/add-system-map-jump-point.component';
 import { AddUpdateStarObjectComponent } from './components/system-map/add-update-star-object/add-update-star-object.component';
 import { SystemMapListTagsComponent } from './components/system-map/system-map-list-tags/system-map-list-tags.component';
+import { MakeDonationComponent } from './components/donations/make-donation/make-donation.component';
+import { AppUpdateDonationGoalComponent } from './components/donations/app-update-donation-goal/app-update-donation-goal.component';
+import { JoinSupporterComponent } from './components/donations/join-supporter/join-supporter.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +57,9 @@ import { SystemMapListTagsComponent } from './components/system-map/system-map-l
     NewsDetailComponent,
     SelectAvatarComponent,
     AddUpdateStarObjectComponent,
+    MakeDonationComponent,
+    AppUpdateDonationGoalComponent,
+    JoinSupporterComponent,
     // SystemMapListTagsComponent
   ],
   entryComponents: [

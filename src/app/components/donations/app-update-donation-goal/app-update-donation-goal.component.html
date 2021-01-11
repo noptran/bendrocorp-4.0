@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{formAction}} Donation Item</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="submitForm()" [disabled]="dataSubmitted || !valid()">{{formAction}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="donationItem">
+  <ion-item>
+    <ion-label position="floating">Goal Title <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input required placeholder="Enter a title..." [(ngModel)]="donationItem.title" name="donation_title"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Goal Amount <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input type="number" required placeholder="Enter an amount..." [(ngModel)]="donationItem.goal" name="donation_goal"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Goal Description <ion-text color="danger">*</ion-text></ion-label>
+    <ion-textarea [(ngModel)]="donationItem.description" name="donation_description" placeholder="Enter a description for the goal. Be specifc. This is real money." rows="10"></ion-textarea>
+  </ion-item>
+  <ion-button *ngIf="donationItem.id" (click)="archive()" color="danger" expand="block">Archive</ion-button>
+</ion-content>
