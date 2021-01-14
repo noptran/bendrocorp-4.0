@@ -25,7 +25,7 @@
               <ion-label text-wrap>
                 {{selectedItem.title}} ({{selectedItem.kind}})
                 <app-system-map-detail-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-detail-tags>
-                <p>{{selectedItem.description}}</p>
+                <p style="white-space: pre-wrap;">{{selectedItem.description}}</p>
               </ion-label>
             </ion-item>
           </ion-col>

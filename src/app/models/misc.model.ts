@@ -99,6 +99,7 @@ export class DonationItem
 export class Donation
 {
     id?: number;
+    summary_text?: string;
     donation_item_id?: number;
     user_id?: number;
     user?: User;

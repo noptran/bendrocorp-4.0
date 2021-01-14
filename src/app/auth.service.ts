@@ -127,7 +127,8 @@ export class AuthService {
         expires: decodedToken.exp,
         tfa_enabled: decodedToken.tfa_enabled,
         character_id: decodedToken.character_id,
-        job_title: decodedToken.job_title
+        job_title: decodedToken.job_title,
+        subscriber: decodedToken.subscriber
       } as UserSessionResponse;
     }
   }

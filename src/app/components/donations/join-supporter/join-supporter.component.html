@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Become a Supporter</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="isSupporter">
+    <h2>Thank you for supporting BendroCorp though our Supporter Program!</h2>
+    <div style="text-align: center;">
+      <ion-button (click)="cancelSubscription()" color="danger">Cancel Subscription</ion-button>
+    </div>
+  </div>
+  
+  <div *ngIf="!isSupporter">
+    <ion-item>
+      <div>
+        <p>Thank you for your interest in the Supporter Program!</p>
+        <p>The Support Program will bill $5 from your entered card starting immediately. Your transactions will be visible from the main portion of the funding page! You can cancel the subscription any time by visiting this form.</p>
+      </div>
+    </ion-item>
+    <ion-item>
+      <div>
+        <ion-label for="card-element">Card Info <ion-text color="danger">*</ion-text></ion-label>
+        <div style="width: 30em" id="card-element" #cardElementSub></div>
+        <div style="width: 30em" id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+      </div>
+    </ion-item>
+    <div style="text-align: center;">
+      <ion-button (click)="submitForm()" [disabled]="dataSubmitted">Join the Supporter Program</ion-button>
+    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div>
+            <small>* We do not store or retain your credit card information. Please consult our <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a> for more details.<br />** By submitting this donation you understand that this amount is non-refundable. The amount you give will be used for the specified donation item titled above. By donating to the above you gain no rights to that item and its use and operations are determined by the direction of BendroCorp officers and by BendroCorp policy and procedure.</small>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

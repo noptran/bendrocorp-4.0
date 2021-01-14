@@ -73,6 +73,14 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             },
+            "localProd": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
             "ci": {
               "progress": false
             }
@@ -86,6 +94,9 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "localProd": {
+              "browserTarget": "app:build:localProd"
             },
             "ci": {
               "progress": false

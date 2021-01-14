@@ -11,6 +11,7 @@ export class UserSessionResponse
     roles?: number[];
     tfa_enabled?: boolean;
     job_title?: string;
+    subscriber?: boolean;
 }
 
 export class LoginRequest

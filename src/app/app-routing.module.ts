@@ -24,30 +24,37 @@ const routes: Routes = [
   },
   {
     path: 'events',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/events/events.module').then( m => m.EventsPageModule)
   },
   {
     path: 'job-board',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/job/job.module').then( m => m.JobPageModule)
   },
   {
     path: 'flight-logs',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/flight-logs/flight-logs.module').then( m => m.FlightLogsPageModule)
   },
   {
     path: 'forms',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/forms/forms.module').then( m => m.FormsPageModule)
   },
   {
     path: 'pages',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/pages/pages.module').then( m => m.PagesPageModule)
   },
   {
     path: 'alerts',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/alerts/alerts.module').then( m => m.AlertsPageModule)
   },
   {
     path: 'offender-reports',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/offender-reports/offender-reports.module').then( m => m.OffenderReportsPageModule)
   },
   {
@@ -56,11 +63,17 @@ const routes: Routes = [
   },
   {
     path: 'approvals',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/approval/approval.module').then( m => m.ApprovalPageModule)
   },
   {
     path: 'offline',
     loadChildren: () => import('./app-offline/app-offline.module').then( m => m.AppOfflinePageModule)
+  },
+  {
+    path: 'funding',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/funding/funding.module').then( m => m.FundingPageModule)
   },
 ];
 
