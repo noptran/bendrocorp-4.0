@@ -57,8 +57,8 @@
       <ion-card-title>
         <span>{{item.title}}</span>
         <span>
-          <ion-button *ngIf="!item.is_completed" (click)="makeDonation(item)" style="float: right; margin-bottom: 10px;">Donate ></ion-button>
-          <ion-button *ngIf="isAdmin && !isNativeiOS" (click)="addUpdateDonationItem(item)" color="dark" style="float: right;">Edit</ion-button>
+          <ion-button *ngIf="!item.is_completed && !isNativeiOS" (click)="makeDonation(item)" style="float: right; margin-bottom: 10px;">Donate ></ion-button>
+          <ion-button *ngIf="isAdmin" (click)="addUpdateDonationItem(item)" color="dark" style="float: right;">Edit</ion-button>
         </span>        
       </ion-card-title>
     </ion-card-header>
