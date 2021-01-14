@@ -45,6 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // updates
   updateAvailable: boolean;
 
+  isNativeiOS: boolean;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -67,12 +69,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private update: SwUpdate
   ) {
     this.initializeApp();
-
-    // this.authorizationSubscription = this.authService.AuthUpdateAnnounced$.subscribe((action) => {
-    //   if (action === 'LOGOUT') {
-    //     this.router.navigateByUrl('/auth')
-    //   }
-    // });
   }
 
   initializeApp() {
@@ -169,6 +165,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async fetchMenu() {
     this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
+
+    if (this.isNativeiOS) {
+      this.appPages = this.appPages.filter(x => !x.skip_ios);
+    }
   }
 
   async openSettingsModal() {
@@ -179,6 +179,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isNativeiOS = this.platform.is('capacitor') && this.platform.is('ios');
   }
 
   ngOnDestroy() {

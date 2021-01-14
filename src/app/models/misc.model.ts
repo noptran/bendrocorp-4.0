@@ -18,6 +18,8 @@ export class MenuItem
     nested_under_id?: number;
     ordinal?: number;
     nested_items?: MenuItem[];
+    // api provided variable which causes certain items to be skipped on ios
+    skip_ios?: boolean;
 }
 
 export class StatusMessage
