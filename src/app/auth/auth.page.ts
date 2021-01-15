@@ -43,6 +43,10 @@ export class AuthPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.login = {} as LoginRequest;
+  }
+
   ngOnInit() {
     this.isWeb = this.platform.is('desktop');
   }

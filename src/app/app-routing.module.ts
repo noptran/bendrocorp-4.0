@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { AuthGuard } from './auth.guard';
+import { NoAuthGuard } from './no-auth.guard';
 import { NotFoundPage } from './not-found/not-found.page';
 
 const routes: Routes = [
@@ -10,8 +12,23 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'offline',
+    loadChildren: () => import('./app-offline/app-offline.module').then( m => m.AppOfflinePageModule)
+  },
+  {
     path: 'auth',
+    canActivate: [NoAuthGuard],
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
+  },
+  {
+    path: 'register',
+    canActivate: [NoAuthGuard],
+    loadChildren: () => import('./pages/registration/registration.module').then( m => m.RegistrationPageModule)
+  },
+  {
+    path: 'forgot-password',
+    canActivate: [NoAuthGuard],
+    loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   },
   {
     path: 'dashboard',
@@ -69,10 +86,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/approval/approval.module').then( m => m.ApprovalPageModule)
   },
   {
-    path: 'offline',
-    loadChildren: () => import('./app-offline/app-offline.module').then( m => m.AppOfflinePageModule)
-  },
-  {
     path: 'funding',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/funding/funding.module').then( m => m.FundingPageModule)
@@ -81,7 +94,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }), // , enableTracing: true
     RouterModule.forChild([ // catch all our mistakes route provider
       {
           path: '**',

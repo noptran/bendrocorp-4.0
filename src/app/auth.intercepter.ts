@@ -11,9 +11,12 @@ export class AuthInterceptor implements HttpInterceptor
 constructor(private authService: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (/*this.authService.getAuthResponse() &&*/ !request.url.includes('auth')) {
+    if (!request.url.includes('auth')
+    && !request.url.includes('register')
+    && !request.url.includes('forgot-password')
+    && !request.url.includes('reset-password')) {
       console.log('interceptor triggered');
-      console.log(request.url);
+    //   console.log(request.url);
       return from(
           this.authService.checkAndRefreshAccessToken()
               .then((accessTokenResponse: string) => {

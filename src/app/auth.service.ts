@@ -68,7 +68,7 @@ export class AuthService {
     );
   }
 
-  async checkAndRefreshAccessToken(override: boolean = false): Promise<string|HttpErrorResponse> {
+  async checkAndRefreshAccessToken(override: boolean = false, skipLoginRedirect: boolean = false): Promise<string|HttpErrorResponse> {
     return new Promise (async (results, error) => {
       const authResponse = await this.getAuthResponse();
 
@@ -98,7 +98,11 @@ export class AuthService {
           });
         }
       } else {
-        this.redirectToLogin();
+        if (!skipLoginRedirect) {
+          this.redirectToLogin();
+        } else {
+          results(null); // you still have to resolve it with something or the promise never returns
+        }
       }
     });
   }

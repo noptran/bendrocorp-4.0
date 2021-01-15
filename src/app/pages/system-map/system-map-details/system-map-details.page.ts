@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { Subscription, concat, from } from 'rxjs';
 import { concatAll } from 'rxjs/operators';
