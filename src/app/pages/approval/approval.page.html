@@ -16,12 +16,22 @@
     <ion-list-header>
       <ion-label>Your Approvals</ion-label>
     </ion-list-header>
-    <ion-item detail *ngFor="let approval of myApprovals" routerLink="details/{{approval.id}}">
-      <ion-label>{{approval.approval_id}} | {{approval.approval.approval_kind.title}}</ion-label>
-      <ion-label slot="end"><small>{{approval.approval.approval_status}}</small>
-        <span *ngIf="approval.approval_type_id < 4">&nbsp;<ion-badge color="danger">!</ion-badge></span>
-      </ion-label>
-    </ion-item>
+    <ion-item-sliding #slideItemAdmin *ngFor="let approval of myApprovals">
+      <ion-item detail routerLink="details/{{approval.id}}">
+        <ion-label>{{approval.approval_id}} | {{approval.approval.approval_kind.title}}</ion-label>
+        <ion-label slot="end"><small>{{approval.approval.approval_status}}</small>
+          <span *ngIf="approval.approval_type_id < 4">&nbsp;<ion-badge color="danger">!</ion-badge></span>
+        </ion-label>
+      </ion-item>
+      <ion-item-options *ngIf="approval.approval_type_id < 4" side="end">
+        <ion-item-option color="success" (click)="submitApproval(approval, 4); slideItemAdmin.close()">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="submitApproval(approval, 5); slideItemAdmin.close()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>    
   </ion-list>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">

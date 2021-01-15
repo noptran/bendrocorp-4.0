@@ -7,6 +7,9 @@ import { AuthService } from 'src/app/auth.service';
 import { MyApproval } from 'src/app/models/approval.model';
 import { RequestsService } from 'src/app/services/requests.service';
 import { UserService } from 'src/app/services/user.service';
+import { Plugins } from '@capacitor/core';
+
+const { Modals } = Plugins;
 
 @Component({
   selector: 'app-approval',
@@ -17,7 +20,7 @@ export class ApprovalPage implements OnInit {
 
   myApprovals: MyApproval[] = [];
   dataLoadSkip = 0;
-  dataLoadTake = 15;
+  dataLoadTake = 25;
   baseIncrease = 15;
   totalApprovalCount: number;
   initialDataLoaded: boolean;
@@ -74,6 +77,65 @@ export class ApprovalPage implements OnInit {
     });
   }
 
+  async submitApproval(item: MyApproval, typeId: number) {
+    if (item) {
+      let appDen = '...';
+      if (typeId === 4) {
+        appDen = 'approve';
+      }
+
+      if (typeId === 5) {
+        appDen = 'deny';
+      }
+
+      if (typeId < 4) {
+        console.error('Invalid type id supplied!');
+        return;
+      }
+
+      const confirmRet = await Modals.confirm({
+        title: 'Confirm',
+        message: `Are you sure you want to ${appDen} approval #${item.approval_id}?`
+      });
+
+      if (confirmRet.value) {
+        // show the loading indicator
+        this.loadingIndicator = await this.loading.create({
+          message: 'Loading'
+        });
+        await this.loadingIndicator.present();
+
+        // make the request
+        this.requestService.submit_approval(item.approval_id, typeId).subscribe(
+          (results) => {
+            if (!(results instanceof HttpErrorResponse)) {
+              item.approval_type_id = typeId;
+              if (typeId === 4) {
+                item.approval.approval_status = 'Approved';
+              }
+
+              if (typeId === 5) {
+                item.approval.approval_status = 'Denied';
+              }
+
+              this.userService.refreshData();
+            } else {
+              Modals.alert({
+                title: 'Error',
+                message: 'Approval could not be processed!'
+              });
+            }
+
+            // dimiss the loading indicator
+            if (this.loadingIndicator) {
+              this.loading.dismiss();
+            }
+          }
+        );
+      }
+    }
+  }
+
   openEvent(approval: MyApproval) {
     const navigationExtras: NavigationExtras = {
       relativeTo: this.route,
@@ -88,7 +150,7 @@ export class ApprovalPage implements OnInit {
   doRefresh(event: any) {
     // reset everything
     this.dataLoadSkip = 0;
-    this.dataLoadTake = 15;
+    this.dataLoadTake = 25;
     this.baseIncrease = 15;
 
     // refresh data
