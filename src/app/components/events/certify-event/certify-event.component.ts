@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { ModalController, LoadingController } from '@ionic/angular';
 import { EventService } from 'src/app/services/event.service';
+import { UserService } from 'src/app/services/user.service';
 import { EventAttendence, AttendenceType, Event } from '../../../models/event.model';
 
 const { Toast } = Plugins;
@@ -28,6 +29,7 @@ export class CertifyEventComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private eventService: EventService,
+    private userService: UserService,
     private loading: LoadingController) { }
 
   async submitForCertification() {
@@ -44,7 +46,10 @@ export class CertifyEventComponent implements OnInit {
           {
             this.attendenceSubmitting = false;
             if (!(results instanceof HttpErrorResponse)) {
+              // refreshes the events page
               this.eventService.refreshData();
+              // refreshes the approval count
+              this.userService.refreshData();
               this.certificationPassed = true;
               this.dismiss();
             }
@@ -61,7 +66,7 @@ export class CertifyEventComponent implements OnInit {
         async (results) =>
         {
           if (!(results instanceof HttpErrorResponse)) {
-            this.attendences = results.sort((a,b) => {
+            this.attendences = results.sort((a, b) => {
               return ('' + a.character.full_name).localeCompare(b.character.full_name);
             })
             this.initialDataLoaded = true;
