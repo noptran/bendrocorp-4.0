@@ -11,9 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 			<key>com.bendrocorp.app</key>
-			<string>BendroCorp Provisioning Profile</string>
-			<!-- <key>com.your.bundleid.extension</key>
-			<string>Name of provisioning profile for extension</string> -->
+			<string>BendroCorp Distribution</string>
 	</dict>
 	<key>generateAppStoreInformation</key>
 	<true/>
