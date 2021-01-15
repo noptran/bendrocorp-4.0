@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
+import { NotFoundPage } from './not-found/not-found.page';
 
 const routes: Routes = [
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'system-map',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/system-map/system-map.module').then( m => m.SystemMapPageModule)
   },
   {
@@ -74,12 +76,18 @@ const routes: Routes = [
     path: 'funding',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/funding/funding.module').then( m => m.FundingPageModule)
-  },
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forChild([ // catch all our mistakes route provider
+      {
+          path: '**',
+          component: NotFoundPage
+      }
+    ])
   ],
   exports: [RouterModule]
 })

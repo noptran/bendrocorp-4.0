@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 
 import { ModalController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -20,6 +20,8 @@ import { CheckUpdateService } from './services/sw/check-update.service';
 import { LogUpdateService } from './services/sw/log-update.service';
 import { SwUpdate } from '@angular/service-worker';
 import { PromptUpdateService } from './services/sw/prompt-update.service';
+import { Plugins } from '@capacitor/core';
+const { App } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -66,15 +68,30 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // updates
     private promptUpdate: PromptUpdateService,
-    private update: SwUpdate
+    private update: SwUpdate,
+
+    // zone
+    private zone: NgZone
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
+    // deep links
+    App.addListener('appUrlOpen', (data: any) => {
+      this.zone.run(() => {
+          const slug = data.url.split('.app').pop();
+          if (slug) {
+              this.router.navigateByUrl(slug);
+          }
+          // If no match, do nothing - let regular routing
+          // logic take over
+      });
+  });
+
     this.platform.ready().then(async () => {
       // intialize settings
-      await this.settings.intializeConfig();
+      await this.settings.intializeSettingsConfig();
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {

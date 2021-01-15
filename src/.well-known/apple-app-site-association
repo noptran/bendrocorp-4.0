@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "97BL343AJJ.com.bendrocorp.app",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

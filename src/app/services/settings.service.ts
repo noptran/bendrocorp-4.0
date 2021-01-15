@@ -22,7 +22,7 @@ export class SettingsService {
     this.dataRefreshSource.next();
   }
 
-  async intializeConfig()
+  async intializeSettingsConfig()
   {
     const config = await this.getConfig();
 
