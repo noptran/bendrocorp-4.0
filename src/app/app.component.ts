@@ -82,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.zone.run(() => {
           const slug = data.url.split('.app').pop();
           if (slug) {
-              this.router.navigateByUrl(slug);
+              // this.router.navigateByUrl(slug);
           }
           // If no match, do nothing - let regular routing
           // logic take over
@@ -118,17 +118,22 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.fetchUser();
       });
 
-      this.isAuthorized = (await this.authService.checkAndRefreshAccessToken()) != null;
-      if (!this.isAuthorized) {
-        this.router.navigateByUrl('/auth');
-      } else {
+      this.isAuthorized = (await this.authService.isAuthorized());
+      // if (!this.isAuthorized) {
+      //   this.router.navigateByUrl('/auth');
+      // } else {
+      //   await this.fetchUser();
+      //   await this.fetchMenu();
+      // }
+
+      if (this.isAuthorized) {
         await this.fetchUser();
         await this.fetchMenu();
-      }
 
-      // get the initial menu selection
-      this.selectMenuItem();
-      this.fetchApprovals();
+        // get the initial menu selection
+        this.selectMenuItem();
+        this.fetchApprovals();
+      }
 
       this.navigationSubscription = this.router.events
       .subscribe(event => {

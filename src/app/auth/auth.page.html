@@ -11,7 +11,6 @@
     </ion-col>
     <ion-col size-md="6" size-sm="12" size-xs="12">
       <ion-card>
-        <!-- <img src="./madison.jpg" /> -->
         <div class="auth-top">
           <img src="../../assets/bendrocorp-final.png" style="max-height: 90%; margin: 8px auto 8px auto;" alt="">
         </div>
@@ -40,11 +39,20 @@
             <section>
               <ion-button expand="block" color="primary" (click)="doLogin()">Login</ion-button>
             </section>
-
-            <!-- <section>
-              <p>Please note this is the Alpha version of the BendroCorp application and requires special permissions to access it. This application will have frequent and unpredictable updates and key functionality may be broken or missing.</p>
-            </section> -->
+            <section>
+              <p><small>By using this service and application you agree to our <a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>, <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a> and <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a>.</small></p>
+            </section>
           </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col size-md="6" size-sm="6" size-xs="12">
+                <ion-button expand="block" color="dark" [routerLink]="['/register']" disabled>Register</ion-button>
+              </ion-col>
+              <ion-col size-md="6" size-sm="6" size-xs="12">
+                <ion-button expand="block" color="dark" [routerLink]="['/forgot-password']">Forgot Password?</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-card-content>
       </ion-card>
     </ion-col>

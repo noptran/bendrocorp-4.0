@@ -1,0 +1,54 @@
+<ion-content>
+  <ion-row>
+    <ion-col size-md="3" size-sm="0" size-xs="0">
+      <!-- empty left column -->
+    </ion-col>
+    <ion-col size-md="6" size-sm="12" size-xs="12">
+      <ion-card>
+        <div class="register-top">
+          <img src="../../assets/bendrocorp-final.png" style="max-height: 90%; margin: 8px auto 8px auto;" alt="">
+        </div>
+        <ion-card-header>
+          <ion-card-title>BendroCorp<span *ngIf="isWeb"> Portal</span> Registration</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div>
+            <ion-list lines="full" class="ion-no-margin">
+              <!-- username -->
+              <ion-item>
+                <ion-label position="stacked">Username <span class="danger">*</span></ion-label>
+                <ion-input name="username" [(ngModel)]="registration.username" placeholder="Enter a username"></ion-input>
+              </ion-item>
+
+              <!-- email -->
+              <ion-item>
+                <ion-label position="stacked">Email <span class="danger">*</span></ion-label>
+                <ion-input name="username" [(ngModel)]="registration.email" placeholder="Enter your email" type="email"></ion-input>
+              </ion-item>
+              
+              <!-- password component -->
+              <app-password (passwordChangeEvent)="setPassword($event)" (validPasswordSet)="setPasswordValid($event)"></app-password>
+
+              <!-- agreements -->
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                  Agreements <span class="danger">*</span>
+                  <p>By submitting this registration you agree to our <a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>, <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a> and <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a>.</p>
+                </ion-label>
+                <ion-checkbox slot="end" [(ngModel)]="termsAgreement"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+            <!-- buttons -->
+            <section>
+              <ion-button expand="block" color="primary" (click)="createSignUp()" [disabled]="!valid() || dataSubmitting">Register</ion-button>
+              <ion-button expand="block" color="dark" (click)="backToLogin()">Back to Login</ion-button>
+            </section>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-md="3" size-sm="0" size-xs="0">
+      <!-- empty right column -->
+    </ion-col>
+  </ion-row>
+</ion-content>

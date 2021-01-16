@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Injectable, Input, OnInit, Output } from '@angular/core';
 import { Base64Upload } from 'src/app/models/misc.model';
 
 @Component({
@@ -6,6 +6,10 @@ import { Base64Upload } from 'src/app/models/misc.model';
   templateUrl: './select-avatar.component.html',
   styleUrls: ['./select-avatar.component.scss'],
 })
+
+// @Injectable({
+//   providedIn: 'root'
+// })
 export class SelectAvatarComponent implements OnInit {
   newAvatar: Base64Upload;
   dataChanged: boolean;

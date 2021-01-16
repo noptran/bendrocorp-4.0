@@ -49,3 +49,11 @@ export class NestedRole {
     role_nested_id?: number;
     role_nested?: Role;
 }
+
+export class SignUp
+{
+    username?: string;
+    email?: string;
+    password?: string;
+    password_confirmation?: string;
+}

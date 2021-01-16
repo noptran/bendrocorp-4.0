@@ -41,6 +41,8 @@ import { SystemMapListTagsComponent } from './components/system-map/system-map-l
 import { MakeDonationComponent } from './components/donations/make-donation/make-donation.component';
 import { AppUpdateDonationGoalComponent } from './components/donations/app-update-donation-goal/app-update-donation-goal.component';
 import { JoinSupporterComponent } from './components/donations/join-supporter/join-supporter.component';
+import { PasswordComponent } from './components/misc/password/password.component';
+import { PasswordComponentModule } from './components/misc/password/password.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import { JoinSupporterComponent } from './components/donations/join-supporter/jo
     AddUpdateOffenderReportComponent,
     NewsDetailComponent,
     SelectAvatarComponent,
+    // PasswordComponent, // ??
     AddUpdateStarObjectComponent,
     MakeDonationComponent,
     AppUpdateDonationGoalComponent,
@@ -82,6 +85,7 @@ import { JoinSupporterComponent } from './components/donations/join-supporter/jo
     AppRoutingModule,
     QRCodeModule,
     FormsModule,
+    PasswordComponentModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [
@@ -105,7 +109,9 @@ import { JoinSupporterComponent } from './components/donations/join-supporter/jo
   ],
   bootstrap: [AppComponent],
   schemas: [
-    CUSTOM_ELEMENTS_SCHEMA // this can sometimes suppress issues. If there is confusion about a component issues comment this out
+     // this can sometimes suppress issues.
+     // if there is a component not appearing or other related issues try comment this out
+    CUSTOM_ELEMENTS_SCHEMA
   ]
 })
 export class AppModule {}
