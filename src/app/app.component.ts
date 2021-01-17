@@ -82,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.zone.run(() => {
           const slug = data.url.split('.app').pop();
           if (slug) {
-              // this.router.navigateByUrl(slug);
+              this.router.navigateByUrl(slug);
           }
           // If no match, do nothing - let regular routing
           // logic take over
@@ -110,6 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isAuthorized = await this.authService.isAuthorized();
         await this.fetchUser();
         await this.fetchMenu();
+        await this.fetchApprovals();
       });
 
       // profile subscriber
@@ -177,6 +178,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   openApprovals() {
     this.router.navigate(['approvals']);
+  }
+
+  getFullName() {
+    if (this.user.first_name && this.user.last_name) {
+      return `${this.user.first_name} ${this.user.last_name}`;
+    } else {
+      return this.user.name;
+    }
   }
 
   getAvatar(): string {

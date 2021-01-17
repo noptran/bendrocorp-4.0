@@ -23,16 +23,16 @@
           <!-- top of menu -->
           <ion-item *ngIf="user">
             <ion-avatar slot="start">
-              <img src="{{getAvatar()}}">
+              <img src="{{getAvatar()}}" onerror="this.src='../assets/imgs/missing-avatar.png'">
             </ion-avatar>
             <ion-label>
-              <h2>{{user.first_name}} {{user.last_name}}</h2>
-              <p>{{user.job_title}}</p>
+              <h2>{{getFullName()}}</h2>
+              <p>{{user.job_title || "Guest Access"}}</p>
             </ion-label>            
           </ion-item>
           
           <ion-grid>
-            <!-- has approvals -->
+            <!-- has had some approvals ever -->
             <ion-row *ngIf="totalApprovalsCount > 0">
               <ion-col>
                 <div class="notification-button">

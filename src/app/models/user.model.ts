@@ -12,6 +12,7 @@ export class UserSessionResponse
     tfa_enabled?: boolean;
     job_title?: string;
     subscriber?: boolean;
+    name?: string;
 }
 
 export class LoginRequest
