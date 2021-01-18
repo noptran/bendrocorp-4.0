@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { UserSessionResponse } from './models/user.model';
 import { MenuItem } from './models/misc.model';
 import { MenuService } from './menu.service';
@@ -44,6 +44,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // updates
   updateAvailable: boolean;
+  // check every 15 seconds for menu updates
+  // if roles change we want to capture menu changes
+  menuInterval = interval(1000 * 15);
+  menuUpdateSubscription: Subscription;
 
   isNativeiOS: boolean;
 
@@ -117,8 +121,15 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.fetchUser();
       });
 
+      this.menuUpdateSubscription = this.menuInterval.subscribe(async () => {
+        if (await this.authService.isAuthorized()) {
+          this.fetchMenu();
+          this.selectMenuItem();
+        }
+      });
+
       // intial setting
-      this.isAuthorized = (await this.authService.isAuthorized());
+      this.isAuthorized = await this.authService.isAuthorized();
 
       if (this.isAuthorized) {
         await this.fetchUser();
@@ -225,6 +236,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.updateSubscription) {
       this.updateSubscription.unsubscribe();
+    }
+
+    if (this.menuUpdateSubscription) {
+      this.menuUpdateSubscription.unsubscribe();
     }
   }
 }
