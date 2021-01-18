@@ -6,11 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { UserSessionResponse } from './models/user.model';
 import { MenuItem } from './models/misc.model';
 import { MenuService } from './menu.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ConnectionService } from 'ng-connection-service';
 import { ProfileService } from './services/profile.service';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -119,13 +117,8 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.fetchUser();
       });
 
+      // intial setting
       this.isAuthorized = (await this.authService.isAuthorized());
-      // if (!this.isAuthorized) {
-      //   this.router.navigateByUrl('/auth');
-      // } else {
-      //   await this.fetchUser();
-      //   await this.fetchMenu();
-      // }
 
       if (this.isAuthorized) {
         await this.fetchUser();
