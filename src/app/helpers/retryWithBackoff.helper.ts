@@ -28,6 +28,9 @@ export function retryWithBackoff(
       retryWhen((errors: Observable<any>) => errors.pipe(
         mergeMap(error => {
           if (retries-- > 0) {
+            if (error.status && error.status === 422) {
+              return throwError(error);
+            }
             const backoffTime = delayMs + (maxRetry - retries) * backoffMs;
             return of(error).pipe(delay(backoffTime));
           } else {

@@ -57,13 +57,24 @@
     </ion-row>
 
     <!-- App info -->
-    <ion-row *ngIf="character && (hrRights && character.application.application_status_id < 6 )">
+    <ion-row *ngIf="character && character.application && character.application.application_status_id < 6">
       <ion-col size-md="4" size-sm="12" size-xs="12">
         <ion-card>
           <ion-card-content>
-            <ion-button *ngIf="character.application.application_status_id == 5" expand="full" color="success" (click)="advanceApplication()">CEO Accept</ion-button>
-            <ion-button *ngIf="character.application.application_status_id < 5" expand="full" color="success" (click)="advanceApplication()">Advance Application</ion-button>
-            <ion-button expand="full" color="danger" (click)="rejectApplication()">Reject Application</ion-button>
+            <!-- status -->
+            <div>
+              <h1>Open Application</h1>
+              <br />
+              <h2>Status: {{character.application.application_status.title}}</h2>
+              <br />
+              <p>&quot;{{character.application.application_status.description}}&quot;</p>
+            </div>
+
+            <div *ngIf="hrRights && character.application.application_status_id < 6">
+              <ion-button *ngIf="character.application.application_status_id == 5" expand="full" color="success" (click)="advanceApplication()">CEO Accept</ion-button>
+              <ion-button *ngIf="character.application.application_status_id < 5" expand="full" color="success" (click)="advanceApplication()">Advance Application</ion-button>
+              <ion-button expand="full" color="danger" (click)="rejectApplication()">Reject Application</ion-button>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -71,7 +82,10 @@
   </ion-grid>
   <!-- Application Buttons -->
   <!-- application_status_id -->
-  <!-- <div *ngIf="hrRights && character.application.application_status_id < 6">
+  <!-- <div>
+    {{hrRights}}
+  </div>
+  <div *ngIf="hrRights && character.application.application_status_id < 6">
     <ion-button *ngIf="character.application.application_status_id == 5" expand="full" color="success" (click)="advanceApplication()">CEO Accept</ion-button>
     <ion-button *ngIf="character.application.application_status_id < 5" expand="full" color="success" (click)="advanceApplication()">Advance Application</ion-button>
     <ion-button expand="full" color="danger" (click)="rejectApplication()">Reject Application</ion-button>

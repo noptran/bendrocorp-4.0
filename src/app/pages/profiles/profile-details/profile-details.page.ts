@@ -137,32 +137,36 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
   }
 
   async advanceApplication() {
-    const confirmRet = await Modals.confirm({
-      title: 'Confirm',
-      message: 'Are you sure you want advance this application?'
-    });
-
-    if (confirmRet.value) {
-      this.applicationService.advanceApplication(this.character).subscribe((results) => {
-        if (!(results instanceof HttpErrorResponse)) {
-          this.profileService.refreshData();
-        }
+    if (this.hrRights) {
+      const confirmRet = await Modals.confirm({
+        title: 'Confirm',
+        message: 'Are you sure you want advance this application?'
       });
+
+      if (confirmRet.value) {
+        this.applicationService.advanceApplication(this.character).subscribe((results) => {
+          if (!(results instanceof HttpErrorResponse)) {
+            this.profileService.refreshData();
+          }
+        });
+      }
     }
   }
 
   async rejectApplication() {
-    const confirmRet = await Modals.confirm({
-      title: 'Confirm',
-      message: 'Are you sure you want reject this application?'
-    });
-
-    if (confirmRet.value) {
-      this.applicationService.rejectApplication(this.character).subscribe((results) => {
-        if (!(results instanceof HttpErrorResponse)) {
-          this.profileService.refreshData();
-        }
+    if (this.hrRights) {
+      const confirmRet = await Modals.confirm({
+        title: 'Confirm',
+        message: 'Are you sure you want reject this application?'
       });
+
+      if (confirmRet.value) {
+        this.applicationService.rejectApplication(this.character).subscribe((results) => {
+          if (!(results instanceof HttpErrorResponse)) {
+            this.profileService.refreshData();
+          }
+        });
+      }
     }
   }
 
@@ -186,8 +190,13 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
     this.checkScreenSize();
 
     this.ceoRights = await this.authService.hasClaim(9);
-    this.hrRights = await (this.authService.hasClaim(12) || this.authService.hasClaim(9));
+    console.log(`ceo rights ${this.ceoRights}`);
+    
+    this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
+    console.log(`hr rights ${this.hrRights}`);
+
     this.directorRights = await this.authService.hasClaim(3);
+    console.log(`director rights ${this.directorRights}`);
 
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {

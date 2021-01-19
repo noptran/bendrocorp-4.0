@@ -68,6 +68,7 @@
             <ion-col>
               <ion-label style="font-size: 1.5em;">Corporate News</ion-label>
               <ion-list *ngIf="news">
+                <h6 *ngIf="news.length == 0">No news items posted.</h6>
                 <ion-item class="news-item" (click)="openNewsModal(item)" *ngFor="let item of news" detail>
                   <ion-label>{{item.title}}</ion-label>
                 </ion-item>

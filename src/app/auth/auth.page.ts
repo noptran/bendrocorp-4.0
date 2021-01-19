@@ -37,7 +37,8 @@ export class AuthPage implements OnInit {
         this.router.navigateByUrl('/');
       } else {
         await Toast.show({
-          text: response.error.message
+          text: response.error.message,
+          duration: 'long'
         });
       }
     });

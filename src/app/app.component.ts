@@ -40,13 +40,13 @@ export class AppComponent implements OnInit, OnDestroy {
   updateSubscription: Subscription;
 
   user: UserSessionResponse;
-  totalApprovalsCount: number;
+  totalApprovalsCount = 0;
 
   // updates
   updateAvailable: boolean;
-  // check every 15 seconds for menu updates
+  // check every 60 seconds for menu updates
   // if roles change we want to capture menu changes
-  menuInterval = interval(1000 * 15);
+  menuInterval = interval(1000 * 60);
   menuUpdateSubscription: Subscription;
 
   isNativeiOS: boolean;
@@ -154,10 +154,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private selectMenuItem() {
     const path = window.location.pathname.split('/')[1];
-    if (path !== undefined) {
+    if (path !== undefined && path !== '') {
       this.selectedIndex = this.appPages.findIndex(page => page.title.replace(' ', '-').toLowerCase() === path.toLowerCase());
     } else {
       this.selectedIndex = 0;
+      if (this.appPages && this.appPages.length > 0) {
+        this.router.navigateByUrl(this.appPages[0].link);
+      }
     }
   }
 
@@ -165,15 +168,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this.update.activateUpdate().then(() => document.location.reload());
   }
 
-  fetchApprovals() {
+  async fetchApprovals() {
     // TODO: Promisify this...
-    this.userService.fetchTotalApprovalCount().subscribe((results) => {
-      this.totalApprovalsCount = results;
-    });
+    if (await this.authService.isAuthorized() && await this.authService.hasClaim(0)) {
+      this.userService.fetchTotalApprovalCount().subscribe((results) => {
+        this.totalApprovalsCount = results;
+      });
 
-    this.userService.fetchPendingApprovalsCount().subscribe((results) => {
-      this.pendingApprovalCount = results;
-    });
+      this.userService.fetchPendingApprovalsCount().subscribe((results) => {
+        this.pendingApprovalCount = results;
+      });
+    }
   }
 
   async fetchUser() {

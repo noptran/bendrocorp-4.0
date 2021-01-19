@@ -45,13 +45,20 @@ export class RegistrationPage implements OnInit {
         (result) => {
           this.dataSubmitting = false;
           if (!(result instanceof HttpErrorResponse)) {
-            this.router.navigateByUrl('/login');
+            this.router.navigateByUrl('/auth');
             Toast.show({
               text: 'Registration completed successfully! Please login!'
+            });
+          } else {
+            Toast.show({
+              text: result.error.message,
+              duration: 'long'
             });
           }
         }
       );
+    } else {
+      console.warn('Invalid input?!');
     }
   }
 
@@ -81,6 +88,10 @@ export class RegistrationPage implements OnInit {
 
   backToLogin() {
     this.router.navigateByUrl('/auth');
+  }
+
+  ionViewWillEnter() {
+    this.registration = { } as SignUp;
   }
 
   ngOnInit() {

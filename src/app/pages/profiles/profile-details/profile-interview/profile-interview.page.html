@@ -23,7 +23,7 @@
       </ion-row>
     </ion-col>
   </ion-grid>
-  <ion-item detail (click)="openInterviewHints()">Interview Hints</ion-item>
+  <ion-item detail (click)="openInterviewHints()" style="cursor: pointer;">Interview Hints</ion-item>
   <ion-grid>
     <ion-col>
       <ion-row>
@@ -50,7 +50,7 @@
    -->
   <ion-item>
     <ion-label position="floating">Tell us about yourself</ion-label>
-    <ion-textarea [disabled]="character.application.interview.locked_for_review" rows="6" placeholder="Tell us about yourself" [(ngModel)]="character.application.interview.tell_us_about_yourself"></ion-textarea>
+    <ion-textarea [disabled]="character.application.interview.locked_for_review" rows="6" placeholder="Tell us about yourself...the player behind the character" [(ngModel)]="character.application.interview.tell_us_about_yourself"></ion-textarea>
   </ion-item>
   <ion-item>
     <ion-label text-wrap>Applicant has read and agrees to follow the Standards of Conduct</ion-label>
@@ -65,7 +65,7 @@
     <ion-checkbox [disabled]="character.application.interview.locked_for_review" slot="start" [(ngModel)]="character.application.interview.applicant_agrees_to_voice_policy"></ion-checkbox>
   </ion-item>
   <ion-item>
-    <ion-label text-wrap><p>BendroCorp is an immersion roleplay organization. Otherwise known as "light" roleplay. Interactions are often both in and out of character.</p> Applicant agrees to roleplay style?</ion-label>
+    <ion-label text-wrap><p>BendroCorp is an immersion roleplay organization. Otherwise known as "light" roleplay. Interactions are often both in and out of character and the focus is generally on 'immersion' rather than on specific story telling.</p> Applicant agrees to roleplay style?</ion-label>
     <ion-checkbox [disabled]="character.application.interview.locked_for_review" slot="start" [(ngModel)]="character.application.interview.applicant_agrees_to_roleplay_style"></ion-checkbox>
   </ion-item>
   <ion-item>
@@ -73,7 +73,7 @@
     <ion-checkbox [disabled]="character.application.interview.locked_for_review" slot="start" [(ngModel)]="character.application.interview.applicant_agrees_to_follow_all_policies"></ion-checkbox>
   </ion-item>
   <ion-item>
-    <ion-label text-wrap><p>Our goal is to make your experience with our guild as fun as possible while still encouraging a community atmosphere where people participate and help each other. No member will ever be removed from the guild for inactivity. All we ask is that if a member knows that they will be absent for a long period of time that they make the rest of the guild community aware of it through our forum. If a member has been in-active for 6 months or more they will be moved to the inactive roster.</p> Applicant understands participation policy?</ion-label>
+    <ion-label text-wrap><p>Our goal is to make your experience with our organization as fun as possible while still encouraging a community atmosphere where people participate and help each other. No member will ever be removed from the organization for inactivity. All we ask is that if a member knows that they will be absent for a long period of time that they make the rest of the organization community aware of it through our forum. If a member has been in-active for 6 months or more they will be moved to the inactive roster.</p> Applicant understands participation policy?</ion-label>
     <ion-checkbox [disabled]="character.application.interview.locked_for_review" slot="start" [(ngModel)]="character.application.interview.applicant_agrees_to_understands_participation"></ion-checkbox>
   </ion-item>
   <ion-item>

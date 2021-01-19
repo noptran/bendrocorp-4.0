@@ -31,11 +31,19 @@ export class ErrorService {
           // localStorage.removeItem('userObject');
         }
 
+        if (error.status === 422) {
+          Toast.show({
+            text: error.error.message,
+            duration: 'long'
+          });
+          return;
+        }
+
         if (error.status === 504) {
           this.router.navigateByUrl('/offline');
         }
 
-        if (error.statusText !== 'Unknown Error') {
+        if (error.statusText !== 'Unknown Error' && error.status !== 422) {
           if (error.error && error.error.message) {
             this.message = `${operation}: ${error.message}`;
             if (!skipMessage) {

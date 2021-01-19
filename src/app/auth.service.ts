@@ -91,7 +91,7 @@ export class AuthService {
             } else {
               response.headers.keys();
               error(response);
-              if (response.status === 401) {
+              if (response.status === 401 || (response.status === 404 && response.error.message.includes('Refresh token not found, is expired'))) {
                 this.redirectToLogin();
               }
             }
@@ -132,7 +132,8 @@ export class AuthService {
         tfa_enabled: decodedToken.tfa_enabled,
         character_id: decodedToken.character_id,
         job_title: decodedToken.job_title,
-        subscriber: decodedToken.subscriber
+        subscriber: decodedToken.subscriber,
+        name: decodedToken.name
       } as UserSessionResponse;
     }
   }
@@ -174,7 +175,8 @@ export class AuthService {
     }
   }
 
-  redirectToLogin() {
+  async redirectToLogin() {
+    await this.logout();
     this.preservePath();
     this.router.navigateByUrl('/auth');
   }

@@ -22,17 +22,17 @@
             <ion-list lines="full" class="ion-no-margin">
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
-                <ion-input name="username" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
+                <ion-input name="username" autocomplete="email" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input name="password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
+                <ion-input name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">2FA</ion-label>
-                <ion-input name="code" [(ngModel)]="login.code" placeholder="2FA code (if applicable)" type="number"></ion-input>
+                <ion-input name="code" autocomplete="one-time-code" [(ngModel)]="login.code" placeholder="2FA code (if applicable)" type="number"></ion-input>
               </ion-item>
             </ion-list>
         
@@ -46,7 +46,7 @@
           <ion-grid>
             <ion-row>
               <ion-col size-md="6" size-sm="6" size-xs="12">
-                <ion-button expand="block" color="dark" [routerLink]="['/register']" disabled>Register</ion-button>
+                <ion-button expand="block" color="dark" [routerLink]="['/register']">Register</ion-button>
               </ion-col>
               <ion-col size-md="6" size-sm="6" size-xs="12">
                 <ion-button expand="block" color="dark" [routerLink]="['/forgot-password']">Forgot Password?</ion-button>

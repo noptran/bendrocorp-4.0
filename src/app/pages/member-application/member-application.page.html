@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Member Application</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="initialDataLoaded">
+  <ion-refresher *ngIf="currentApplication" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- topper -->
+  <ion-card>
+    <div class="applications-topper"></div>
+    <ion-card-header>
+      <ion-card-title>Member Application</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      Want to join BendroCorp?
+    </ion-card-content>
+  </ion-card>
+  
+  <!-- content -->
+  <ion-card>
+    <ion-card-content>
+      <!-- application status for when you do have an application -->
+      <div *ngIf="currentApplication">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <h2 class="application-heading">Application Completed</h2>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                Status: {{currentApplication.application_status.title}}
+                <p>{{currentApplication.application_status.description}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <!-- if the user does not have an application on file -->
+      <div *ngIf="!currentApplication">
+        <ion-grid>
+          <ion-row>
+            <ion-col>Blurb here about the form</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <h2 class="application-heading">RSI Information</h2>
+              <!-- RSI Handle -->
+              <ion-item>
+                <ion-label position="floating">
+                  <ion-text>RSI Handle </ion-text>
+                  <ion-text *ngIf="checkingHandle">
+                    <ion-icon name="hourglass-outline"></ion-icon>
+                  </ion-text>
+                  <ion-text color="success" *ngIf="handleCheckedOnce && !checkingHandle && handleValid">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  </ion-text>
+                  <ion-text color="danger" *ngIf="handleCheckedOnce && !checkingHandle && !handleValid">
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                  </ion-text>
+                  <ion-text color="danger"> *</ion-text>
+                </ion-label>
+                <ion-input [(ngModel)]="newApplication.rsi_handle" (ionChange)="onFieldChange($event); onHandleFieldChange($event)" [debounce]="debounceInterval" placeholder="Enter your RSI handle..."></ion-input>
+                <p><small>* You must provide a valid RSI handle. RSI data will be checked to ensure that the provided handle is valid.</small></p>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <!-- Character info -->
+            <ion-col size-md="6" size-sm="6" size-xs="12">
+              <h2 class="application-heading">Character Information</h2>
+              <!-- Character First Name -->
+              <ion-item>
+                <ion-label position="floating">First Name <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input [(ngModel)]="newApplication.character.first_name" (ionChange)="onFieldChange($event)" [debounce]="debounceInterval" placeholder="Enter character first name..."></ion-input>
+              </ion-item>
+              <!-- Character Last Name -->
+              <ion-item>
+                <ion-label position="floating">Last Name <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input [(ngModel)]="newApplication.character.last_name" (ionChange)="onFieldChange($event)" [debounce]="debounceInterval" placeholder="Enter character last name..."></ion-input>
+              </ion-item>
+              <!-- Description -->
+              <ion-item>
+                <ion-label position="floating">Description <ion-text color="danger">*</ion-text></ion-label>
+                <ion-textarea [(ngModel)]="newApplication.character.description" (ionChange)="onFieldChange($event)" autoGrow="true" [debounce]="debounceInterval" placeholder="Enter character physical description..." autocapitalize></ion-textarea>
+              </ion-item>
+              <!-- Background -->
+              <ion-item>
+                <ion-label position="floating">Background <ion-text color="danger">*</ion-text></ion-label>
+                <ion-textarea [(ngModel)]="newApplication.character.background" (ionChange)="onFieldChange($event)" autoGrow="true" [debounce]="debounceInterval" placeholder="Enter character background..." autocapitalize></ion-textarea>
+              </ion-item>
+
+              <!-- Primary ship -->
+              <h2 class="application-heading">Primary Ship</h2>
+              <ion-item>
+                <ion-label position="floating">Ship Title <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input [(ngModel)]="newApplication.owned_ship.title" (ionChange)="onFieldChange($event)" [debounce]="debounceInterval" placeholder="Enter ship title..."></ion-input>
+                <p><small>* What did your name you ship? (Enter 'Undecided' if that is the case)</small></p>
+              </ion-item>
+              <!--  -->
+              <ion-item>
+                <ion-label position="floating">Ship Type <ion-text color="danger">*</ion-text></ion-label>
+                <ion-select placeholder="Ship Used" okText="Select" cancelText="Cancel" (ionChange)="onFieldChange($event)" [(ngModel)]="newApplication.owned_ship.ship_id">
+                  <ion-select-option *ngFor="let ship of ships" [value]="ship.id">{{ship.name}}</ion-select-option>
+                </ion-select>
+                <p><small>* All applicants are required to have purchased a Star Citizen package. Most organization events are conducted with organization ships. If you have more than one ship you would like to add you can do so from your profile page later if accepted as a member.</small></p>
+              </ion-item>
+            </ion-col>
+
+            <!-- Application Info -->
+            <ion-col size-md="6" size-sm="6" size-xs="12">
+              <h2 class="application-heading">Desired Position</h2>
+              <ion-item>
+                <ion-label position="floating">Position <ion-text color="danger">*</ion-text></ion-label>
+                <ion-select placeholder="Select position" okText="Select" cancelText="Cancel" (ionChange)="onFieldChange($event)" [(ngModel)]="newApplication.new_application.job_id">
+                  <ion-select-option *ngFor="let job of availableJobs" [value]="job.id">{{job.title}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <h2 class="application-heading">Application Questions</h2>
+              <!-- Why do you want to join -->
+              <ion-item>
+                <ion-label position="floating">Why do want to join BendroCorp? <ion-text color="danger">*</ion-text></ion-label>
+                <ion-textarea [(ngModel)]="newApplication.new_application.why_do_want_to_join" (ionChange)="onFieldChange($event)" [debounce]="debounceInterval" autoGrow="true" autocapitalize placeholder="Please provide a short blurb..."></ion-textarea>
+              </ion-item>
+              <!-- marketing - how did you hear about us? -->
+              <ion-item>
+                <ion-label position="floating">How did you hear about us? <ion-text color="danger">*</ion-text></ion-label>
+                <ion-textarea [(ngModel)]="newApplication.new_application.how_did_you_hear_about_us" (ionChange)="onFieldChange($event)" [debounce]="debounceInterval" autoGrow="true" autocapitalize placeholder="Let us know how you heard about us..."></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button (click)="submitApplication()" expand="block" [disabled]="!valid() || dataSubmitting">Submit Application</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-card-content>   
+  </ion-card>
+</ion-content>

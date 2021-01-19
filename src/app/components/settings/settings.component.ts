@@ -19,6 +19,7 @@ export class SettingsComponent implements OnInit {
   qrData: string;
   dataSubmitted: boolean;
   initialDataLoaded: boolean;
+  isMember: boolean;
 
   constructor(
     private settingsService: SettingsService,
@@ -53,6 +54,7 @@ export class SettingsComponent implements OnInit {
 
   async ngOnInit() {
     this.config = await this.settingsService.getConfig();
+    this.isMember = await this.authService.hasClaim(0);
     this.qrData = environment.userQRBase + (await this.authService.retrieveUserSession()).character_id;
   }
 
