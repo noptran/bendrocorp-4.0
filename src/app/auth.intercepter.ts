@@ -14,7 +14,8 @@ constructor(private authService: AuthService) { }
     if (!request.url.includes('auth')
     && !request.url.includes('register')
     && !request.url.includes('forgot-password')
-    && !request.url.includes('reset-password')) {
+    && !request.url.includes('reset-password')
+    && !request.url.includes('signup')) {
       console.log('interceptor triggered');
     //   console.log(request.url);
       return from(

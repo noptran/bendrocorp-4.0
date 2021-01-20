@@ -78,9 +78,12 @@ export class ProfileInterviewPage implements OnInit {
 
     if (this.router.getCurrentNavigation()?.extras.state) {
       console.log('Loading route info');
+      const stateValue = this.router.getCurrentNavigation().extras.state.character;
+
+      // make sure that we are allowed to be there
       await this.securityCheck();
 
-      this.character = this.router.getCurrentNavigation().extras.state.character;
+      this.character = stateValue;
       // console.log(this.character);
       // console.log(this.character.application.interview);
       this.lockForReview = this.character.application.interview.locked_for_review;

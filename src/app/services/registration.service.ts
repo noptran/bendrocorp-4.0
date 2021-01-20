@@ -20,7 +20,7 @@ export class RegistrationService {
   signup(signup: SignUp): Observable<StatusMessage> {
     return this.http.post<StatusMessage>(`${environment.baseUrl}/signup`, { signup }).pipe(
       tap(result => console.log('New sign up created!')),
-      catchError(this.error.handleError<any>('Sign Up'))
+      catchError(this.error.handleError<any>('Sign Up', null, true))
     );
   }
 

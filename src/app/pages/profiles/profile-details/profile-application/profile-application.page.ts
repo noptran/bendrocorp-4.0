@@ -60,10 +60,19 @@ export class ProfileApplicationPage implements OnInit {
     this.hrRights = await (this.authService.hasClaim(12) || this.authService.hasClaim(9));
     this.directorRights = await this.authService.hasClaim(3);
 
-    if (!(this.ceoRights || this.hrRights || (this.character.application && this.character.application.application_status_id < 6))) {
+    if (!(this.ceoRights || this.hrRights || (this.character && this.character.application && this.character.application.application_status_id < 6))) {
       Toast.show({ text: 'You are not authorized to view this page!' });
       this.router.navigate(['profiles']);
       return;
+    }
+  }
+
+  commentsAllowed(): boolean {
+    if (this.character.application.application_status_id > 1
+      && this.character.application.application_status_id < 4) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -71,12 +80,16 @@ export class ProfileApplicationPage implements OnInit {
     this.newComment = { } as CharacterApplicationComment;
 
 
-    if (this.router.getCurrentNavigation().extras.state) {
+    if (this.router.getCurrentNavigation()?.extras.state) {
+      const stateValue = this.router.getCurrentNavigation();
+
       console.log('Loading route info');
       await this.securityCheck();
-      this.character = this.router.getCurrentNavigation().extras.state.character;
+      this.character = stateValue.extras.state.character;
       console.log(this.character);
     } else {
+      console.log('no route info');
+
       await this.securityCheck();
 
       // create the loading indicator
@@ -87,6 +100,8 @@ export class ProfileApplicationPage implements OnInit {
 
       // go look up the data
       const characterId = parseInt(this.route.snapshot.paramMap.get('id'), null);
+      console.log(characterId);
+
       this.profileService.fetch(characterId).subscribe(async (results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.character = results;

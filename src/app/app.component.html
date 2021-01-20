@@ -1,12 +1,6 @@
 <ion-app>
   <ion-split-pane *ngIf="isAuthorized" contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
-      <!-- <ion-item>
-        <ion-label>
-          <h1>BendroCorp</h1>
-          <p>Expanding the frontier...</p>
-        </ion-label>
-      </ion-item> -->
       <ion-content>
         <ion-label>
           <ion-button *ngIf="updateAvailable" (click)="doUpdate()" style="float: right;" color="light" slot="end">

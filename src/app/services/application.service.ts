@@ -23,9 +23,7 @@ export class ApplicationService {
 
   constructor(
     private http: HttpClient,
-    private errorService: ErrorService,
-    // private messageService: MessageService,
-    // private globals: Globals
+    private errorService: ErrorService
   ) { }
 
   private dataRefreshSource = new Subject();
@@ -38,9 +36,9 @@ export class ApplicationService {
     this.dataRefreshSource.next();
   }
 
-  createApplication(character: NewCharacterApplication): Observable<CharacterApplication> {
-    return this.http.post<CharacterApplication>(`${environment.baseUrl}/apply`, { character }).pipe(
-      retryWithBackoff(1000, 3),
+  createApplication(characterApplication: NewCharacterApplication): Observable<CharacterApplication> {
+    return this.http.post<CharacterApplication>(`${environment.baseUrl}/apply`, characterApplication).pipe(
+      retryWithBackoff(700, 2),
       tap(results => console.log('Advanced application status!')),
       catchError(this.errorService.handleError<any>('Create Application'))
     );
@@ -48,9 +46,9 @@ export class ApplicationService {
 
   fetchApplication(): Observable<CharacterApplication> {
     return this.http.get<CharacterApplication>(`${environment.baseUrl}/apply`).pipe(
-      retryWithBackoff(1000, 3),
-      tap(results => console.log('Advanced application status!')),
-      catchError(this.errorService.handleError<any>('Fetch Application'))
+      retryWithBackoff(1000, 1),
+      tap(results => console.log(results)),
+      catchError(this.errorService.handleError<any>('Fetch Application', null, true))
     );
   }
 

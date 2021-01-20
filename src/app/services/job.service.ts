@@ -37,6 +37,15 @@ export class JobsService {
     );
   }
 
+  list_hiring(): Observable<Job[]>
+  {
+    return this.http.get<Job[]>(`${environment.baseUrl}/job/hiring`).pipe(
+      retryWithBackoff(),
+      tap(results => console.log(`Fetched ${results.length} jobs`)),
+      catchError(this.errorService.handleError('Fetch Jobs', []))
+    );
+  }
+
   listDivisions(): Observable<Division[]> {
     return this.http.get<Division[]>(`${environment.baseUrl}/division`).pipe(
       retryWithBackoff(),

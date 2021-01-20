@@ -12,6 +12,7 @@
     <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
+  <!-- topper -->
   <ion-card>
     <div class="jobs-topper"></div>
     <ion-card-header>
@@ -22,6 +23,8 @@
       Jobs are missions created by BendroCorp for our members which can be undertaken to earn operations points!
     </ion-card-content>
   </ion-card>
+
+  <!-- content -->
   <ion-list *ngIf="!isAdmin">
     <ion-list-header>
       <ion-label>Available Jobs</ion-label>

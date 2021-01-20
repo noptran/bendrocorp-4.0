@@ -26,7 +26,7 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
   offenderSubscription: Subscription;
   initialDataLoaded = false;
   loadingIndicator: any;
-  isAdmin = this.authService.hasClaim(16);
+  isAdmin: boolean;
 
   constructor(
     private offenderService: OffenderService,
@@ -128,7 +128,10 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    // get required user data
     this.userId = (await this.authService.retrieveUserSession()).id;
+    this.isAdmin = await this.authService.hasClaim(16);
+
     this.loadingIndicator = await this.loading.create({
       message: 'Loading'
     });

@@ -6,10 +6,16 @@ import { NoAuthGuard } from './no-auth.guard';
 import { NotFoundPage } from './not-found/not-found.page';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   redirectTo: 'dashboard',
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/empty/empty.module').then( m => m.EmptyPageModule)
   },
   {
     path: 'offline',
@@ -89,6 +95,11 @@ const routes: Routes = [
     path: 'funding',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/funding/funding.module').then( m => m.FundingPageModule)
+  },
+  {
+    path: 'application',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/member-application/member-application.module').then( m => m.MemberApplicationPageModule)
   }
 ];
 
