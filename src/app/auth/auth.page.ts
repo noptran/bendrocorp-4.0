@@ -5,7 +5,8 @@ import { Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { LoginRequest } from '../models/user.model';
 import { Plugins } from '@capacitor/core';
-const { Toast } = Plugins;
+import { environment } from 'src/environments/environment';
+const { Toast, Device } = Plugins;
 
 @Component({
   selector: 'app-auth',
@@ -26,10 +27,15 @@ export class AuthPage implements OnInit {
    */
   async doLogin()
   {
+    const { uuid, operatingSystem, platform } = await Device.getInfo();
     this.authService.login(
-      this.login.email,
-      this.login.password,
-      this.login.code)
+      {
+        email: this.login.email,
+        password: this.login.password,
+        code: this.login.code,
+        device: `${platform}:${operatingSystem}:${uuid}`
+      }
+      )
     .subscribe(async (response) => {
       if (!(response instanceof HttpErrorResponse)) {
         await this.authService.storeAuthResponse(response);
@@ -48,8 +54,12 @@ export class AuthPage implements OnInit {
     this.login = {} as LoginRequest;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.isWeb = this.platform.is('desktop');
+    const { uuid } = await Device.getInfo();
+    if (!environment.production) {
+      console.log(uuid);
+    }
   }
 
 }

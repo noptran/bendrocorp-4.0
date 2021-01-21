@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
@@ -13,12 +13,13 @@ import * as moment from 'moment';
 import { UserSessionResponse } from './models/user.model';
 import { Router } from '@angular/router';
 import { retryWithBackoff } from './helpers/retryWithBackoff.helper';
-const { Toast, Storage } = Plugins;
+const { Toast, Storage, Device } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private deviceUuid: string;
 
   constructor(
     private http: HttpClient,
@@ -39,8 +40,11 @@ export class AuthService {
     console.log('announceAuthUpdate called and sent!');
   }
 
-  login(email: string, password: string, code?: number): Observable<TokenResponse> {
-    const session = { email, password, code, device: this.platform.platforms()?.join(':'), offline_access: true };
+  login(params: { email: string, password: string, code?: number, device: string }): Observable<TokenResponse> {
+    // this.deviceUuid = uuid;
+    const { email, password, code, device } = params;
+    // TODO: If platform web request refresh token as cookie
+    const session = { email, password, code, device, offline_access: true };
 
     return this.http.post<TokenResponse>(`${environment.baseUrlRoot}/auth`, { session }).pipe(
       tap(async result => {
