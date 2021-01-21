@@ -8,6 +8,7 @@ import { ErrorService } from './error.service';
 import { StatusMessage } from '../models/misc.model';
 import { environment } from '../../environments/environment';
 import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
+import { PushTokenReg } from '../models/push-token-reg.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +43,7 @@ export class UserService {
     );
   }
 
-  registerForPushNotifications(token: string, userDeviceTypeId: 1|2) {
-    // tslint:disable-next-line: variable-name
-    const push_token = { token, user_device_type_id: userDeviceTypeId };
+  registerForPushNotifications(push_token: PushTokenReg) {
     return this.http.post<StatusMessage>(`${environment.baseUrl}/user/push-token`, { push_token }).pipe(
       retryWithBackoff(),
       tap(result => console.log(`Added push notification!`)),

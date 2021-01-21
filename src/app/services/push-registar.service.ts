@@ -12,8 +12,9 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed,
 } from '@capacitor/core';
+import { PushTokenReg } from '../models/push-token-reg.model';
 
-const { PushNotifications, Storage } = Plugins;
+const { PushNotifications, Storage, Device } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -71,8 +72,16 @@ export class PushRegistarService {
             return;
           }
 
+          const { uuid } = await Device.getInfo();
+
+          const tokenReg: PushTokenReg = {
+            token: tokenValue,
+            user_device_type_id: this.deviceTypeId,
+            device_uuid: uuid
+          };
+
           // send the token to the API for registration
-          this.userService.registerForPushNotifications(tokenValue, this.deviceTypeId).subscribe((results) => {
+          this.userService.registerForPushNotifications(tokenReg).subscribe((results) => {
             if (!(results instanceof HttpErrorResponse)) {
               console.log(`Push token ${tokenValue} registered on the BendroCorp API for this device.`);
             }
