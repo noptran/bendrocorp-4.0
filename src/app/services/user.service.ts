@@ -42,8 +42,9 @@ export class UserService {
     );
   }
 
-  registerForPushNotifications(token: string, user_device_type_id: 1|2|3, reg_data: string) {
-    const push_token = { token, user_device_type_id, reg_data };
+  registerForPushNotifications(token: string, userDeviceTypeId: 1|2) {
+    // tslint:disable-next-line: variable-name
+    const push_token = { token, user_device_type_id: userDeviceTypeId };
     return this.http.post<StatusMessage>(`${environment.baseUrl}/user/push-token`, { push_token }).pipe(
       retryWithBackoff(),
       tap(result => console.log(`Added push notification!`)),

@@ -6,10 +6,21 @@ import { UserService } from './user.service';
 import { environment } from 'src/environments/environment.prod';
 import { AppBadgeService } from './app-badge.service';
 
+import {
+  Plugins,
+  PushNotification,
+  PushNotificationToken,
+  PushNotificationActionPerformed,
+} from '@capacitor/core';
+
+const { PushNotifications, Storage } = Plugins;
+
 @Injectable({
   providedIn: 'root'
 })
 export class PushRegistarService {
+  private deviceTypeId: 1|2;
+  private readonly pushTokenStorageKey = 'push-token';
 
   constructor(
     private platform: Platform,
@@ -17,7 +28,81 @@ export class PushRegistarService {
     private userService: UserService,
     private appBadgeService: AppBadgeService) { }
 
-  initPushNotifications() {
+  /**
+   * Attempt to initialize push notifications on devices which are supported by the BendroCorp service.
+   */
+  async initPushNotifications() {
+    if (this.platform.is('capacitor')) {
+      // if we have already set a push notification token then skip
+      if (await Storage.get({ key: this.pushTokenStorageKey })) {
+        return;
+      }
+
+      // Request permission to use push notifications
+      // iOS will prompt user and return if they granted permission or not
+      // Android will just grant without prompting
+      PushNotifications.requestPermission().then(result => {
+        if (result.granted) {
+          // Register with Apple / Google to receive push via APNS/FCM
+          PushNotifications.register();
+        } else {
+          // Show some error
+          console.warn('Push notification registration failed!');
+        }
+      });
+
+      // On success, we should be able to receive notifications
+      PushNotifications.addListener('registration',
+        async (token: PushNotificationToken) => {
+          alert('Push registration success, token: ' + token.value);
+
+          const tokenValue = (token.value as string).replace('<', '').replace('>', '');
+
+          // store the token
+          await Storage.set({ key: this.pushTokenStorageKey, value: tokenValue });
+
+          // determine the platform of the device so we can tell the API what its looking for
+          if (this.platform.is('ios')) {
+            this.deviceTypeId = 1;
+          } else if (this.platform.is('android')) {
+            this.deviceTypeId = 2;
+          } else {
+            console.warn('Unsupported push notification platform');
+            return;
+          }
+
+          // send the token to the API for registration
+          this.userService.registerForPushNotifications(tokenValue, this.deviceTypeId).subscribe((results) => {
+            if (!(results instanceof HttpErrorResponse)) {
+              console.log(`Push token ${tokenValue} registered on the BendroCorp API for this device.`);
+            }
+          });
+        }
+      );
+
+      // Some issue with our setup and push will not work
+      PushNotifications.addListener('registrationError',
+        (error: any) => {
+          alert('Error on registration: ' + JSON.stringify(error));
+        }
+      );
+
+      // Show us the notification payload if the app is open on our device
+      PushNotifications.addListener('pushNotificationReceived',
+        (notification: PushNotification) => {
+          alert('Push received: ' + JSON.stringify(notification));
+        }
+      );
+
+      // Method called when tapping on a notification
+      PushNotifications.addListener('pushNotificationActionPerformed',
+        (notification: PushNotificationActionPerformed) => {
+          alert('Push action performed: ' + JSON.stringify(notification));
+        }
+      );
+    }
+
+
     // check to see if this is a physical device if not "Eject, Eject, Eject!"
     // if (!this.platform.is('cordova')) {
     //   console.warn('Push notifications not available. Must run on a physical device.');

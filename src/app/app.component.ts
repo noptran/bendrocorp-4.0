@@ -19,6 +19,7 @@ import { LogUpdateService } from './services/sw/log-update.service';
 import { SwUpdate } from '@angular/service-worker';
 import { PromptUpdateService } from './services/sw/prompt-update.service';
 import { Plugins } from '@capacitor/core';
+import { PushRegistarService } from './services/push-registar.service';
 const { App } = Plugins;
 
 @Component({
@@ -63,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private modalController: ModalController,
     private settings: SettingsService,
     private userService: UserService,
+    private push: PushRegistarService,
 
     // sw stuff
     private checkUpdate: CheckUpdateService,
@@ -94,6 +96,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.ready().then(async () => {
       // intialize settings
       await this.settings.intializeSettingsConfig();
+
+      // register for push notifications
+      this.push.initPushNotifications();
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
