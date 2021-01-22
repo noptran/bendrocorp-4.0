@@ -14,7 +14,7 @@ import {
 } from '@capacitor/core';
 import { PushTokenReg } from '../models/push-token-reg.model';
 
-const { PushNotifications, Storage, Device } = Plugins;
+const { PushNotifications, Storage, Device, Toast, Modals } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,7 @@ const { PushNotifications, Storage, Device } = Plugins;
 export class PushRegistarService {
   private deviceTypeId: 1|2;
   private readonly pushTokenStorageKey = 'push-token';
+  private readonly pushDebug = true;
 
   constructor(
     private platform: Platform,
@@ -33,9 +34,14 @@ export class PushRegistarService {
    * Attempt to initialize push notifications on devices which are supported by the BendroCorp service.
    */
   async initPushNotifications() {
-    if (this.platform.is('capacitor')) {
+    if (this.platform.is('capacitor') || this.platform.is('cordova')) {
       // if we have already set a push notification token then skip
       if (await Storage.get({ key: this.pushTokenStorageKey })) {
+        if (this.pushDebug) {
+          Toast.show({
+            text: 'Push key already found not pushing'
+          });
+        }
         return;
       }
 
@@ -44,10 +50,20 @@ export class PushRegistarService {
       // Android will just grant without prompting
       PushNotifications.requestPermission().then(result => {
         if (result.granted) {
+          if (this.pushDebug) {
+            Toast.show({
+              text: 'Push notifcation rights granted. Registering.'
+            });
+          }
           // Register with Apple / Google to receive push via APNS/FCM
           PushNotifications.register();
         } else {
           // Show some error
+          if (this.pushDebug) {
+            Toast.show({
+              text: 'Push notification rights not granted'
+            });
+          }
           console.warn('Push notification registration failed!');
         }
       });
@@ -55,12 +71,13 @@ export class PushRegistarService {
       // On success, we should be able to receive notifications
       PushNotifications.addListener('registration',
         async (token: PushNotificationToken) => {
-          alert('Push registration success, token: ' + token.value);
+          if (this.pushDebug) {
+            Toast.show({
+              text: 'Push registration success, token: ' + token.value
+            });
+          }
 
           const tokenValue = (token.value as string).replace('<', '').replace('>', '');
-
-          // store the token
-          await Storage.set({ key: this.pushTokenStorageKey, value: tokenValue });
 
           // determine the platform of the device so we can tell the API what its looking for
           if (this.platform.is('ios')) {
@@ -81,9 +98,26 @@ export class PushRegistarService {
           };
 
           // send the token to the API for registration
-          this.userService.registerForPushNotifications(tokenReg).subscribe((results) => {
+          this.userService.registerForPushNotifications(tokenReg).subscribe(async (results) => {
             if (!(results instanceof HttpErrorResponse)) {
+              // store the token
+              await Storage.set({ key: this.pushTokenStorageKey, value: tokenValue });
               console.log(`Push token ${tokenValue} registered on the BendroCorp API for this device.`);
+
+              // debug output
+              if (this.pushDebug) {
+                Toast.show({
+                  text: 'Token registered!'
+                });
+              }
+            } else {
+              // remove the stored token since things failed
+              await Storage.remove({ key: this.pushTokenStorageKey });
+              if (this.pushDebug) {
+                Toast.show({
+                  text: `Token could not be registered with the BendroCorp API because: ${results.error.message}`
+                });
+              }
             }
           });
         }
@@ -91,22 +125,27 @@ export class PushRegistarService {
 
       // Some issue with our setup and push will not work
       PushNotifications.addListener('registrationError',
-        (error: any) => {
-          alert('Error on registration: ' + JSON.stringify(error));
+        async (error: any) => {
+          Modals.alert({
+            title: 'Error',
+            message: 'Error on push registration: ' + JSON.stringify(error)
+          });
+
+          await Storage.remove({ key: this.pushTokenStorageKey });
         }
       );
 
       // Show us the notification payload if the app is open on our device
       PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotification) => {
-          alert('Push received: ' + JSON.stringify(notification));
+          // alert('Push received: ' + JSON.stringify(notification));
         }
       );
 
       // Method called when tapping on a notification
       PushNotifications.addListener('pushNotificationActionPerformed',
         (notification: PushNotificationActionPerformed) => {
-          alert('Push action performed: ' + JSON.stringify(notification));
+          // alert('Push action performed: ' + JSON.stringify(notification));
         }
       );
     }
