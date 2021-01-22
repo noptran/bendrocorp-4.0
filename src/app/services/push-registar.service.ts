@@ -13,6 +13,9 @@ import {
   PushNotificationActionPerformed,
 } from '@capacitor/core';
 import { PushTokenReg } from '../models/push-token-reg.model';
+import { pushTokenStorageKey } from 'constants';
+import { AuthService } from '../auth.service';
+import { debugRole } from 'constants';
 
 const { PushNotifications, Storage, Device, Toast, Modals } = Plugins;
 
@@ -21,22 +24,25 @@ const { PushNotifications, Storage, Device, Toast, Modals } = Plugins;
 })
 export class PushRegistarService {
   private deviceTypeId: 1|2;
-  private readonly pushTokenStorageKey = 'push-token';
-  private readonly pushDebug = true;
+  private pushDebug: boolean;
 
   constructor(
     private platform: Platform,
     // private push: Push,
     private userService: UserService,
-    private appBadgeService: AppBadgeService) { }
+    private appBadgeService: AppBadgeService,
+    private authService: AuthService) {
+    }
 
   /**
    * Attempt to initialize push notifications on devices which are supported by the BendroCorp service.
    */
   async initPushNotifications() {
+    this.pushDebug = await this.authService.hasClaim(debugRole);
+
     if (this.platform.is('capacitor') || this.platform.is('cordova')) {
       // if we have already set a push notification token then skip
-      if (await Storage.get({ key: this.pushTokenStorageKey })) {
+      if (((await Storage.get({ key: pushTokenStorageKey }))?.value)) {
         if (this.pushDebug) {
           Toast.show({
             text: 'Push key already found not pushing'
@@ -77,6 +83,7 @@ export class PushRegistarService {
             });
           }
 
+          // ios fix, does not apply to Android or others
           const tokenValue = (token.value as string).replace('<', '').replace('>', '');
 
           // determine the platform of the device so we can tell the API what its looking for
@@ -101,7 +108,7 @@ export class PushRegistarService {
           this.userService.registerForPushNotifications(tokenReg).subscribe(async (results) => {
             if (!(results instanceof HttpErrorResponse)) {
               // store the token
-              await Storage.set({ key: this.pushTokenStorageKey, value: tokenValue });
+              await Storage.set({ key: pushTokenStorageKey, value: tokenValue });
               console.log(`Push token ${tokenValue} registered on the BendroCorp API for this device.`);
 
               // debug output
@@ -112,7 +119,7 @@ export class PushRegistarService {
               }
             } else {
               // remove the stored token since things failed
-              await Storage.remove({ key: this.pushTokenStorageKey });
+              await Storage.remove({ key: pushTokenStorageKey });
               if (this.pushDebug) {
                 Toast.show({
                   text: `Token could not be registered with the BendroCorp API because: ${results.error.message}`
@@ -131,7 +138,7 @@ export class PushRegistarService {
             message: 'Error on push registration: ' + JSON.stringify(error)
           });
 
-          await Storage.remove({ key: this.pushTokenStorageKey });
+          await Storage.remove({ key: pushTokenStorageKey });
         }
       );
 

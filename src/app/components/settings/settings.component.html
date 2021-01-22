@@ -22,5 +22,11 @@
       <ion-toggle slot="end" id="biometrics" (ionChange)="updateConfig()" [(ngModel)]="config.useTouchId" disabled></ion-toggle>
     </ion-item>
   </ion-list>
+
+  <div *ngIf="ceoRights">
+    <h4>Debug Commands</h4>
+    <ion-button (click)="clearNotificationToken()" expand="block">Clear Notification Token</ion-button>
+    <hr />
+  </div>
   <ion-button (click)="logout()" color="danger" expand="block">Logout</ion-button>
 </ion-content>
