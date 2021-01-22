@@ -97,9 +97,6 @@ export class AppComponent implements OnInit, OnDestroy {
       // intialize settings
       await this.settings.intializeSettingsConfig();
 
-      // register for push notifications
-      await this.push.initPushNotifications();
-
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
         this.fetchApprovals();
@@ -118,6 +115,9 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.fetchUser();
         await this.fetchMenu();
         await this.fetchApprovals();
+
+        // register for push notifications
+        await this.push.initPushNotifications();
       });
 
       // profile subscriber
@@ -135,6 +135,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
       // intial setting
       this.isAuthorized = await this.authService.isAuthorized();
+
+      if (this.isAuthorized) {
+        // register for push notifications
+        await this.push.initPushNotifications();
+      }
 
       if (this.isAuthorized) {
         await this.fetchUser();
