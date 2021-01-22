@@ -98,7 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
       await this.settings.intializeSettingsConfig();
 
       // register for push notifications
-      this.push.initPushNotifications();
+      await this.push.initPushNotifications();
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
