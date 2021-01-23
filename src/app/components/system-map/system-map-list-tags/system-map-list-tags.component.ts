@@ -9,6 +9,7 @@ export class SystemMapListTagsComponent {
 
   // input is a comma seperated list of tags
   @Input() tags: string;
+  @Input() limitTags = false;
 
   constructor() { }
 
@@ -25,7 +26,7 @@ export class SystemMapListTagsComponent {
         tagArray[index] = tagArray[index].trim();
       }
       // return tags
-      if (tagArray.length > 3) {
+      if (tagArray.length > 3 && this.limitTags) {
         tagArray.length = 3;
         return tagArray;
       } else {

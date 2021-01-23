@@ -1,6 +1,0 @@
-<div>
-  <span *ngFor="let tag of parsedTags()" style="margin-right: 2px;">
-    <ion-badge *ngIf="!tagRestricted(tag)" color="primary" style="margin-right: 2px;">#{{tag}}</ion-badge>
-    <ion-badge *ngIf="tagRestricted(tag)" color="danger" style="margin-right: 2px;">#{{tag}}</ion-badge>
-  </span>
-</div>

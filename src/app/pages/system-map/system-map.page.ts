@@ -129,7 +129,6 @@ export class SystemMapPage implements OnInit, OnDestroy {
   }
 
   selectListItem(listItem: StarObject) {
-    // this.recentItems = this.systemMapService.addRecentSelectedListItems(listItem);
     const navigationExtras: NavigationExtras = {
       relativeTo: this.route,
       // state: {
@@ -138,7 +137,6 @@ export class SystemMapPage implements OnInit, OnDestroy {
     };
 
     this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
-    // this.selectedListItem = listItem;
   }
 
   fetchSystemObjects(event?: any) {

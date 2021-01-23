@@ -7,18 +7,20 @@ import { IonicModule } from '@ionic/angular';
 import { SystemMapDetailsPageRoutingModule } from './system-map-details-routing.module';
 
 import { SystemMapDetailsPage } from './system-map-details.page';
-import { SystemMapDetailTagsComponent } from 'src/app/components/system-map/system-map-detail-tags/system-map-detail-tags.component';
+import { SystemMapListCardComponentModule } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.module';
+import { SystemMapListTagsComponentModule } from 'src/app/components/system-map/system-map-list-tags/system-map-list-tags.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SystemMapDetailsPageRoutingModule
+    SystemMapDetailsPageRoutingModule,
+    SystemMapListCardComponentModule,
+    SystemMapListTagsComponentModule
   ],
   declarations: [
     SystemMapDetailsPage,
-    SystemMapDetailTagsComponent
   ]
 })
 export class SystemMapDetailsPageModule {}

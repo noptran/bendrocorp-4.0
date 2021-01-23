@@ -10,18 +10,20 @@ import { SystemMapPage } from './system-map.page';
 import { SystemMapListCardComponent } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.component';
 import { SystemMapListTagsComponent } from 'src/app/components/system-map/system-map-list-tags/system-map-list-tags.component';
 import { SelectAvatarComponent } from 'src/app/components/misc/select-avatar/select-avatar.component';
+import { SystemMapListCardComponentModule } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.module';
+import { SystemMapListTagsComponentModule } from 'src/app/components/system-map/system-map-list-tags/system-map-list-tags.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SystemMapPageRoutingModule
+    SystemMapPageRoutingModule,
+    SystemMapListCardComponentModule,
+    SystemMapListTagsComponentModule
   ],
   declarations: [
-    SystemMapPage,
-    SystemMapListCardComponent,
-    SystemMapListTagsComponent
+    SystemMapPage
   ],
 })
 export class SystemMapPageModule {}

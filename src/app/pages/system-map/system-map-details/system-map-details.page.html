@@ -24,7 +24,7 @@
             <ion-item>
               <ion-label text-wrap>
                 {{selectedItem.title}} ({{selectedItem.kind}})
-                <app-system-map-detail-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-detail-tags>
+                <app-system-map-list-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-list-tags>
                 <p style="white-space: pre-wrap;">{{selectedItem.description}}</p>
               </ion-label>
             </ion-item>
@@ -47,6 +47,20 @@
       <!-- <ion-item *ngIf="selectedItem.jurisdiction">
         <strong>Jurisdiction:&nbsp;</strong>{{selectedItem.jurisdiction.title}}
       </ion-item> -->
+
+      <!-- children grid -->
+      <ion-grid *ngIf="selectedItem.children && selectedItem.children.length > 0 && starObjectTypes">
+        <ion-row *ngFor="let childType of starObjectTypes">
+          <ion-col *ngIf="selectChildren(childType.id).length > 0">
+            <h3>{{childType.title}}s</h3>
+            <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+              <ion-slide *ngFor="let child of selectChildren(childType.id)" (click)="selectListItem(child)">
+                <app-system-map-list-card [showTags]="false" [smObject]="child"></app-system-map-list-card>
+              </ion-slide>
+            </ion-slides>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
 

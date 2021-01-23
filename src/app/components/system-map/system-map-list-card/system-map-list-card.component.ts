@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class SystemMapListCardComponent implements OnInit {
   @Input() smObject: any;
+  @Input() showTags = true;
   constructor() { }
 
   ngOnInit() {}

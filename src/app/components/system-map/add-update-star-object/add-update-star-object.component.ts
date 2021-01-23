@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PickerOptions, PickerColumnOption } from '@ionic/core';
 import { Base64Upload } from 'src/app/models/misc.model';
 import { Subscription } from 'rxjs';
+import { SystemMapTypeField } from 'constants';
 
 const { Modals, Toast } = Plugins;
 
@@ -70,7 +71,7 @@ export class AddUpdateStarObjectComponent implements OnInit {
     });
 
     // system object types
-    this.fieldService.getField('0f65a426-aa0e-4589-88b6-6bb54247e0bf').subscribe((results) => {
+    this.fieldService.getField(SystemMapTypeField).subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.starObjectTypes = results;
       }

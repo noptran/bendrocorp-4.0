@@ -32,7 +32,7 @@
     <ion-item>
       <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
       </ion-label>
-      <ion-input required placeholder="Location Title" [(ngModel)]="starObject.title"
+      <ion-input required placeholder="{{showObjectTypeSelection()}} Title" [(ngModel)]="starObject.title"
         name="star_object_title"></ion-input>
     </ion-item>
 
@@ -40,7 +40,7 @@
     <ion-item>
       <ion-label>Description <ion-text color="danger">*</ion-text>
       </ion-label>
-      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the object"
+      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the {{showObjectTypeSelection().toLowerCase()}}"
         rows="10" name="star_object_description"></ion-textarea>
     </ion-item>
 

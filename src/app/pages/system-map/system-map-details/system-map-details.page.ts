@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { Subscription, concat, from } from 'rxjs';
 import { concatAll } from 'rxjs/operators';
@@ -9,6 +9,10 @@ import { StarObject } from 'src/app/models/system-map.model';
 import { SystemMapService } from 'src/app/services/system-map.service';
 import { Plugins } from '@capacitor/core';
 import { AddUpdateStarObjectComponent } from 'src/app/components/system-map/add-update-star-object/add-update-star-object.component';
+import { FieldService } from 'src/app/services/field.service';
+import { SystemMapTypeField } from 'constants';
+import { FieldDescriptor } from 'src/app/models/field.model';
+import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 
 const { Toast, Modals } = Plugins;
 
@@ -18,7 +22,11 @@ const { Toast, Modals } = Plugins;
   styleUrls: ['./system-map-details.page.scss'],
 })
 export class SystemMapDetailsPage implements OnInit, OnDestroy {
-  isEditor: boolean = (this.authService.hasClaim(22) || this.authService.hasClaim(23)) ? true : false;
+  slideOpts = {
+    slidesPerView: 4
+  };
+
+  isEditor: boolean;
 
   fullList: StarObject[] = [];
   selectedItemId: string;
@@ -31,8 +39,12 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
 
+  // config
+  config: AppConfig;
+
   readonly routePartialObjectId: string;
   initialDataLoaded: boolean;
+  starObjectTypes: FieldDescriptor[] = [];
 
   constructor(
     private systemMapService: SystemMapService,
@@ -40,7 +52,9 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     private loading: LoadingController,
     private router: Router,
     private route: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private fieldService: FieldService,
+    private settingsService: SettingsService
   ) {
     this.routePartialObjectId = this.route.snapshot.paramMap.get('id').split('-')[0];
 
@@ -59,6 +73,12 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
   }
 
   fetchSystemObjectsAndSelect(event?: any) {
+    this.fieldService.getField(SystemMapTypeField).subscribe((results) => {
+      if (!(results instanceof HttpErrorResponse)) {
+        this.starObjectTypes = results;
+      }
+    });
+
     this.systemMapService.searchByUUID(this.routePartialObjectId).subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         if (results.length === 1) { // we found found it
@@ -86,6 +106,26 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  selectChildren(typeId: string): StarObject[] {
+    if (this.selectedItem
+      && this.selectedItem.children
+      && this.selectedItem.children.length > 0) {
+      return this.selectedItem.children.filter(x => x.object_type_id === typeId);
+    }
+  }
+
+  selectListItem(listItem: StarObject) {
+    const navigationExtras: NavigationExtras = {
+      relativeTo: this.route.parent,
+      // state: {
+      //   smObject: listItem
+      // }
+    };
+
+    this.router.navigateByUrl(`/system-map/${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`);
+    // this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
   }
 
   parseObjectLink(item: StarObject): string {
@@ -137,7 +177,14 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     }
   }
 
+  async getSettings() {
+    this.config = await this.settingsService.getConfig();
+  }
+
   async ngOnInit() {
+    this.isEditor = (await this.authService.hasClaim(22) || await this.authService.hasClaim(23)) ? true : false;
+    await this.getSettings();
+
     if (!this.selectedItem) {
       await this.fetchObjectDetails();
     }
