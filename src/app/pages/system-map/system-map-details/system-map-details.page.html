@@ -31,14 +31,33 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <!-- Parent -->
-      <ion-item *ngIf="selectedItem.parent">
-        <strong>Parent:&nbsp;</strong><a [routerLink]="['/system-map', parseObjectLink(selectedItem.parent)]">{{selectedItem.parent.title}}</a>
-      </ion-item>
       <!-- Object Type -->
       <ion-item>
         <strong>Object Type:&nbsp;</strong>{{selectedItem.kind}}
       </ion-item>
+
+      <!-- parent grid -->
+      <ion-grid *ngIf="selectedItem.parent">
+        <ion-row>
+          <ion-col>
+            <h3>Parent</h3>
+            <ion-slides [pager]="config.slideHints" [options]="slideOpts">
+              <ion-slide (click)="selectListItem(selectedItem.parent)">
+                <app-system-map-list-card [showTags]="false" [smObject]="selectedItem.parent"></app-system-map-list-card>
+              </ion-slide>
+            </ion-slides>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <!-- Parent -->
+      <!-- <ion-item *ngIf="selectedItem.parent">
+        <p><strong>Parent</strong></p>
+        <a [routerLink]="['/system-map', parseObjectLink(selectedItem.parent)]">{{selectedItem.parent.title}}</a>
+        <div>
+          <app-system-map-list-card [showTags]="false" [smObject]="selectedItem.parent" (click)="selectListItem(selectedItem.parent)"></app-system-map-list-card>
+        </div>
+      </ion-item> -->
+      
       <!-- Faction -->
       <!-- <ion-item *ngIf="selectedItem.faction_affiliation">
         <strong>Faction:&nbsp;</strong>{{selectedItem.faction_affiliation.title}}

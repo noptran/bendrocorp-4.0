@@ -1,7 +1,7 @@
 <!-- card to be be replaced by categorical sliders -->
 <ion-card class="sm-list-card">
   <img src="{{smObject.primary_image_url}}" onerror="this.src='../../../assets/imgs/missing-system-map.png'" alt="">
-  <ion-card-subtitle>{{smObject.title}}</ion-card-subtitle>
+  <ion-card-subtitle style="text-align: center;">{{smObject.title}}</ion-card-subtitle>
   <ion-card-content *ngIf="showTags">
     <p *ngIf="!smObject.tags">&nbsp;</p>
     <app-system-map-list-tags *ngIf="smObject.tags" [limitTags]="true" [tags]="smObject.tags"></app-system-map-list-tags>
