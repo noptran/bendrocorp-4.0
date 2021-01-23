@@ -21,13 +21,18 @@
             <img src="{{selectedItem.primary_image_url_full}}" alt="" onerror="this.src='../../../assets/imgs/missing-system-map.png'" >
           </ion-col>
           <ion-col size-xs="12" size-sm="12" size-md="6">
-            <ion-item>
+            <!-- <ion-item>
               <ion-label text-wrap>
                 {{selectedItem.title}} ({{selectedItem.kind}})
                 <app-system-map-list-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-list-tags>
                 <p style="white-space: pre-wrap;">{{selectedItem.description}}</p>
               </ion-label>
-            </ion-item>
+            </ion-item> -->
+            <div>
+              <h2 class="so-details-title">{{selectedItem.title}} ({{selectedItem.kind}})</h2>
+              <app-system-map-list-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-list-tags>
+              <p style="white-space: pre-wrap;">{{selectedItem.description}}</p>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>

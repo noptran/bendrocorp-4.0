@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Subscription, concat, from } from 'rxjs';
 import { concatAll } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
@@ -23,7 +23,7 @@ const { Toast, Modals } = Plugins;
 })
 export class SystemMapDetailsPage implements OnInit, OnDestroy {
   slideOpts = {
-    slidesPerView: 4
+    slidesPerView: 0
   };
 
   isEditor: boolean;
@@ -35,6 +35,7 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
   // subscriptions
   routeSubscription: Subscription;
   updateSubscription: Subscription;
+  resizeSubscription: Subscription;
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
@@ -54,7 +55,8 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private modalController: ModalController,
     private fieldService: FieldService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private platform: Platform
   ) {
     this.routePartialObjectId = this.route.snapshot.paramMap.get('id').split('-')[0];
 
@@ -65,6 +67,10 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
 
     this.updateSubscription = this.systemMapService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchSystemObjectsAndSelect();
+    });
+
+    this.resizeSubscription = this.platform.resize.subscribe(() => {
+      this.determineSlideCount();
     });
   }
 
@@ -106,6 +112,31 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  private determineSlideCount() {
+    const platWidth = this.platform.width();
+    // console.log(platWidth);
+    const big = 4;
+    const small = 2;
+
+    if (platWidth < 600) { // this.platform.is('mobile') ||
+      this.slideOpts.slidesPerView = small;
+      // if (this.slidesSearch) {
+      //   this.slidesSearch.options.slidesPerView = small;
+      // }
+      // this.slidesPeople.options.slidesPerView = small;
+      // this.slidesLocations.options.slidesPerView = small;
+      // this.slidesSystems.options.slidesPerView = small;
+    } else {
+      this.slideOpts.slidesPerView = big;
+      // if (this.slidesSearch) {
+      //   this.slidesSearch.options.slidesPerView = big;
+      // }
+      // this.slidesPeople.options.slidesPerView = big;
+      // this.slidesLocations.options.slidesPerView = big;
+      // this.slidesSystems.options.slidesPerView = big;
+    }
   }
 
   selectChildren(typeId: string): StarObject[] {
@@ -185,6 +216,8 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     this.isEditor = (await this.authService.hasClaim(22) || await this.authService.hasClaim(23)) ? true : false;
     await this.getSettings();
 
+    this.determineSlideCount();
+
     if (!this.selectedItem) {
       await this.fetchObjectDetails();
     }
@@ -198,6 +231,10 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
 
     if (this.updateSubscription) {
       this.updateSubscription.unsubscribe();
+    }
+
+    if (this.resizeSubscription) {
+      this.resizeSubscription.unsubscribe();
     }
   }
 
