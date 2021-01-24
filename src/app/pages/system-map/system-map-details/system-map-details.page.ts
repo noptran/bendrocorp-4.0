@@ -208,6 +208,13 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     }
   }
 
+  async addStarObject() {
+    const modal = await this.modalController.create({
+      component: AddUpdateStarObjectComponent
+    });
+    return await modal.present();
+  }
+
   async getSettings() {
     this.config = await this.settingsService.getConfig();
   }

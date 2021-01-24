@@ -41,6 +41,8 @@
         <strong>Object Type:&nbsp;</strong>{{selectedItem.kind}}
       </ion-item>
 
+      <!-- field data -->
+
       <!-- parent grid -->
       <ion-grid *ngIf="selectedItem.parent">
         <ion-row>
@@ -98,6 +100,9 @@
       </ion-fab-button>
       <ion-fab-button (click)="updateStarObject()" color="light">
         <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="addStarObject()" color="primary">
+        <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
