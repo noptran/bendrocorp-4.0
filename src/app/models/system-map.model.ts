@@ -18,6 +18,7 @@ export class StarObject {
     parent: StarObject;
     children: StarObject[];
     object_type: IdTitleDesc;
+    system_map_images: SystemImage[];
 }
 
 export class StarObjectRule {
