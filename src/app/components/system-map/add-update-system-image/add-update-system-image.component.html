@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{formAction}} System Map Image</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="submitForm()" [disabled]="dataSubmitted || !valid()">{{formAction}}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Primary Image -->
+  <app-select-avatar [avatarData]="starObject?.primary_image_url" [avatarTitle]="'Image'" [rounded]="false"
+    (avatarUpdatedEvent)="setPrimaryImage($event)"></app-select-avatar>
+  
+  <!-- Title -->
+  <ion-item>
+    <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-input required placeholder="Image Title" [(ngModel)]="systemImage.title"
+      name="star_object_image_title"></ion-input>
+  </ion-item>
+  
+  <!-- Description -->
+  <ion-item>
+    <ion-label>Description <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-textarea required [(ngModel)]="systemImage.description"
+      placeholder="Description of the image" rows="10"
+      name="star_object_image_description"></ion-textarea>
+  </ion-item>
+</ion-content>

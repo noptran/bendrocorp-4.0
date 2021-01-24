@@ -1,5 +1,5 @@
 <div style="text-align: center; padding-top: 8px;">
-  <img style="border-radius: 50%; max-height: 200px;" src="{{avatarData}}" 
+  <img style="max-height: 200px;" [ngClass]="{'rounded' : rounded }" src="{{avatarData}}" 
   onerror="this.src='/assets/imgs/missing-avatar.png'">
   <br><br>
   <div>

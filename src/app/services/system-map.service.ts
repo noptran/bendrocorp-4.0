@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ErrorService } from './error.service';
 import { Subject, Observable } from 'rxjs';
-import { StarObject, StarObjectRule } from '../models/system-map.model';
+import { StarObject, StarObjectRule, SystemImage } from '../models/system-map.model';
 import { tap, catchError } from 'rxjs/operators';
 import { StatusMessage } from '../models/misc.model';
 import { HttpClient } from '@angular/common/http';
@@ -102,6 +102,33 @@ export class SystemMapService {
       retryWithBackoff(),
       tap(result => console.log(`Fetched star object mapping rules!`)),
       catchError(this.errorService.handleError<any>('Fetch Star Object Rules'))
+    );
+  }
+
+  addSystemImage(image: SystemImage): Observable<SystemImage>
+  {
+    return this.http.post<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
+      retryWithBackoff(),
+      tap(result => console.log(`Created image!`)),
+      catchError(this.errorService.handleError<any>('Create Image'))
+    );
+  }
+
+  updateSystemImage(image: SystemImage): Observable<SystemImage>
+  {
+    return this.http.put<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
+      retryWithBackoff(),
+      tap(result => console.log(`Updated image!`)),
+      catchError(this.errorService.handleError<any>('Update Image'))
+    );
+  }
+
+  archiveSystemImage(image: SystemImage): Observable<SystemImage>
+  {
+    return this.http.delete<SystemImage>(`${environment.baseUrl}/system-map/image/${image.id}`).pipe(
+      retryWithBackoff(),
+      tap(result => console.log(`Archived imgage!`)),
+      catchError(this.errorService.handleError<any>('Archive Image'))
     );
   }
 
@@ -397,33 +424,6 @@ export class SystemMapService {
   //     retryWithBackoff(),
   //     tap(result => console.log(`Archived settlement!`)),
   //     catchError(this.errorService.handleError<any>('Archive Settlement'))
-  //   );
-  // }
-
-  // addSystemImage(image: SystemImage): Observable<SystemImage>
-  // {
-  //   return this.http.post<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
-  //     retryWithBackoff(),
-  //     tap(result => console.log(`Created image!`)),
-  //     catchError(this.errorService.handleError<any>('Create Image'))
-  //   );
-  // }
-
-  // updateSystemImage(image: SystemImage): Observable<SystemImage>
-  // {
-  //   return this.http.put<SystemImage>(`${environment.baseUrl}/system-map/image`, { image }).pipe(
-  //     retryWithBackoff(),
-  //     tap(result => console.log(`Updated image!`)),
-  //     catchError(this.errorService.handleError<any>('Update Image'))
-  //   );
-  // }
-
-  // archiveSystemImage(image: SystemImage): Observable<SystemImage>
-  // {
-  //   return this.http.delete<SystemImage>(`${environment.baseUrl}/system-map/image/${image.id}`).pipe(
-  //     retryWithBackoff(),
-  //     tap(result => console.log(`Archived imgage!`)),
-  //     catchError(this.errorService.handleError<any>('Archive Image'))
   //   );
   // }
 

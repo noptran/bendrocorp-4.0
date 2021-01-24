@@ -43,6 +43,8 @@ import { AppUpdateDonationGoalComponent } from './components/donations/app-updat
 import { JoinSupporterComponent } from './components/donations/join-supporter/join-supporter.component';
 import { PasswordComponent } from './components/misc/password/password.component';
 import { PasswordComponentModule } from './components/misc/password/password.module';
+import { AddUpdateSystemImageComponent } from './components/system-map/add-update-system-image/add-update-system-image.component';
+import { ViewSystemImageComponent } from './components/system-map/view-system-image/view-system-image.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { PasswordComponentModule } from './components/misc/password/password.mod
     MakeDonationComponent,
     AppUpdateDonationGoalComponent,
     JoinSupporterComponent,
+    AddUpdateSystemImageComponent,
+    ViewSystemImageComponent
     // SystemMapListTagsComponent
   ],
   entryComponents: [

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>View Image</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <img src="{{image.image_url}}" style="max-width: 100%;" alt="">
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <h4>{{image.title}}</h4>
+        <p *ngIf="image.description">{{image.description}}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <small>Added By: {{image.created_by.main_character.first_name}} {{image.created_by.main_character.last_name}}</small>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

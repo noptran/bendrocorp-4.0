@@ -136,7 +136,10 @@ export class SystemMapPage implements OnInit, OnDestroy {
       // }
     };
 
-    this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
+    const uri = `/system-map/${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-').replace(/[^-A-Za-z0-9_]+/g, '')}`;
+    console.log(uri);
+
+    this.router.navigateByUrl(uri, navigationExtras);
   }
 
   fetchSystemObjects(event?: any) {

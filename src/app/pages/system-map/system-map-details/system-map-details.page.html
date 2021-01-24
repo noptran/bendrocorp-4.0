@@ -21,13 +21,6 @@
             <img src="{{selectedItem.primary_image_url_full}}" alt="" onerror="this.src='../../../assets/imgs/missing-system-map.png'" >
           </ion-col>
           <ion-col size-xs="12" size-sm="12" size-md="6">
-            <!-- <ion-item>
-              <ion-label text-wrap>
-                {{selectedItem.title}} ({{selectedItem.kind}})
-                <app-system-map-list-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-list-tags>
-                <p style="white-space: pre-wrap;">{{selectedItem.description}}</p>
-              </ion-label>
-            </ion-item> -->
             <div>
               <h2 class="so-details-title">{{selectedItem.title}} ({{selectedItem.kind}})</h2>
               <app-system-map-list-tags *ngIf="selectedItem.tags" [tags]="selectedItem.tags"></app-system-map-list-tags>
@@ -36,12 +29,34 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <!-- images here -->
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h3>{{selectedItem.kind}} Images <ion-icon *ngIf="isEditor" (click)="addUpdateSystemMapImage()" class="add-image-button" slot="icon-only"
+                name="add-circle-outline" color="primary"></ion-icon>
+            </h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h6 *ngIf="selectedItem.system_map_images.length == 0">No images for this {{selectedItem.kind}}</h6>
+            <ion-slides *ngIf="selectedItem.system_map_images.length > 0" [pager]="config.slideHints" [options]="slideOpts">
+              <ion-slide *ngFor="let image of selectedItem.system_map_images" (click)="viewSystemImage(image)">
+                <app-system-image-list-card [image]="image"></app-system-image-list-card>
+              </ion-slide>
+            </ion-slides>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
       <!-- Object Type -->
       <ion-item>
         <strong>Object Type:&nbsp;</strong>{{selectedItem.kind}}
       </ion-item>
 
       <!-- field data -->
+      <!-- other fields here -->
 
       <!-- parent grid -->
       <ion-grid *ngIf="selectedItem.parent">

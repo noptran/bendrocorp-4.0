@@ -5,7 +5,7 @@ import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Subscription, concat, from } from 'rxjs';
 import { concatAll } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth.service';
-import { StarObject } from 'src/app/models/system-map.model';
+import { StarObject, SystemImage } from 'src/app/models/system-map.model';
 import { SystemMapService } from 'src/app/services/system-map.service';
 import { Plugins } from '@capacitor/core';
 import { AddUpdateStarObjectComponent } from 'src/app/components/system-map/add-update-star-object/add-update-star-object.component';
@@ -13,6 +13,8 @@ import { FieldService } from 'src/app/services/field.service';
 import { SystemMapTypeField } from 'constants';
 import { FieldDescriptor } from 'src/app/models/field.model';
 import { AppConfig, SettingsService } from 'src/app/services/settings.service';
+import { AddUpdateSystemImageComponent } from 'src/app/components/system-map/add-update-system-image/add-update-system-image.component';
+import { ViewSystemImageComponent } from 'src/app/components/system-map/view-system-image/view-system-image.component';
 
 const { Toast, Modals } = Plugins;
 
@@ -154,8 +156,10 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
       //   smObject: listItem
       // }
     };
+    const uri = `/system-map/${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-').replace(/[^-A-Za-z0-9_]+/g, '')}`;
+    console.log(uri);
 
-    this.router.navigateByUrl(`/system-map/${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`);
+    this.router.navigateByUrl(uri);
     // this.router.navigate([`${listItem.id.split('-')[0]}-${listItem.title.toLowerCase().split(' ').join('-')}`], navigationExtras);
   }
 
@@ -212,6 +216,29 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     const modal = await this.modalController.create({
       component: AddUpdateStarObjectComponent
     });
+    return await modal.present();
+  }
+
+  async addUpdateSystemMapImage(systemImage?: SystemImage) {
+    const modal = await this.modalController.create({
+      component: AddUpdateSystemImageComponent,
+      componentProps: {
+        systemImage,
+        ofStarObjectId: this.selectedItem.id
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async viewSystemImage(image: SystemImage) {
+    const modal = await this.modalController.create({
+      component: ViewSystemImageComponent,
+      componentProps: {
+        image
+      }
+    });
+
     return await modal.present();
   }
 

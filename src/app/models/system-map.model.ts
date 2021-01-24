@@ -24,6 +24,18 @@ export class StarObjectRule {
     parent_id: string;
     child_id: string;
 }
+
+export class SystemImage {
+    id?: string;
+    title?: string;
+    description?: string;
+    of_star_object_id?: string;
+    created_by_id?: number;
+    created_by?: User;
+    new_image?: Base64Upload;
+    image_url?: string;
+    image_url_thumbnail?: string;
+}
 /*
 export class StarSystem
 {
@@ -203,26 +215,6 @@ export class SystemMapTypes
     jp_statues?: IdTitleDesc[]
     system_object_types?: IdTitleDesc[]
     location_types?: IdTitleDesc[]
-}
-
-export class SystemImage
-{
-    id?: string;
-    title?: string;
-    description?: string;
-    of_system_id?: string;
-    of_planet_id?: string;
-    of_moon_id?: string;
-    of_system_object_id?: string;
-    of_location_id?: string;
-    of_settlement_id?: string;
-    of_gravity_well_id?: string;
-    of_mission_giver_id?: string;
-    created_by_id?: number;
-    created_by?: User;
-    new_image?: Base64Upload;
-    image_url?: string;
-    image_url_thumbnail?: string;
 }
 
 export class MissionGiver
