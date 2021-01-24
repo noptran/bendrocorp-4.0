@@ -201,19 +201,23 @@ export class AddUpdateStarObjectComponent implements OnInit {
 
     if (this.starObject.id) {
       this.systemMapService.updateStarObject(this.starObject).subscribe((results) => {
+        this.dataSubmitted = false;
+        this.loading.dismiss();
+
+        // check the results
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
-          this.dataSubmitted = false;
-          this.loading.dismiss();
           this.modalController.dismiss();
         }
       });
     } else {
       this.systemMapService.addStarObject(this.starObject).subscribe((results) => {
+        this.dataSubmitted = false;
+        this.loading.dismiss();
+
+        // check the results
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
-          this.dataSubmitted = false;
-          this.loading.dismiss();
           this.modalController.dismiss();
         }
       });
