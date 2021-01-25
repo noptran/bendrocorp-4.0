@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Field, FieldDescriptor, FieldDescriptorClass } from '../models/field.model';
+import { Field, FieldDescriptor, FieldDescriptorClass, FieldValue } from '../models/field.model';
 import { StatusMessage } from '../models/misc.model';
 import { ErrorService } from './error.service';
 import { retryWithBackoff } from '../helpers/retryWithBackoff.helper';
@@ -111,6 +111,14 @@ export class FieldService {
 
   getFieldDescriptorClasses(): Observable<FieldDescriptorClass[]> {
     return this.http.get<FieldDescriptorClass[]>(`${environment.baseUrl}/fields/classes`).pipe(
+      retryWithBackoff(),
+      tap(results => console.log(results)),
+      catchError(this.errorService.handleError<any>('Fetch Field'))
+    );
+  }
+
+  addUpdateFieldValue(value_sets: FieldValue[]): Observable<StatusMessage> {
+    return this.http.patch<StatusMessage>(`${environment.baseUrl}/field-value`, { value_sets }).pipe(
       retryWithBackoff(),
       tap(results => console.log(results)),
       catchError(this.errorService.handleError<any>('Fetch Field'))

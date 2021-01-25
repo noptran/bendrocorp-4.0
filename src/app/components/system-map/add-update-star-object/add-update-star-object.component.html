@@ -41,7 +41,7 @@
     <ion-item>
       <ion-label>Description <ion-text color="danger">*</ion-text>
       </ion-label>
-      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the {{showObjectTypeSelection().toLowerCase()}}"
+      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the {{showObjectTypeSelection()?.toLowerCase()}}"
         rows="10" name="star_object_description"></ion-textarea>
     </ion-item>
 
@@ -64,7 +64,14 @@
     <ion-item>
       <p><small>While specifiying a parent is optional, almost all objects have parents.</small></p>
     </ion-item>
-  </div>
 
-  <!-- TBD: Fields -->
+    <!-- Fields -->
+    <ion-item *ngIf="!starObject.id">
+      Other fields will be available after the {{showObjectTypeSelection() || "object"}} has been created.
+    </ion-item>
+
+    <!--  -->
+    <app-field-value-editor *ngIf="starObject.id" [fieldValues]="starObject.field_values" [fields]="starObject.master.type.fields" [masterId]="starObject.id">
+    </app-field-value-editor>
+  </div>  
 </ion-content>

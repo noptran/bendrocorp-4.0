@@ -92,6 +92,8 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
         if (results.length === 1) { // we found found it
           this.selectedItem = results[0];
           this.initialDataLoaded = true;
+          console.log(this.selectedItem);
+
         } else if (results.length === 0) { // we didn't find it
           Toast.show({
             text: 'System Map object not found!'
@@ -244,6 +246,14 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
 
   async getSettings() {
     this.config = await this.settingsService.getConfig();
+  }
+
+  findFieldValue(fieldId: string) {
+    if (fieldId && this.selectedItem && this.selectedItem.field_values) {
+      return this.selectedItem.field_values.find(x => x.field_id === fieldId)?.value;
+    } else {
+      console.warn('erm field id not passed to findFieldValue');
+    }
   }
 
   async ngOnInit() {

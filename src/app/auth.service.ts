@@ -184,4 +184,8 @@ export class AuthService {
     this.preservePath();
     this.router.navigateByUrl('/auth');
   }
+
+  async hasDebugClaim(): Promise<boolean> {
+    return this.hasClaim(-99);
+  }
 }

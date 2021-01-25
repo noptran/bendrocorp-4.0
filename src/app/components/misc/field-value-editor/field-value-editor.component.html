@@ -1,0 +1,36 @@
+<ion-item *ngIf="!fields || fields.length == 0">
+  <!-- no fields available -->
+  <h6>No additional fields available for this object.</h6>
+</ion-item>
+
+
+<ion-list *ngIf="fields && fields.length > 0">
+  <!-- fields -->
+  <ion-list-header lines="full" color="dark">
+    <ion-label>Other Fields</ion-label>
+  </ion-list-header>
+  <ion-item *ngFor="let field of fields">
+    <ion-label *ngIf="!(isMobile && (field.descriptors && field.descriptors.length > 0))" position="floating">{{field.name}}</ion-label>
+    <!-- has descriptors and is mobile -->
+    <div *ngIf="isMobile && (field.descriptors && field.descriptors.length > 0)">
+      <ion-label (click)="showValuePicker(field)">
+        <span>{{field.name}}</span>
+      </ion-label>
+      <ion-label (click)="showValuePicker(field)" slot="end">{{valueForField(field.id) || "Select"}}</ion-label>
+      <!-- <ion-button slot="end" (click)="clearParentSelection()" *ngIf="starObject.parent_id">Clear</ion-button> -->
+    </div>
+    <!-- has descriptors -->
+    <ion-select *ngIf="field.descriptors && field.descriptors.length > 0" cancelText="Cancel" [value]="valueForField(field.id)" (ionChange)="fieldChange($event, field.id)">
+      <ion-select-option *ngFor="let descriptor of field.descriptors" [value]="descriptor.title">{{descriptor.title}}</ion-select-option>
+    </ion-select>
+    <!-- string -->
+    <ion-input *ngIf="!(field.descriptors && field.descriptors.length > 0) && (!field.presentation_type_id || field.presentation_type_id == '246e8225-2224-454c-a972-4af521f6736e')" placeholder="Enter a {{field.name.toLowerCase()}}" [debounce]="700" (ionChange)="fieldChange($event, field.id)" [value]="valueForField(field.id)"></ion-input>
+    <!-- long string -->
+    <ion-textarea *ngIf="!(field.descriptors && field.descriptors.length > 0) && field.presentation_type_id == 'bcdff581-72fd-4538-b756-39802a0ed7be'" placeholder="Enter a {{field.name.toLowerCase()}}" [debounce]="700" (ionChange)="fieldChange($event, field.id)" [value]="valueForField(field.id)" autoGrow="true"></ion-textarea>
+    <!-- number -->
+    <ion-input *ngIf="!(field.descriptors && field.descriptors.length > 0) && field.presentation_type_id == 'e5bd60e6-9e09-4eb3-b57a-9e22cae7a7d9'" placeholder="Enter a {{field.name.toLowerCase()}}" [debounce]="700" (ionChange)="fieldChange($event, field.id)" [value]="valueForField(field.id)"></ion-input>
+    <!-- date -->
+    <ion-datetime *ngIf="!(field.descriptors && field.descriptors.length > 0) && field.presentation_type_id == '9be837b4-fbec-429e-bb2e-7b16fc5e0b4e'" placeholder="Select a date/time" displayFormat="D MMM YYYY H:mm" (ionChange)="fieldChange($event, field.id)" [value]="valueForField(field.id)"></ion-datetime>
+    <p><small *ngIf="field.description">{{field.description}}</small></p>
+  </ion-item>
+</ion-list>

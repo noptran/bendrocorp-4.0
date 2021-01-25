@@ -56,7 +56,14 @@
       </ion-item>
 
       <!-- field data -->
-      <!-- other fields here -->
+      <ion-list *ngIf="selectedItem.id && selectedItem.field_values">
+        <ion-item *ngFor="let field of selectedItem.fields">
+          <ion-label>
+            <p>{{field.name}}: {{findFieldValue(field.id) || "No data"}}</p>
+            <p *ngIf="field.description"><small>{{field.description}}</small></p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
 
       <!-- parent grid -->
       <ion-grid *ngIf="selectedItem.parent">

@@ -4,6 +4,7 @@ export class Field {
   from_class?: boolean;
   read_only?: boolean;
   descriptors?: FieldDescriptor[];
+  presentation_type_id: string;
 }
 
 export class FieldDescriptor {
@@ -12,6 +13,7 @@ export class FieldDescriptor {
   description?: string;
   ordinal?: number;
   read_only?: boolean;
+  fields?: Field[]; // fiele descriptors used as types may have an array of fields
 }
 
 export class FieldDescriptorClass {
@@ -21,4 +23,10 @@ export class FieldDescriptorClass {
   class_field?: string;
   restrict_by_owner?: boolean;
   owner_field_name?: string;
+}
+
+export class FieldValue {
+  master_id: string;
+  field_id: string;
+  value: string;
 }
