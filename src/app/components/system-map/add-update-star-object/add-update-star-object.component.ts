@@ -1,24 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LoadingController, ModalController, PickerController } from '@ionic/angular';
 import { StarObject, StarObjectRule } from 'src/app/models/system-map.model';
 import { FieldService } from 'src/app/services/field.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
-import { Plugins } from '@capacitor/core';
+import { KeyboardInfo, Plugins } from '@capacitor/core';
 import { FieldDescriptor } from 'src/app/models/field.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PickerOptions, PickerColumnOption } from '@ionic/core';
 import { Base64Upload } from 'src/app/models/misc.model';
 import { Subscription } from 'rxjs';
 import { SystemMapTypeField } from 'constants';
+import { FieldValueEditorComponent } from '../../misc/field-value-editor/field-value-editor.component';
 
-const { Modals, Toast } = Plugins;
+const { Modals, Toast, Keyboard } = Plugins;
 
 @Component({
   selector: 'app-add-update-star-object',
   templateUrl: './add-update-star-object.component.html',
   styleUrls: ['./add-update-star-object.component.scss'],
 })
-export class AddUpdateStarObjectComponent implements OnInit {
+export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
+  @ViewChild(FieldValueEditorComponent) fieldEditor: FieldValueEditorComponent;
+
   // base objects and vars
   starObject: StarObject;
   formAction: string;
@@ -163,7 +166,7 @@ export class AddUpdateStarObjectComponent implements OnInit {
 
   showObjectTypeSelection() {
     if (this.starObject && this.starObject.object_type_id) {
-      return this.starObjectTypes.find(x => x.id === this.starObject.object_type_id).title;
+      return this.starObjectTypes.find(x => x.id === this.starObject.object_type_id)?.title;
     }
   }
 
@@ -200,6 +203,14 @@ export class AddUpdateStarObjectComponent implements OnInit {
     await this.loadingIndicator.present();
 
     if (this.starObject.id) {
+      try {
+        await this.fieldEditor.submitFieldsForm();
+      } catch (error) {
+        this.loading.dismiss();
+        this.dataSubmitted = false;
+        return;
+      }
+
       this.systemMapService.updateStarObject(this.starObject).subscribe((results) => {
         this.dataSubmitted = false;
         this.loading.dismiss();
@@ -236,7 +247,19 @@ export class AddUpdateStarObjectComponent implements OnInit {
       this.starObject = {} as StarObject;
     }
 
+    Keyboard.addListener('keyboardWillShow', (info: KeyboardInfo) => {
+      Keyboard.setAccessoryBarVisible({ isVisible: true });
+    });
+
+    Keyboard.addListener('keyboardWillHide', () => {
+      Keyboard.setAccessoryBarVisible({ isVisible: false });
+    });
+
     this.fetchFieldsDescriptorsTypes();
+  }
+
+  ngOnDestroy() {
+    Keyboard.removeAllListeners();
   }
 
 }

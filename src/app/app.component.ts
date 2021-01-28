@@ -30,6 +30,7 @@ const { App } = Plugins;
 export class AppComponent implements OnInit, OnDestroy {
   public selectedIndex = 0;
   public appPages = [] as MenuItem[];
+  readonly copyrightYear = new Date().getFullYear();
   pendingApprovalCount: number;
 
   isAuthorized: boolean;

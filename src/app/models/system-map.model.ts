@@ -1,5 +1,6 @@
-import { FieldDescriptor } from './field.model';
+import { Field, FieldDescriptor, FieldValue } from './field.model';
 import { Jurisdiction } from './law.model';
+import { MasterId } from './master-id.model';
 import { Base64Upload, FactionAffiliation, IdTitleDesc, IdTitleDescOrd } from './misc.model';
 import { User } from './user.model';
 
@@ -19,6 +20,9 @@ export class StarObject {
     children: StarObject[];
     object_type: IdTitleDesc;
     system_map_images: SystemImage[];
+    field_values: FieldValue[];
+    fields: Field[];
+    master: MasterId;
 }
 
 export class StarObjectRule {

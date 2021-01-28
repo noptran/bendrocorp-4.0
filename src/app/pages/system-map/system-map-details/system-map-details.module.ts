@@ -19,10 +19,10 @@ import { SystemImageListCardComponentModule } from 'src/app/components/system-ma
     SystemMapDetailsPageRoutingModule,
     SystemMapListCardComponentModule,
     SystemMapListTagsComponentModule,
-    SystemImageListCardComponentModule
+    SystemImageListCardComponentModule,
   ],
   declarations: [
-    SystemMapDetailsPage,
+    SystemMapDetailsPage
   ]
 })
 export class SystemMapDetailsPageModule {}

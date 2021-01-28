@@ -45,6 +45,7 @@ import { PasswordComponent } from './components/misc/password/password.component
 import { PasswordComponentModule } from './components/misc/password/password.module';
 import { AddUpdateSystemImageComponent } from './components/system-map/add-update-system-image/add-update-system-image.component';
 import { ViewSystemImageComponent } from './components/system-map/view-system-image/view-system-image.component';
+import { FieldValueEditorModule } from './components/misc/field-value-editor/field-value-editor.module';
 
 @NgModule({
   declarations: [
@@ -66,8 +67,8 @@ import { ViewSystemImageComponent } from './components/system-map/view-system-im
     AppUpdateDonationGoalComponent,
     JoinSupporterComponent,
     AddUpdateSystemImageComponent,
-    ViewSystemImageComponent
-    // SystemMapListTagsComponent
+    ViewSystemImageComponent,
+    // SystemMapListTagsComponent,
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
@@ -90,6 +91,7 @@ import { ViewSystemImageComponent } from './components/system-map/view-system-im
     QRCodeModule,
     FormsModule,
     PasswordComponentModule,
+    FieldValueEditorModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [
