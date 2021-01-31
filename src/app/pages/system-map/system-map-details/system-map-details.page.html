@@ -69,7 +69,7 @@
       <ion-grid *ngIf="selectedItem.parent">
         <ion-row>
           <ion-col>
-            <h3>Parent</h3>
+            <h3>Parent {{selectedItem.parent.kind}}</h3>
             <ion-slides [pager]="config.slideHints" [options]="slideOpts">
               <ion-slide (click)="selectListItem(selectedItem.parent)">
                 <app-system-map-list-card [showTags]="false" [smObject]="selectedItem.parent"></app-system-map-list-card>
