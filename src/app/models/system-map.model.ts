@@ -23,6 +23,7 @@ export class StarObject {
     field_values: FieldValue[];
     fields: Field[];
     master: MasterId;
+    created_at: string;
 }
 
 export class StarObjectRule {

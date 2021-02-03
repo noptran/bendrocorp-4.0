@@ -34,6 +34,7 @@
       <ion-toggle slot="end" color="primary" disabled></ion-toggle>
     </ion-item>
     
+    <!-- Star Systems -->
     <h3 class="outer-title">Star Systems</h3>
     <ion-slides #slidesSystems *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('system')" (click)="selectListItem(item)">
@@ -41,6 +42,7 @@
       </ion-slide>
     </ion-slides>
 
+    <!-- Planets -->
     <h3 class="outer-title">Planets</h3>
     <ion-slides #slidesPeople *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('planet')" (click)="selectListItem(item)">
@@ -48,6 +50,7 @@
       </ion-slide>
     </ion-slides>
     
+    <!-- People -->
     <h3 class="outer-title">People</h3>
     <ion-slides #slidesPeople *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('mission giver')" (click)="selectListItem(item)">
@@ -55,13 +58,23 @@
       </ion-slide>
     </ion-slides>
     
+    <!-- Locations -->
     <h3 class="outer-title">Locations</h3>
     <ion-slides #slidesLocations *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
       <ion-slide *ngFor="let item of fetchTypeOfItem('location')" (click)="selectListItem(item)">
         <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
       </ion-slide>
     </ion-slides>
-  </div>
+
+    <!-- Recent Items - last 10 -->
+    <h3 class="outer-title">Recently Added</h3>
+    <ion-slides #slidesRecentlyAdded *ngIf="showSlides" [pager]="config.slideHints" [options]="slideOpts">
+      <ion-slide *ngFor="let item of recentlyAddedItems" (click)="selectListItem(item)">
+        <app-system-map-list-card [smObject]="item"></app-system-map-list-card>
+      </ion-slide>
+    </ion-slides>
+
+  </div> <!-- End of list view -->
 
   <!-- Search Results view -->
   <div *ngIf="searchFilter">

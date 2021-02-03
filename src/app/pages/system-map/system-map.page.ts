@@ -47,6 +47,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
   fullList: StarObject[] = [];
   searchList: StarObject[] = [];
   recentItems: StarObject[] = [];
+  recentlyAddedItems: StarObject[] = [];
   isFiltering: boolean = false;
   showSlides = true;
 
@@ -91,6 +92,14 @@ export class SystemMapPage implements OnInit, OnDestroy {
     this.updateSubscription = this.systemMapService.dataRefreshAnnounced$.subscribe(() => {
       this.fetchSystemObjects();
     });
+  }
+
+  populateRecentlyAddedItems() {
+    if (this.fullList) {
+      this.recentlyAddedItems = this.fullList.sort((a, b) => {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }).splice(0, 10);
+    }
   }
 
   filterItems() {
@@ -147,6 +156,7 @@ export class SystemMapPage implements OnInit, OnDestroy {
       if (!(results instanceof HttpErrorResponse)) {
         this.fullList = results;
         this.initialDataLoaded = true;
+        this.populateRecentlyAddedItems();
       }
 
       // stop the spinner
