@@ -41,8 +41,8 @@
     <ion-item>
       <ion-label>Description <ion-text color="danger">*</ion-text>
       </ion-label>
-      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of the {{showObjectTypeSelection()?.toLowerCase()}}"
-        rows="10" name="star_object_description"></ion-textarea>
+      <ion-textarea required [(ngModel)]="starObject.description" placeholder="Description of {{showObjectTypeSelection()?.toLowerCase()}}"
+      autoGrow autocapitalize name="star_object_description"></ion-textarea>
     </ion-item>
 
     <!-- Tags -->

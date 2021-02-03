@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LoadingController, ModalController, PickerController } from '@ionic/angular';
+import { LoadingController, ModalController, PickerController, Platform } from '@ionic/angular';
 import { StarObject, StarObjectRule } from 'src/app/models/system-map.model';
 import { FieldService } from 'src/app/services/field.service';
 import { SystemMapService } from 'src/app/services/system-map.service';
@@ -41,7 +41,8 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
     private fieldService: FieldService,
     private modalController: ModalController,
     private pickerController: PickerController,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private platform: Platform
   ) {
   }
 
@@ -247,19 +248,23 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       this.starObject = {} as StarObject;
     }
 
-    Keyboard.addListener('keyboardWillShow', (info: KeyboardInfo) => {
-      Keyboard.setAccessoryBarVisible({ isVisible: true });
-    });
+    if (this.platform.is('mobile')) {
+      Keyboard.addListener('keyboardWillShow', (info: KeyboardInfo) => {
+        Keyboard.setAccessoryBarVisible({ isVisible: true });
+      });
 
-    Keyboard.addListener('keyboardWillHide', () => {
-      Keyboard.setAccessoryBarVisible({ isVisible: false });
-    });
+      Keyboard.addListener('keyboardWillHide', () => {
+        Keyboard.setAccessoryBarVisible({ isVisible: false });
+      });
+    }
 
     this.fetchFieldsDescriptorsTypes();
   }
 
   ngOnDestroy() {
-    Keyboard.removeAllListeners();
+    if (this.platform.is('mobile')) {
+      Keyboard.removeAllListeners();
+    }
   }
 
 }

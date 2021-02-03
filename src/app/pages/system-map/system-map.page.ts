@@ -200,6 +200,11 @@ export class SystemMapPage implements OnInit, OnDestroy {
     });
     await this.loadingIndicator.present();
 
+    while (!this.loadingIndicator) {
+      // this might be a terrible idea...
+      // but it should create a temp ms long hold to prevent the app from the skipping past the indicator being loaded
+    }
+
     // system map admin
     this.isAdmin = await this.authService.hasClaim(23);
 
