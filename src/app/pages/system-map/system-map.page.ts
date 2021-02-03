@@ -94,13 +94,16 @@ export class SystemMapPage implements OnInit, OnDestroy {
     });
   }
 
-  populateRecentlyAddedItems() {
-    if (this.fullList) {
-      this.recentlyAddedItems = this.fullList.sort((a, b) => {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      }).splice(0, 10);
-    }
-  }
+  // populateRecentlyAddedItems() {
+  //   if (this.fullList) {
+  //     let recentlyAddedList = this.fullList;
+
+  //     // adjust the data
+  //     recentlyAddedList = recentlyAddedList
+
+  //     this.recentlyAddedItems = recentlyAddedList;
+  //   }
+  // }
 
   filterItems() {
     // console.log('filter me');
@@ -154,9 +157,16 @@ export class SystemMapPage implements OnInit, OnDestroy {
   fetchSystemObjects(event?: any) {
     this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
+        // full list
         this.fullList = results;
+
+        // recently added items
+        let toFilter = Object.assign([], results); // this is to fix issues with splicing
+        this.recentlyAddedItems = toFilter.sort((a, b) => {
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        }).splice(0, 10);
+
         this.initialDataLoaded = true;
-        this.populateRecentlyAddedItems();
       }
 
       // stop the spinner
