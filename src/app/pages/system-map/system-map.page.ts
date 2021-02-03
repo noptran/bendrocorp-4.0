@@ -166,6 +166,9 @@ export class SystemMapPage implements OnInit, OnDestroy {
           return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         }).splice(0, 10);
 
+        // force the search filtering - this is for updates
+        this.filterItems();
+
         this.initialDataLoaded = true;
       }
 
