@@ -11,7 +11,7 @@ import { Plugins } from '@capacitor/core';
 import { AddUpdateStarObjectComponent } from 'src/app/components/system-map/add-update-star-object/add-update-star-object.component';
 import { FieldService } from 'src/app/services/field.service';
 import { SystemMapTypeField } from 'constants';
-import { FieldDescriptor } from 'src/app/models/field.model';
+import { Field, FieldDescriptor } from 'src/app/models/field.model';
 import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 import { AddUpdateSystemImageComponent } from 'src/app/components/system-map/add-update-system-image/add-update-system-image.component';
 import { ViewSystemImageComponent } from 'src/app/components/system-map/view-system-image/view-system-image.component';
@@ -80,6 +80,14 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     this.fetchSystemObjectsAndSelect(event);
   }
 
+  isReadOnly(field: Field): string {
+    if (field.read_only) {
+      return 'dark';
+    } else {
+      return '';
+    }
+  }
+
   fetchSystemObjectsAndSelect(event?: any) {
     this.fieldService.getField(SystemMapTypeField).subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
@@ -91,6 +99,15 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
       if (!(results instanceof HttpErrorResponse)) {
         if (results.length === 1) { // we found found it
           this.selectedItem = results[0];
+
+          if (this.selectedItem.fields) {
+            this.selectedItem.fields = this.selectedItem.fields.filter(x => {
+              if (!(x.hide_no_value && !this.findFieldValue(x.id))) {
+                return x;
+              }
+            });
+          }
+
           this.initialDataLoaded = true;
           console.log(this.selectedItem);
 

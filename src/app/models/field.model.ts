@@ -5,6 +5,7 @@ export class Field {
   read_only?: boolean;
   descriptors?: FieldDescriptor[];
   presentation_type_id: string;
+  hide_no_value: boolean;
 }
 
 export class FieldDescriptor {
