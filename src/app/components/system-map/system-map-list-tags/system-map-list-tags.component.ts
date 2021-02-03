@@ -17,6 +17,16 @@ export class SystemMapListTagsComponent {
     return (tagText.toLowerCase() === 'restricted');
   }
 
+  tagColor(tagText: string): string {
+    if (tagText.toLowerCase() === 'restricted') {
+      return 'danger';
+    } else if (tagText.toLowerCase() === 'warning') {
+      return 'warning';
+    } else {
+      return 'primary';
+    }
+  }
+
   parsedTags() {
     if (this.tags) {
       // tslint:disable-next-line:prefer-const
