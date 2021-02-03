@@ -55,10 +55,10 @@
         <strong>Object Type:&nbsp;</strong>{{selectedItem.kind}}
       </ion-item>
 
-      <!-- field data hide_no_value-->
+      <!-- field data -->
       <ion-list *ngIf="selectedItem.id && selectedItem.field_values">
         <ion-item *ngFor="let field of selectedItem.fields">
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p><ion-text [color]="isReadOnly(field)">{{field.name}}:</ion-text> {{findFieldValue(field.id) || "No data"}}</p>
             <p *ngIf="field.description"><small>{{field.description}}</small></p>
           </ion-label>
@@ -78,23 +78,6 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <!-- Parent -->
-      <!-- <ion-item *ngIf="selectedItem.parent">
-        <p><strong>Parent</strong></p>
-        <a [routerLink]="['/system-map', parseObjectLink(selectedItem.parent)]">{{selectedItem.parent.title}}</a>
-        <div>
-          <app-system-map-list-card [showTags]="false" [smObject]="selectedItem.parent" (click)="selectListItem(selectedItem.parent)"></app-system-map-list-card>
-        </div>
-      </ion-item> -->
-      
-      <!-- Faction -->
-      <!-- <ion-item *ngIf="selectedItem.faction_affiliation">
-        <strong>Faction:&nbsp;</strong>{{selectedItem.faction_affiliation.title}}
-      </ion-item> -->
-      <!-- Jurisdiction -->
-      <!-- <ion-item *ngIf="selectedItem.jurisdiction">
-        <strong>Jurisdiction:&nbsp;</strong>{{selectedItem.jurisdiction.title}}
-      </ion-item> -->
 
       <!-- children grid -->
       <ion-grid *ngIf="selectedItem.children && selectedItem.children.length > 0 && starObjectTypes">

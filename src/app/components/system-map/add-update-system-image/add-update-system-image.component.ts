@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { Base64Upload } from 'src/app/models/misc.model';
 import { SystemImage } from 'src/app/models/system-map.model';
 import { SystemMapService } from 'src/app/services/system-map.service';
@@ -16,15 +16,31 @@ export class AddUpdateSystemImageComponent implements OnInit {
   formAction: string;
   dataSubmitted: boolean;
 
+  // loading indicator
+  loadingIndicator: HTMLIonLoadingElement;
+
   constructor(
     private systemMapService: SystemMapService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loading: LoadingController
   ) { }
 
-  submitForm() {
+  async submitForm() {
     this.dataSubmitted = true;
+
+    this.loadingIndicator = await this.loading.create({
+      message: `${this.formAction.slice(0, -1)}ing`
+    });
+    await this.loadingIndicator.present();
+
     if (this.systemImage.id) {
       this.systemMapService.updateSystemImage(this.systemImage).subscribe((results) => {
+
+        // remove the loading locating indicator
+        if (this.loadingIndicator) {
+          this.loading.dismiss();
+        }
+
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
           this.dismiss();
@@ -34,6 +50,12 @@ export class AddUpdateSystemImageComponent implements OnInit {
       });
     } else {
       this.systemMapService.addSystemImage(this.systemImage).subscribe((results) => {
+
+        // remove the loading locating indicator
+        if (this.loadingIndicator) {
+          this.loading.dismiss();
+        }
+
         if (!(results instanceof HttpErrorResponse)) {
           this.systemMapService.refreshData();
           this.dismiss();
@@ -49,7 +71,10 @@ export class AddUpdateSystemImageComponent implements OnInit {
   }
 
   valid(): boolean {
-    if (this.systemImage && this.systemImage.title && this.systemImage.of_star_object_id) {
+    if (this.systemImage
+      && this.systemImage.title
+      && this.systemImage.of_star_object_id
+      && (this.systemImage.image_url || this.systemImage.new_image)) {
       return true;
     } else {
       return false;

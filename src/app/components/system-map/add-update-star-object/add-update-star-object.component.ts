@@ -199,7 +199,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
     this.dataSubmitted = true;
 
     this.loadingIndicator = await this.loading.create({
-      message: 'Loading'
+      message: `${this.formAction.slice(0, -1)}ing`
     });
     await this.loadingIndicator.present();
 
