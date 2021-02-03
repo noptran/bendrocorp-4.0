@@ -33,6 +33,12 @@ export class FieldValueEditorComponent implements OnInit {
     }
   }
 
+  validFields(): Field[] {
+    if (this.fields) {
+      return this.fields.filter(x => !x.read_only);
+    }
+  }
+
   fieldChange(event: any, fieldId: string) {
     console.log(event);
     console.log(fieldId);

@@ -9,7 +9,7 @@
   <ion-list-header lines="full" color="dark">
     <ion-label>Other Fields</ion-label>
   </ion-list-header>
-  <ion-item *ngFor="let field of fields">
+  <ion-item *ngFor="let field of validFields()">
     <ion-label *ngIf="!(isMobile && (field.descriptors && field.descriptors.length > 0))" position="floating">{{field.name}}</ion-label>
     <!-- has descriptors and is mobile -->
     <div *ngIf="isMobile && (field.descriptors && field.descriptors.length > 0)">
