@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: AlertsPage
+  },
+  {
+    path: ':id',
+    loadChildren: () => import('./alert-detail/alert-detail.module').then( m => m.AlertDetailPageModule)
   }
 ];
 

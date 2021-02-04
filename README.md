@@ -1,6 +1,12 @@
 # BendroCorp 4.0
 This is the code base for the entire BendroCorp application.
 
+Framework: https://capacitorjs.com/
+
+Plugins:
+- https://ionicframework.com/
+- https://github.com/eakoriakin/ionic-selectable
+
 ## Basics
 To debug the app: `ionic serve`
 

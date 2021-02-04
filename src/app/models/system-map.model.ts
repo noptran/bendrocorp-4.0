@@ -11,6 +11,7 @@ export class StarObject {
     tags?: string;
     object_type_id: string;
     kind: string;
+    title_with_kind?: string;
     new_primary_image?: Base64Upload;
     primary_image_url?: string;
     primary_image_url_full?: string;

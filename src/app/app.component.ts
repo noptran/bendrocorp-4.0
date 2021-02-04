@@ -20,6 +20,8 @@ import { SwUpdate } from '@angular/service-worker';
 import { PromptUpdateService } from './services/sw/prompt-update.service';
 import { Plugins } from '@capacitor/core';
 import { PushRegistarService } from './services/push-registar.service';
+import { AlertService } from './services/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
 const { App } = Plugins;
 
 @Component({
@@ -40,9 +42,12 @@ export class AppComponent implements OnInit, OnDestroy {
   profileSubscription: Subscription;
   userServiceSubscription: Subscription;
   updateSubscription: Subscription;
+  alertSubscription: Subscription;
 
   user: UserSessionResponse;
   totalApprovalsCount = 0;
+
+  alertCount = 0;
 
   // updates
   updateAvailable: boolean;
@@ -60,6 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private menuService: MenuService,
     private connection: ConnectionService,
+    private alertService: AlertService,
     private profileService: ProfileService,
     private router: Router,
     private modalController: ModalController,
@@ -117,6 +123,8 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.fetchMenu();
         await this.fetchApprovals();
 
+        this.getAlertCount();
+
         // register for push notifications
         await this.push.initPushNotifications();
       });
@@ -131,7 +139,12 @@ export class AppComponent implements OnInit, OnDestroy {
         if (await this.authService.isAuthorized()) {
           this.fetchMenu();
           this.selectMenuItem();
+          this.getAlertCount();
         }
+      });
+
+      this.alertSubscription = this.alertService.dataRefreshAnnounced$.subscribe(() => {
+         this.getAlertCount();
       });
 
       // intial setting
@@ -145,6 +158,9 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.isAuthorized) {
         await this.fetchUser();
         await this.fetchMenu();
+
+        // get alerts count
+        this.getAlertCount();
 
         // get the initial menu selection
         this.selectMenuItem();
@@ -214,6 +230,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  getAlertCount() {
+    this.alertService.list().subscribe((results) => {
+      if (!(results instanceof HttpErrorResponse)) {
+        this.alertCount = results.length;
+      }
+    });
+  }
+
   async fetchMenu() {
     this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
 
@@ -256,6 +280,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.menuUpdateSubscription) {
       this.menuUpdateSubscription.unsubscribe();
+    }
+
+    if (this.alertSubscription) {
+      this.alertSubscription.unsubscribe();
     }
   }
 }
