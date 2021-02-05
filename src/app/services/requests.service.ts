@@ -90,4 +90,11 @@ export class RequestsService {
       catchError(this.errorService.handleError<any>('Submit Approval'))
     );
   }
+
+  remove_approver(approver_id: number): Observable<StatusMessage> {
+    return this.http.delete<StatusMessage>(`${environment.baseUrl}/approvals/approver/${approver_id}`).pipe(
+      tap(results => console.log(`Removed approver #${approver_id}`)),
+      catchError(this.errorService.handleError<any>('Remove Approver'))
+    )
+  }
 }

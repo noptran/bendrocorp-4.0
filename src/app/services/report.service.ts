@@ -46,6 +46,13 @@ export class ReportService {
     );
   }
 
+  showReport(reportId: string): Observable<Report> {
+    return this.http.get<Report>(`${environment.baseUrl}/reports/${reportId}`).pipe(
+      tap(result => console.log(result)),
+      catchError(this.errorService.handleError<any>('Fetch Report'))
+    );
+  }
+
   createReport(report: Report): Observable<Report> {
     return this.http.post<Report>(`${environment.baseUrl}/reports`, { report }).pipe(
       tap(results => console.log(results)),

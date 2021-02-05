@@ -1,12 +1,15 @@
-import { Field } from './field.model';
+import { Approval } from './approval.model';
+import { Field, FieldDescriptor } from './field.model';
 import { Role, User } from './user.model';
 
 export class Report {
   id?: string;
   template_id?: string;
+  template?: ReportTemplate;
   template_name?: string;
   template_description?: string;
-  created_by_id?: string;
+  user_id?: number;
+  user: User;
   report_for_id?: string;
   report_for: ReportRoute;
   draft?: boolean;
@@ -14,6 +17,8 @@ export class Report {
   fields?: ReportField[];
   handler_id?: string;
   handler: ReportHandler;
+  approval: Approval;
+  created_at: Date;
 }
 
 export class ReportTemplate {
@@ -67,6 +72,7 @@ export class ReportFieldValue {
   field_id?: string;
   report_id?: string;
   value?: string;
+  descriptor_value?: FieldDescriptor;
 }
 
 export class ReportRoute {

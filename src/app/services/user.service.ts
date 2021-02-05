@@ -20,7 +20,7 @@ export class UserService {
   private approvalsDataRefreshSource = new Subject();
   approvalsDataRefreshAnnounced$ = this.approvalsDataRefreshSource.asObservable();
   /**
-   * Call this to signal all subscribers to refresh their data
+   * Call this to signal all subscribers to refresh their approvals data
    */
   refreshData() {
     console.log('Approvals data refresh called!');

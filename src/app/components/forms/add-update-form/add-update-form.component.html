@@ -1,3 +1,33 @@
-<p>
-  add-update-form works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{formAction}} Report</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!report || (report && !report.id)" color="primary" (click)="createReport()" [disabled]="dataSubmitted || !createValid()">Create</ion-button>
+      <ion-button *ngIf="report && report.id" color="primary" (click)="submitReport()" [disabled]="dataSubmitted || !submitValid()">Submit</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- initial form -->
+  <div *ngIf="!report || (report && !report.id)">
+    <ion-item>
+      <ion-label>Report Template</ion-label>
+      <ionic-selectable *ngIf="reportTemplates.length > 0"
+        [(ngModel)]="report.template"
+        [items]="reportTemplates"
+        itemValueField="id"
+        itemTextField="name"
+        [canSearch]="true"
+        (onChange)="templateChange($event)">
+      </ionic-selectable>
+    </ion-item>
+  </div>
+  <!-- post initial creation form -->
+  <div *ngIf="report && report.id">
+    full form
+  </div>
+</ion-content>

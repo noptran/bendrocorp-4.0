@@ -8,6 +8,7 @@ import { FormsPageRoutingModule } from './forms-routing.module';
 
 import { FormsPage } from './forms.page';
 import { AddUpdateFormComponentModule } from 'src/app/components/forms/add-update-form/add-update-form.module';
+import { FormStatusComponentModule } from 'src/app/components/forms/form-status/form-status.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { AddUpdateFormComponentModule } from 'src/app/components/forms/add-updat
     FormsModule,
     IonicModule,
     FormsPageRoutingModule,
-    AddUpdateFormComponentModule
+    AddUpdateFormComponentModule,
+    FormStatusComponentModule
   ],
   declarations: [FormsPage]
 })

@@ -7,7 +7,9 @@ import { AddUpdateOffenderReportComponent } from 'src/app/components/offender-re
 import { Report } from 'src/app/models/report.model';
 import { ReportService } from 'src/app/services/report.service';
 
-import { Plugins } from '@capacitor/core';
+import { ActionSheetOptionStyle, Plugins } from '@capacitor/core';
+import { AddUpdateFormComponent } from 'src/app/components/forms/add-update-form/add-update-form.component';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 const { Toast } = Plugins;
 const { Modals } = Plugins;
 
@@ -17,9 +19,14 @@ const { Modals } = Plugins;
   styleUrls: ['./forms.page.scss'],
 })
 export class FormsPage implements OnInit, OnDestroy {
-  reports: Report[];
+  // report arrays
+  reports: Report[] = [];
+  // myReports: Report[] = [];
+  reportsForMe: Report[] = [];
+  //
   initialDataLoaded: boolean;
   updateSubscription: Subscription;
+  userId: number;
   isAdmin: boolean;
 
   // loading indicator
@@ -29,7 +36,9 @@ export class FormsPage implements OnInit, OnDestroy {
     private reportService: ReportService,
     private loading: LoadingController,
     private modalController: ModalController,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.updateSubscription = this.reportService.reportsRefreshAnnounced$.subscribe(() => {
       this.fetchReports();
@@ -39,7 +48,9 @@ export class FormsPage implements OnInit, OnDestroy {
   async fetchReports(event?: any) {
     this.reportService.listReports().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
-        this.reports = results;
+        this.reports = results.filter(x => x.user_id === this.userId);
+        this.reportsForMe = results.filter(x => x.user_id !== this.userId);
+
         this.initialDataLoaded = true;
       }
 
@@ -58,15 +69,23 @@ export class FormsPage implements OnInit, OnDestroy {
   }
 
   openReport(report: Report) {
-    //
+    // nav to the details
+    const navigationExtras: NavigationExtras = {
+      relativeTo: this.route,
+      state: {
+        report
+      }
+    };
+    this.router.navigate([report.id], navigationExtras);
   }
 
   async addUpdateReport(report?: Report) {
     const modal = await this.modalController.create({
-      component: AddUpdateOffenderReportComponent,
+      component: AddUpdateFormComponent,
       componentProps: {
         report
-      }
+      },
+      backdropDismiss: false
     });
     return await modal.present();
   }
@@ -85,7 +104,7 @@ export class FormsPage implements OnInit, OnDestroy {
     // spin the spinner
     // setup the loading indicator
     this.loadingIndicator = await this.loading.create({
-      message: 'Loading'
+      message: 'Archiving'
     });
     await this.loadingIndicator.present();
 
@@ -111,7 +130,8 @@ export class FormsPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    // this.isAdmin = await this.authService.hasClaim(2);
+    this.userId = (await this.authService.retrieveUserSession()).id;
+    this.isAdmin = await this.authService.hasClaim(49);
 
     // spin the spinner
     // setup the loading indicator
@@ -126,6 +146,56 @@ export class FormsPage implements OnInit, OnDestroy {
     }
 
     this.fetchReports();
+  }
+
+  async showActions(event: MouseEvent, report: Report) {
+    event.preventDefault();
+
+    if ((report.draft && report.user_id === this.userId) || this.isAdmin) {
+      const promptRet = await Modals.showActions({
+        title: 'Report Options',
+        options: [
+          {
+            title: 'Open'
+          },
+          {
+            title: 'Archive',
+            style: ActionSheetOptionStyle.Destructive
+          },
+          {
+            title: 'Cancel',
+            style: ActionSheetOptionStyle.Cancel
+          }
+        ]
+      });
+      console.log('You selected', promptRet);
+
+      if (promptRet.index === 0) {
+        this.openReport(report);
+      }
+
+      if (promptRet.index === 1) {
+        this.archiveReport(report);
+      }
+    } else {
+      const promptRet = await Modals.showActions({
+        title: 'Report Options',
+        options: [
+          {
+            title: 'Open'
+          },
+          {
+            title: 'Cancel',
+            style: ActionSheetOptionStyle.Cancel
+          }
+        ]
+      });
+      console.log('You selected', promptRet);
+
+      if (promptRet.index === 0) {
+        this.openReport(report);
+      }
+    }
   }
 
   ngOnDestroy() {
