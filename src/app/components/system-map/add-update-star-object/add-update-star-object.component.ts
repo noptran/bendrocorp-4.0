@@ -22,8 +22,11 @@ const { Modals, Toast, Keyboard } = Plugins;
 export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   @ViewChild(FieldValueEditorComponent) fieldEditor: FieldValueEditorComponent;
 
-  // base objects and vars
+  // input vars
   starObject: StarObject;
+  preferredParent: StarObject;
+
+  // base objects and vars
   formAction: string;
   dataSubmitted: boolean;
 
@@ -98,6 +101,30 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
         return;
       }
 
+      const valueOpts = () => {
+        if (this.preferredParent) {
+          const canMapList: string[] = this.starRules
+          .filter(x => x.parent_id === this.preferredParent.object_type_id)
+          .map(x => x.child_id);
+
+          return this.starObjectTypes
+          .filter(x => canMapList.includes(x.id))
+          .map((val) => {
+            return {
+              text: val.title,
+              value: val.id,
+            } as PickerColumnOption;
+          });
+        } else {
+          return this.starObjectTypes.map((val) => {
+            return {
+              text: val.title,
+              value: val.id,
+            } as PickerColumnOption;
+          });
+        }
+      };
+
       const opts: PickerOptions = {
         buttons: [
           {
@@ -117,12 +144,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
         columns: [
           {
             name: 'objectType',
-            options: this.starObjectTypes.map((val) => {
-              return {
-                text: val.title,
-                value: val.id,
-              } as PickerColumnOption;
-            })
+            options: valueOpts()
           }
         ]
       };
@@ -252,7 +274,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       this.formAction = 'Update';
     } else {
       this.formAction = 'Create';
-      this.starObject = {} as StarObject;
+      this.starObject = { parent: this.preferredParent } as StarObject;
     }
 
     if (this.platform.is('mobile')) {
