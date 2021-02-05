@@ -60,7 +60,7 @@
       </ion-label>
       <ionic-selectable
         [(ngModel)]="starObject.parent"
-        [items]="filterMappableItems()"
+        [items]="parentFilteredStarObjects"
         itemValueField="id"
         itemTextField="title"
         [canSearch]="true"

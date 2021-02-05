@@ -31,7 +31,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   starRules: StarObjectRule[] = [];
   starObjectTypes: FieldDescriptor[] = [];
   starObjects: StarObject[] = [];
-  // parentFilteredStarObjects: StarObject[] = [];
+  parentFilteredStarObjects: any[] = [];
   mappableItems: any[] = [];
 
   // loading indicator
@@ -53,12 +53,12 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       const canMapList: string[] = this.starRules.filter(x => x.child_id === this.starObject.object_type_id).map(x => x.parent_id);
 
       // get the possible items that we could map to
-      return this.starObjects
+      this.parentFilteredStarObjects = this.starObjects
       .filter(x => canMapList.includes(x.object_type_id))
       .map(x => {
         return {
           id: x.id,
-          title: `(${x.kind}) ${x.title}`
+          title: `${x.title} (${x.kind})`
         };
       })
       .sort((a, b) => {
@@ -72,6 +72,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
     this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.starObjects = results;
+        this.filterMappableItems();
       }
     });
 
@@ -109,6 +110,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
               const found = this.starObjectTypes.find(x => x.id === val.objectType.value);
               console.log(found);
               this.starObject.object_type_id = found.id;
+              this.filterMappableItems();
             }
           }
         ],
