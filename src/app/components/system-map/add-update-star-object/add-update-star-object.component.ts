@@ -274,7 +274,13 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       this.formAction = 'Update';
     } else {
       this.formAction = 'Create';
-      this.starObject = { parent: this.preferredParent, parent_id: this.preferredParent.id } as StarObject;
+
+      // check to see if a preferred parent has been sent
+      if (this.preferredParent) {
+        this.starObject = { parent: this.preferredParent, parent_id: this.preferredParent.id } as StarObject;
+      } else {
+        this.starObject = { } as StarObject;
+      }
     }
 
     if (this.platform.is('mobile')) {
