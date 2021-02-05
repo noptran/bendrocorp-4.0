@@ -46,6 +46,7 @@ import { PasswordComponentModule } from './components/misc/password/password.mod
 import { AddUpdateSystemImageComponent } from './components/system-map/add-update-system-image/add-update-system-image.component';
 import { ViewSystemImageComponent } from './components/system-map/view-system-image/view-system-image.component';
 import { FieldValueEditorModule } from './components/misc/field-value-editor/field-value-editor.module';
+import { SelectAvatarComponentModule } from './components/misc/select-avatar/select-avatar.module';
 
 @NgModule({
   declarations: [
@@ -60,13 +61,13 @@ import { FieldValueEditorModule } from './components/misc/field-value-editor/fie
     AddUpdateFlightLogComponent,
     AddUpdateOffenderReportComponent,
     NewsDetailComponent,
-    SelectAvatarComponent,
+    // SelectAvatarComponent,
     // PasswordComponent, // ??
-    AddUpdateStarObjectComponent,
+    // AddUpdateStarObjectComponent,
     MakeDonationComponent,
     AppUpdateDonationGoalComponent,
     JoinSupporterComponent,
-    AddUpdateSystemImageComponent,
+    // AddUpdateSystemImageComponent,
     ViewSystemImageComponent,
     // SystemMapListTagsComponent,
   ],

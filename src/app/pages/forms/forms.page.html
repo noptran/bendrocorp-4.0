@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="initialDataLoaded">
   <ion-card>
     <div class="reports-topper"></div>
     <ion-card-header>
@@ -19,9 +19,16 @@
     </ion-card-content>
   </ion-card>
   <!-- Everything else goes here -->
-  <ion-item>
+  <ion-item *ngIf="reports.length == 0">
     <ion-label>
-      There are currently no forms available.
+      You have not filed any forms.
     </ion-label>
   </ion-item>
+  <ion-list *ngIf="reports.length > 0">
+    <ion-item *ngFor="let report of reports">
+      <ion-label>
+        test line
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

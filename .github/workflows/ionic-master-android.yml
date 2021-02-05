@@ -65,6 +65,14 @@ jobs:
           cat VERSION
           cat ./android/app/VERSION_CODE
 
+      # Follow instructions. The update is that access is granted from the play console
+      # The service account must also be assigned a role within the project or it will not appear in the play console
+      - name: Create google-services.json
+        id: createServiceAccount
+        run: |
+          cd ./android/app
+          echo '${{ secrets.GPLAY_SERVICE_ACCOUNT_JSON }}' > google-services.json
+
       - name: Grant rights
         run: chmod +x ./android/build.gradle
 
@@ -89,12 +97,6 @@ jobs:
           alias: ${{ secrets.GPLAY_ALIAS }}
           keyStorePassword: ${{ secrets.GPLAY_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.GPLAY_KEY_PASSWORD }}
-
-      # Follow instructions. The update is that access is granted from the play console
-      # The service account must also be assigned a role within the project or it will not appear in the play console
-      - name: Create service_account.json
-        id: createServiceAccount
-        run: echo '${{ secrets.GPLAY_SERVICE_ACCOUNT_JSON }}' > service_account.json
 
       - name: Check Output
         run: |

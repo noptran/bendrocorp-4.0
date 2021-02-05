@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{formAction}} Alert</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="submitForm()" [disabled]="dataSubmitted || !valid()">{{formAction}}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="alert && alertTypes.length > 0">
+  <!-- Title -->
+  <ion-item>
+    <ion-label position="floating">Title <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-input required placeholder="Alert Title" [(ngModel)]="alert.title"
+      name="alert_title"></ion-input>
+  </ion-item>
+
+  <!-- Description -->
+  <ion-item>
+    <ion-label>Description <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-textarea required [(ngModel)]="alert.description" placeholder="Description of alert"
+    autoGrow autocapitalize name="alert_description"></ion-textarea>
+  </ion-item>
+
+  <!-- Alert Type -->
+  <ion-item>
+    <ion-label>Alert Type <ion-text color="danger">*</ion-text></ion-label>
+    <ion-select cancelText="Cancel" [(ngModel)]="alert.alert_type_id">
+      <ion-select-option *ngFor="let type of alertTypes" [value]="type.id">{{type.title}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Expires when -->
+  <ion-item>
+    <ion-label>Expires When</ion-label>
+    <ion-datetime placeholder="Add Expiration" displayFormat="D MMM YYYY H:mm" [(ngModel)]="alert.expires"></ion-datetime>
+  </ion-item>
+  <ion-button *ngIf="alert.expires" expand="block" (click)="clearExpiration()">Clear Expiration</ion-button>
+  <ion-item *ngIf="alert && starObjects.length > 0">
+    <ion-label>Star Object</ion-label>
+    <ionic-selectable
+      [(ngModel)]="alert.star_object"
+      [items]="starObjects"
+      itemValueField="id"
+      itemTextField="title_with_kind"
+      [canSearch]="true"
+      (onChange)="soChange($event)">
+    </ionic-selectable>
+  </ion-item>
+</ion-content>

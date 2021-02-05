@@ -31,6 +31,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   starRules: StarObjectRule[] = [];
   starObjectTypes: FieldDescriptor[] = [];
   starObjects: StarObject[] = [];
+  // parentFilteredStarObjects: StarObject[] = [];
   mappableItems: any[] = [];
 
   // loading indicator
@@ -130,40 +131,44 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
 
   }
 
-
-  async showParentPicker() {
-    const opts: PickerOptions = {
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Done',
-          handler: (val) => {
-            const found = this.starObjects.find(x => x.id === val.parent.value);
-            console.log(found);
-            this.starObject.parent_id = found.id;
-          }
-        }
-      ],
-      columns: [
-        {
-          name: 'parent',
-          options: this.filterMappableItems().map((val) => {
-            return {
-              text: val.title,
-              value: val.id,
-            } as PickerColumnOption;
-          })
-        }
-      ]
-    };
-    const picker = await this.pickerController.create(opts);
-    picker.present();
-    picker.onWillDismiss().then(async data => {
-    });
+  parentChange(event?: any) {
+    this.starObject.parent_id = event.value.id;
   }
+
+
+  // async showParentPicker() {
+  //   const opts: PickerOptions = {
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel'
+  //       },
+  //       {
+  //         text: 'Done',
+  //         handler: (val) => {
+  //           const found = this.starObjects.find(x => x.id === val.parent.value);
+  //           console.log(found);
+  //           this.starObject.parent_id = found.id;
+  //         }
+  //       }
+  //     ],
+  //     columns: [
+  //       {
+  //         name: 'parent',
+  //         options: this.filterMappableItems().map((val) => {
+  //           return {
+  //             text: val.title,
+  //             value: val.id,
+  //           } as PickerColumnOption;
+  //         })
+  //       }
+  //     ]
+  //   };
+  //   const picker = await this.pickerController.create(opts);
+  //   picker.present();
+  //   picker.onWillDismiss().then(async data => {
+  //   });
+  // }
 
   showObjectTypeSelection() {
     if (this.starObject && this.starObject.object_type_id) {
