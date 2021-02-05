@@ -238,7 +238,10 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
 
   async addStarObject() {
     const modal = await this.modalController.create({
-      component: AddUpdateStarObjectComponent
+      component: AddUpdateStarObjectComponent,
+      componentProps: {
+        preferredParent: this.selectedItem
+      }
     });
     return await modal.present();
   }

@@ -22,8 +22,11 @@ const { Modals, Toast, Keyboard } = Plugins;
 export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   @ViewChild(FieldValueEditorComponent) fieldEditor: FieldValueEditorComponent;
 
-  // base objects and vars
+  // input vars
   starObject: StarObject;
+  preferredParent: StarObject;
+
+  // base objects and vars
   formAction: string;
   dataSubmitted: boolean;
 
@@ -31,6 +34,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   starRules: StarObjectRule[] = [];
   starObjectTypes: FieldDescriptor[] = [];
   starObjects: StarObject[] = [];
+  parentFilteredStarObjects: any[] = [];
   mappableItems: any[] = [];
 
   // loading indicator
@@ -52,12 +56,12 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       const canMapList: string[] = this.starRules.filter(x => x.child_id === this.starObject.object_type_id).map(x => x.parent_id);
 
       // get the possible items that we could map to
-      return this.starObjects
+      this.parentFilteredStarObjects = this.starObjects
       .filter(x => canMapList.includes(x.object_type_id))
       .map(x => {
         return {
           id: x.id,
-          title: `(${x.kind}) ${x.title}`
+          title: `${x.title} (${x.kind})`
         };
       })
       .sort((a, b) => {
@@ -71,6 +75,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
     this.systemMapService.listStarObjects().subscribe((results) => {
       if (!(results instanceof HttpErrorResponse)) {
         this.starObjects = results;
+        this.filterMappableItems();
       }
     });
 
@@ -96,6 +101,30 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
         return;
       }
 
+      const valueOpts = () => {
+        if (this.preferredParent) {
+          const canMapList: string[] = this.starRules
+          .filter(x => x.parent_id === this.preferredParent.object_type_id)
+          .map(x => x.child_id);
+
+          return this.starObjectTypes
+          .filter(x => canMapList.includes(x.id))
+          .map((val) => {
+            return {
+              text: val.title,
+              value: val.id,
+            } as PickerColumnOption;
+          });
+        } else {
+          return this.starObjectTypes.map((val) => {
+            return {
+              text: val.title,
+              value: val.id,
+            } as PickerColumnOption;
+          });
+        }
+      };
+
       const opts: PickerOptions = {
         buttons: [
           {
@@ -108,18 +137,14 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
               const found = this.starObjectTypes.find(x => x.id === val.objectType.value);
               console.log(found);
               this.starObject.object_type_id = found.id;
+              this.filterMappableItems();
             }
           }
         ],
         columns: [
           {
             name: 'objectType',
-            options: this.starObjectTypes.map((val) => {
-              return {
-                text: val.title,
-                value: val.id,
-              } as PickerColumnOption;
-            })
+            options: valueOpts()
           }
         ]
       };
@@ -130,40 +155,44 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
 
   }
 
-
-  async showParentPicker() {
-    const opts: PickerOptions = {
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Done',
-          handler: (val) => {
-            const found = this.starObjects.find(x => x.id === val.parent.value);
-            console.log(found);
-            this.starObject.parent_id = found.id;
-          }
-        }
-      ],
-      columns: [
-        {
-          name: 'parent',
-          options: this.filterMappableItems().map((val) => {
-            return {
-              text: val.title,
-              value: val.id,
-            } as PickerColumnOption;
-          })
-        }
-      ]
-    };
-    const picker = await this.pickerController.create(opts);
-    picker.present();
-    picker.onWillDismiss().then(async data => {
-    });
+  parentChange(event?: any) {
+    this.starObject.parent_id = event.value.id;
   }
+
+
+  // async showParentPicker() {
+  //   const opts: PickerOptions = {
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel'
+  //       },
+  //       {
+  //         text: 'Done',
+  //         handler: (val) => {
+  //           const found = this.starObjects.find(x => x.id === val.parent.value);
+  //           console.log(found);
+  //           this.starObject.parent_id = found.id;
+  //         }
+  //       }
+  //     ],
+  //     columns: [
+  //       {
+  //         name: 'parent',
+  //         options: this.filterMappableItems().map((val) => {
+  //           return {
+  //             text: val.title,
+  //             value: val.id,
+  //           } as PickerColumnOption;
+  //         })
+  //       }
+  //     ]
+  //   };
+  //   const picker = await this.pickerController.create(opts);
+  //   picker.present();
+  //   picker.onWillDismiss().then(async data => {
+  //   });
+  // }
 
   showObjectTypeSelection() {
     if (this.starObject && this.starObject.object_type_id) {
@@ -245,7 +274,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
       this.formAction = 'Update';
     } else {
       this.formAction = 'Create';
-      this.starObject = {} as StarObject;
+      this.starObject = { parent: this.preferredParent, parent_id: this.preferredParent.id } as StarObject;
     }
 
     if (this.platform.is('mobile')) {

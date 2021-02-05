@@ -153,6 +153,12 @@ export class PushRegistarService {
       PushNotifications.addListener('pushNotificationActionPerformed',
         (notification: PushNotificationActionPerformed) => {
           // alert('Push action performed: ' + JSON.stringify(notification));
+          // debug output
+          // if (this.pushDebug) {
+          //   Toast.show({
+          //     text: 'Token registered!'
+          //   });
+          // }
         }
       );
     }

@@ -56,10 +56,18 @@
 
     <!-- Parent Specification -->
     <ion-item class="picker">
-      <ion-label (click)="showParentPicker()">
+      <ion-label>
         <span>Parent</span>
       </ion-label>
-      <ion-label (click)="showParentPicker()" slot="end">{{showParentSelection() || "Select Parent"}}</ion-label>
+      <ionic-selectable
+        [(ngModel)]="starObject.parent"
+        [items]="parentFilteredStarObjects"
+        itemValueField="id"
+        itemTextField="title"
+        [canSearch]="true"
+        (onChange)="parentChange($event)">
+      </ionic-selectable>
+      <!-- <ion-label (click)="showParentPicker()" slot="end">{{showParentSelection() || "Select Parent"}}</ion-label> -->
       <ion-button slot="end" (click)="clearParentSelection()" *ngIf="starObject.parent_id">Clear</ion-button>
     </ion-item>
     <ion-item>

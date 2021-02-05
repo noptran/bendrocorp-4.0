@@ -12,6 +12,7 @@ import { SystemMapListTagsComponent } from 'src/app/components/system-map/system
 import { SelectAvatarComponent } from 'src/app/components/misc/select-avatar/select-avatar.component';
 import { SystemMapListCardComponentModule } from 'src/app/components/system-map/system-map-list-card/system-map-list-card.module';
 import { SystemMapListTagsComponentModule } from 'src/app/components/system-map/system-map-list-tags/system-map-list-tags.module';
+import { AddUpdateStarObjectComponentModule } from 'src/app/components/system-map/add-update-star-object/add-update-star-object.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { SystemMapListTagsComponentModule } from 'src/app/components/system-map/
     IonicModule,
     SystemMapPageRoutingModule,
     SystemMapListCardComponentModule,
-    SystemMapListTagsComponentModule
+    SystemMapListTagsComponentModule,
+    AddUpdateStarObjectComponentModule
   ],
   declarations: [
     SystemMapPage

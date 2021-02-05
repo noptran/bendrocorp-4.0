@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: FormsPage
+  },
+  {
+    path: ':id',
+    loadChildren: () => import('./form-detail/form-detail.module').then( m => m.FormDetailPageModule)
   }
+
 ];
 
 @NgModule({
