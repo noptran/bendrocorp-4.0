@@ -232,6 +232,9 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
     });
     await this.loadingIndicator.present();
 
+    while (!this.loadingIndicator) {
+    }
+
     if (this.starObject.id) {
       try {
         await this.fieldEditor.submitFieldsForm();
