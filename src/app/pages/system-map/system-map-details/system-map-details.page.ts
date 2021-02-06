@@ -285,10 +285,11 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
 
   async shareItem() {
     const uri = `system-map/${this.selectedItem.id.split('-')[0]}-${this.selectedItem.title.toLowerCase().split(' ').join('-').replace(/[^-A-Za-z0-9_]+/g, '')}`;
+    const shareString = `The ${this.selectedItem.title} on BendroCorp`;
 
     const shareRet = await Share.share({
-      title: `${this.selectedItem.title} (BendroCorp)`,
-      text: 'Really awesome thing you need to see right meow',
+      title: shareString,
+      text: shareString,
       url: `https://bendrocorp.app/${uri}`,
     });
   }
