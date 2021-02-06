@@ -106,7 +106,7 @@ jobs:
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: google-services.json
+          serviceAccountJson: ./android/app/google-services.json
           packageName: com.bendrocorp.app
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: internal
