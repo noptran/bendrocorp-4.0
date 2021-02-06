@@ -16,7 +16,7 @@ import { AppConfig, SettingsService } from 'src/app/services/settings.service';
 import { AddUpdateSystemImageComponent } from 'src/app/components/system-map/add-update-system-image/add-update-system-image.component';
 import { ViewSystemImageComponent } from 'src/app/components/system-map/view-system-image/view-system-image.component';
 
-const { Toast, Modals } = Plugins;
+const { Toast, Modals, Share } = Plugins;
 
 @Component({
   selector: 'app-system-map-details',
@@ -48,6 +48,7 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
   readonly routePartialObjectId: string;
   initialDataLoaded: boolean;
   starObjectTypes: FieldDescriptor[] = [];
+  isCap: boolean;
 
   constructor(
     private systemMapService: SystemMapService,
@@ -263,7 +264,8 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
       component: ViewSystemImageComponent,
       componentProps: {
         image
-      }
+      },
+      cssClass: 'big-viewer'
     });
 
     return await modal.present();
@@ -281,7 +283,19 @@ export class SystemMapDetailsPage implements OnInit, OnDestroy {
     }
   }
 
+  async shareItem() {
+    const uri = `system-map/${this.selectedItem.id.split('-')[0]}-${this.selectedItem.title.toLowerCase().split(' ').join('-').replace(/[^-A-Za-z0-9_]+/g, '')}`;
+
+    const shareRet = await Share.share({
+      title: `${this.selectedItem.title} (BendroCorp)`,
+      text: 'Really awesome thing you need to see right meow',
+      url: `https://bendrocorp.app/${uri}`,
+    });
+  }
+
   async ngOnInit() {
+    this.isCap = this.platform.is('capacitor');
+
     this.isEditor = (await this.authService.hasClaim(22) || await this.authService.hasClaim(23)) ? true : false;
     await this.getSettings();
 

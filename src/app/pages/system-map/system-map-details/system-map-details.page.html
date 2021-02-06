@@ -18,7 +18,7 @@
       <ion-grid>
         <ion-row>
           <ion-col size-xs="12" size-sm="12" size-md="6" style="text-align: center; vertical-align: middle;">
-            <img src="{{selectedItem.primary_image_url_full}}" alt="" onerror="this.src='../../../assets/imgs/missing-system-map.png'" >
+            <img style="cursor: pointer;" (click)="viewSystemImage({ image_url: selectedItem.primary_image_url_full, title: selectedItem.title })" src="{{selectedItem.primary_image_url_full}}" alt="" onerror="this.src='../../../assets/imgs/missing-system-map.png'" >
           </ion-col>
           <ion-col size-xs="12" size-sm="12" size-md="6">
             <div>
@@ -95,7 +95,15 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+  <!-- Share FAB -->
+  <ion-fab *ngIf="isCap" (click)="shareItem()" horizontal="end" vertical="center" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon name="share-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Edit FAB -->
+  <ion-fab *ngIf="isEditor" horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="primary">
       <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
     </ion-fab-button>

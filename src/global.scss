@@ -115,6 +115,11 @@ ion-item-sliding {
   cursor: pointer;
 }
 
+.big-viewer .modal-wrapper {
+  min-width: 50% !important;
+  min-height: 80% !important;
+}
+
 // ion-select {
 //   min-width: 60% !impo;
 //   max-width: 100%;
