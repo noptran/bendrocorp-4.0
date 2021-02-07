@@ -67,7 +67,7 @@ jobs:
 
       # Add the google-services.json
       - name: Create google-services.json
-        id: createServiceAccount
+        id: createGoogleServices
         run: |
           cd ./android/app
           echo '${{ secrets.GPLAY_GOOGLE_SERVICES }}' > google-services.json
