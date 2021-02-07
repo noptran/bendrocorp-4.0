@@ -65,13 +65,12 @@ jobs:
           cat VERSION
           cat ./android/app/VERSION_CODE
 
-      # Follow instructions. The update is that access is granted from the play console
-      # The service account must also be assigned a role within the project or it will not appear in the play console
+      # Add the google-services.json
       - name: Create google-services.json
         id: createServiceAccount
         run: |
           cd ./android/app
-          echo '${{ secrets.GPLAY_SERVICE_ACCOUNT_JSON }}' > google-services.json
+          echo '${{ secrets.GPLAY_GOOGLE_SERVICES }}' > google-services.json
 
       - name: Grant rights
         run: chmod +x ./android/build.gradle
@@ -101,12 +100,19 @@ jobs:
       - name: Check Output
         run: |
           ls -la ./android/app/build/outputs/bundle/release/
+      
+      # Follow instructions. The update is that access is granted from the play console
+      # The service account must also be assigned a role within the project or it will not appear in the play console
+      - name: Create service_account.json
+        id: createServiceAccount
+        run: |
+          echo '${{ secrets.GPLAY_SERVICE_ACCOUNT_JSON }}' > service_account.json
 
       - name: Deploy to Play Store (Beta)
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: ./android/app/google-services.json
+          serviceAccountJson: service_account.json
           packageName: com.bendrocorp.app
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: internal
