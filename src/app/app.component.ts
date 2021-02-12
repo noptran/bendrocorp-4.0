@@ -1,7 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 
 import { ModalController, Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthService } from './auth.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -22,7 +21,7 @@ import { Plugins } from '@capacitor/core';
 import { PushRegistarService } from './services/push-registar.service';
 import { AlertService } from './services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
-const { App } = Plugins;
+const { App, SplashScreen } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -60,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
+    // private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private authService: AuthService,
     private menuService: MenuService,
@@ -98,8 +97,9 @@ export class AppComponent implements OnInit, OnDestroy {
           // If no match, do nothing - let regular routing
           // logic take over
       });
-  });
+    });
 
+    // wait for the platform to be ready and all the basic setup to be done
     this.platform.ready().then(async () => {
       // intialize settings
       await this.settings.intializeSettingsConfig();
@@ -175,7 +175,8 @@ export class AppComponent implements OnInit, OnDestroy {
       });
 
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      // this.splashScreen.hide();
+      SplashScreen.hide();
     });
   }
 
