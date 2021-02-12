@@ -6,6 +6,7 @@ import { MyApproval } from 'src/app/models/approval.model';
 import { RequestsService } from 'src/app/services/requests.service';
 import { UserService } from 'src/app/services/user.service';
 import { Plugins } from '@capacitor/core';
+import { AuthService } from 'src/app/auth.service';
 
 const { Modals } = Plugins;
 
@@ -20,6 +21,7 @@ export class ApprovalDetailsPage implements OnInit {
   approval: MyApproval;
   approvalSubmitting: boolean;
   loadingIndicator: any;
+  isCeo: boolean;
 
   hideThis = true; // just used to hide things
 
@@ -29,7 +31,8 @@ export class ApprovalDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private nav: NavController,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private authService: AuthService
     // private iab: InAppBrowser
     ) {
     if (this.router.getCurrentNavigation()?.extras.state?.approval) {
@@ -69,6 +72,23 @@ export class ApprovalDetailsPage implements OnInit {
     //   location: 'no'
     // };
     // const browser = this.iab.create(`https://my.bendrocorp.com/${uri}`, '_system', options);
+  }
+
+  async removeApprover(approver_id: number) {
+    if (approver_id) {
+      const confirmRet = await Modals.confirm({
+        title: 'Confirm',
+        message: 'Are you sure you want remove this approver? This will set their status to not needed and override any previous approval type. (CEO ONLY)'
+      });
+
+      if (confirmRet.value) {
+        this.requestService.remove_approver(approver_id).subscribe((results) => {
+          if (!(results instanceof HttpErrorResponse)) {
+            this.fetchApprovalDetails();
+          }
+        });
+      }
+    }
   }
 
   async submitApproval(typeId: number) {
@@ -112,6 +132,8 @@ export class ApprovalDetailsPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.isCeo = await this.authService.hasClaim(9);
+
     if (!this.approval) {
       this.loadingIndicator = await this.loading.create({
         message: 'Loading'

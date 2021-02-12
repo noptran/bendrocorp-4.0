@@ -8,6 +8,8 @@ import { FormDetailPageRoutingModule } from './form-detail-routing.module';
 
 import { FormDetailPage } from './form-detail.page';
 import { AddUpdateFormComponentModule } from 'src/app/components/forms/add-update-form/add-update-form.module';
+import { FormStatusComponentModule } from 'src/app/components/forms/form-status/form-status.module';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import { AddUpdateFormComponentModule } from 'src/app/components/forms/add-updat
     FormsModule,
     IonicModule,
     FormDetailPageRoutingModule,
-    AddUpdateFormComponentModule
+    AddUpdateFormComponentModule,
+    FormStatusComponentModule,
+    IonicSelectableModule
   ],
   declarations: [FormDetailPage]
 })

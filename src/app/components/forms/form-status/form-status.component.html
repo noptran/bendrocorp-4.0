@@ -1,0 +1,6 @@
+<span>
+  <ion-text *ngIf="reportStatusCheck() === 'draft'">&nbsp;<ion-badge>Draft</ion-badge></ion-text>
+  <ion-text *ngIf="reportStatusCheck() === 'submitted'">&nbsp;<ion-badge color="secondary">Submitted</ion-badge></ion-text>
+  <ion-text *ngIf="reportStatusCheck() === 'approved'">&nbsp;<ion-badge color="success">Approved</ion-badge></ion-text>
+  <ion-text *ngIf="reportStatusCheck() === 'returned'">&nbsp;<ion-badge color="danger">Returned</ion-badge></ion-text>
+</span>
