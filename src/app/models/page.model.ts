@@ -14,11 +14,11 @@ export class Page {
   /**
    * Used with the API for adding categories.
    */
-  new_categories?: FieldDescriptor[];
+  // new_categories?: FieldDescriptor[];
   /**
    * Used with the API for removing categories.
    */
-  remove_categories?: FieldDescriptor[];
+  // remove_categories?: FieldDescriptor[];
   creator?: User;
   archived?: boolean;
 
