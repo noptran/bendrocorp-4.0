@@ -121,7 +121,7 @@ jobs:
           # whatsNewDirectory: whatsnew/
 
       - name: Deploy to Play Store (Production)
-        id: deploy-beta
+        id: deploy-production
         uses: r0adkll/upload-google-play@v1
         if: startsWith(github.ref, 'refs/tags/v')
         with:
