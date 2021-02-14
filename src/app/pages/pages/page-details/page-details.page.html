@@ -20,7 +20,7 @@
       <p>By: {{page.creator.main_character_full_name}}</p>
     </ion-card-header>
     <ion-card-content>
-      <div [innerHTML]="sanitizedContent"></div>
+      <div style="white-space: pre-line;" [innerHTML]="renderMarkdown()"></div>
     </ion-card-content>
   </ion-card>
 

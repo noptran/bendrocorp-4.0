@@ -1,12 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth.service';
 import { Page } from 'src/app/models/page.model';
 import { PageService } from 'src/app/services/page.service';
+import { Remarkable } from 'remarkable';
 import { Plugins } from '@capacitor/core';
+import { Subscription } from 'rxjs';
 
 const { Modals, Toast } = Plugins;
 
@@ -15,7 +17,8 @@ const { Modals, Toast } = Plugins;
   templateUrl: './page-details.page.html',
   styleUrls: ['./page-details.page.scss'],
 })
-export class PageDetailsPage implements OnInit {
+export class PageDetailsPage implements OnInit, OnDestroy {
+  md = new Remarkable();
   page: Page;
   readonly pageId: string;
   userId: number;
@@ -26,7 +29,7 @@ export class PageDetailsPage implements OnInit {
   loadingIndicator: HTMLIonLoadingElement;
 
   // other
-  sanitizedContent: SafeHtml;
+  pageSubscription: Subscription;
 
   constructor(
     private pageService: PageService,
@@ -40,7 +43,16 @@ export class PageDetailsPage implements OnInit {
 
     if (this.router.getCurrentNavigation()?.extras.state?.page) {
       this.page = this.router.getCurrentNavigation().extras.state.page;
-      this.sanitizedContent = this.domSanitizer.bypassSecurityTrustHtml(this.page.content);
+    }
+
+    this.pageSubscription = this.pageService.dataRefreshAnnounced$.subscribe(() => {
+      this.getPage();
+    });
+  }
+
+  renderMarkdown() {
+    if (this.page) {
+      return this.domSanitizer.bypassSecurityTrustHtml(this.md.render(this.page.content));
     }
   }
 
@@ -49,7 +61,7 @@ export class PageDetailsPage implements OnInit {
       this.pageService.pageSearch(this.pageId).subscribe((results) => {
         if (!(results instanceof HttpErrorResponse)) {
           this.page = results[0];
-          this.sanitizedContent = this.domSanitizer.bypassSecurityTrustHtml(this.page.content);
+          // this.sanitizedContent = this.domSanitizer.bypassSecurityTrustHtml(this.page.content);
 
           if (this.loadingIndicator) {
             this.loadingIndicator.dismiss();
@@ -121,6 +133,12 @@ export class PageDetailsPage implements OnInit {
       this.getPage();
     } else {
       console.log('page passed from parent');
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.pageSubscription) {
+      this.pageSubscription.unsubscribe();
     }
   }
 
