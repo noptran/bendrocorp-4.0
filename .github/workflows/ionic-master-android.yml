@@ -56,9 +56,9 @@ jobs:
         run: |
           echo ${{ steps.buildnumber.outputs.build_number }} > ./android/app/VERSION_CODE
 
-      - name: Write Version File (testing)
-        run: |
-          echo vi${{ steps.buildnumber.outputs.build_number }} > VERSION
+      # - name: Write Version File (testing)
+      #   run: |
+      #     echo vi${{ steps.buildnumber.outputs.build_number }} > VERSION
 
       - name: Show VERSION file
         run: |
