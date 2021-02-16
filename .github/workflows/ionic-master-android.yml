@@ -119,7 +119,7 @@ jobs:
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: beta
           releaseName: vi${{ steps.buildnumber.outputs.build_number }}
-          # whatsNewDirectory: whatsnew/
+          # whatsNewDirectory: whats-new/
 
       - name: Deploy to Play Store (Production)
         id: deploy-production
@@ -132,4 +132,3 @@ jobs:
           track: production
           releaseName: v${{ env.VERSION_FILE_VERSION }}
           whatsNewDirectory: whats-new/
-      
