@@ -131,5 +131,5 @@ jobs:
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: production
           releaseName: v${{ env.VERSION_FILE_VERSION }}
-          # whatsNewDirectory: whatsnew/
+          whatsNewDirectory: whats-new/
       

@@ -1,0 +1,2 @@
+# What New?
+This directory serves as the patch notes for Android phones and will also contain the mobile patch notes. As always the web code will always be "hottest" and "latest" and patch notes will not accompany web changes.
