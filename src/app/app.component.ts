@@ -55,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
   menuInterval = interval(1000 * 60);
   menuUpdateSubscription: Subscription;
 
+  isCapacitor: boolean;
   isNativeiOS: boolean;
 
   constructor(
@@ -254,7 +255,16 @@ export class AppComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
+  footerAlign(): string {
+    if (this.isCapacitor) {
+      return 'right';
+    } else {
+      return 'left';
+    }
+  }
+
   ngOnInit() {
+    this.isCapacitor = this.platform.is('capacitor');
     this.isNativeiOS = this.platform.is('capacitor') && this.platform.is('ios');
   }
 
