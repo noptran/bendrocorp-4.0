@@ -52,13 +52,14 @@ jobs:
           prefix: android
           token: ${{ secrets.github_token }}
 
-      - name: Write Version File (testing)
+      - name: Write Version Code File (testing)
         run: |
           echo ${{ steps.buildnumber.outputs.build_number }} > ./android/app/VERSION_CODE
 
-      # - name: Write Version File (testing)
-      #   run: |
-      #     echo vi${{ steps.buildnumber.outputs.build_number }} > VERSION
+        # v${{ env.VERSION_FILE_VERSION }}
+      - name: Get Version File 
+        run: |
+          echo "VERSION_FILE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Show VERSION file
         run: |
@@ -128,7 +129,7 @@ jobs:
           serviceAccountJson: service_account.json
           packageName: com.bendrocorp.app
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: beta
-          releaseName: vi${{ steps.buildnumber.outputs.build_number }}
+          track: production
+          releaseName: v${{ env.VERSION_FILE_VERSION }}
           # whatsNewDirectory: whatsnew/
       
