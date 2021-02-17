@@ -159,6 +159,8 @@ export class PushRegistarService {
           //     text: 'Token registered!'
           //   });
           // }
+          // notification.actionId
+          // notification.notification.data.variable_here
         }
       );
     }
