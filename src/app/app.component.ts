@@ -256,7 +256,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   footerAlign(): string {
-    if (this.isCapacitor) {
+    if (!this.isCapacitor) {
       return 'right';
     } else {
       return 'left';
