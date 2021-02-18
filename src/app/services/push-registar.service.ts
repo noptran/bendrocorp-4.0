@@ -162,7 +162,7 @@ export class PushRegistarService {
           const data = notification.notification.data;
           switch (notification.actionId) {
             case 'FUNNY_BUNNY':
-              this.router.navigateByUrl(`/alerts/dashboard`);
+              this.router.navigateByUrl(`/profiles/${data.profile_id}`);
               break;
             case 'VIEW_ALERT':
               this.router.navigateByUrl(`/alerts/${data.alert_id}`);

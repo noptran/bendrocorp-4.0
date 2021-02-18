@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_ALERT",
             title: "View Alert",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_PROFILE",
             title: "View Profile",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_EVENT",
             title: "View Event",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "FUNNY_BUNNY",
             title: "Funny Bunny 🐰",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_ARTICLE",
             title: "View Article",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_APPROVAL",
             title: "View Approval",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -82,13 +82,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "VIEW_APPROVAL",
             title: "View Approval",
-            options: UNNotificationActionOptions(rawValue: 0)),
+            options: [.foreground]),
             UNNotificationAction(identifier: "APPROVE_APPROVAL",
             title: "Approve",
-            options: UNNotificationActionOptions(rawValue: 0)),
+            options: [.foreground]),
             UNNotificationAction(identifier: "DENY_APPROVAL",
             title: "Deny",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground, .destructive])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
@@ -99,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         actions: [
             UNNotificationAction(identifier: "PROFILE_360",
             title: "View Application",
-            options: UNNotificationActionOptions(rawValue: 0))
+            options: [.foreground])
         ],
         intentIdentifiers: [],
         hiddenPreviewsBodyPlaceholder: "",
