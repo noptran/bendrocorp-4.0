@@ -9,6 +9,116 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
+    // add notification types
+    // ALERT_NOTICE
+    let alertNoticeCategory =
+        UNNotificationCategory(identifier: "ALERT_NOTICE",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_ALERT",
+            title: "View Alert",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // PROFILE_NOTICE
+    let profileNoticeCategory =
+        UNNotificationCategory(identifier: "PROFILE_NOTICE",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_PROFILE",
+            title: "View Profile",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // CALENDAR_EVENT
+    let calendarEventCategory =
+        UNNotificationCategory(identifier: "CALENDAR_EVENT",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_EVENT",
+            title: "View Event",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // SELF_TEST
+    let selfTestCategory =
+        UNNotificationCategory(identifier: "SELF_TEST",
+        actions: [
+            UNNotificationAction(identifier: "FUNNY_BUNNY",
+            title: "Funny Bunny 🐰",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // NEWS_POSTED
+    let newsPostedCategory =
+        UNNotificationCategory(identifier: "NEWS_POSTED",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_ARTICLE",
+            title: "View Article",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // APPROVAL_CHANGE
+    let approvalChangeCategory =
+        UNNotificationCategory(identifier: "APPROVAL_CHANGE",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_APPROVAL",
+            title: "View Approval",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // APPROVAL
+    let approvalCategory =
+        UNNotificationCategory(identifier: "APPROVAL",
+        actions: [
+            UNNotificationAction(identifier: "VIEW_APPROVAL",
+            title: "View Approval",
+            options: UNNotificationActionOptions(rawValue: 0)),
+            UNNotificationAction(identifier: "APPROVE_APPROVAL",
+            title: "Approve",
+            options: UNNotificationActionOptions(rawValue: 0)),
+            UNNotificationAction(identifier: "DENY_APPROVAL",
+            title: "Deny",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+        options: .customDismissAction)
+    // VIEW_APPLICATION
+    let viewApplicationCategory =
+        UNNotificationCategory(identifier: "VIEW_APPLICATION",
+        actions: [
+            UNNotificationAction(identifier: "PROFILE_360",
+            title: "View Application",
+            options: UNNotificationActionOptions(rawValue: 0))
+        ],
+        intentIdentifiers: [],
+        hiddenPreviewsBodyPlaceholder: "",
+    options: .customDismissAction)
+    
+    // add the notification categories to the app
+    let notificationCenter = UNUserNotificationCenter.current()
+    notificationCenter.setNotificationCategories([
+        alertNoticeCategory,
+        profileNoticeCategory,
+        calendarEventCategory,
+        selfTestCategory,
+        newsPostedCategory,
+        approvalChangeCategory,
+        approvalCategory,
+        viewApplicationCategory
+    ])
+    
+    // return
     return true
   }
 

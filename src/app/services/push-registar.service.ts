@@ -16,6 +16,8 @@ import { PushTokenReg } from '../models/push-token-reg.model';
 import { pushTokenStorageKey } from 'constants';
 import { AuthService } from '../auth.service';
 import { debugRole } from 'constants';
+import { RequestsService } from './requests.service';
+import { Router } from '@angular/router';
 
 const { PushNotifications, Storage, Device, Toast, Modals } = Plugins;
 
@@ -27,9 +29,11 @@ export class PushRegistarService {
   private pushDebug: boolean;
 
   constructor(
+    private router: Router,
     private platform: Platform,
     // private push: Push,
     private userService: UserService,
+    private requestService: RequestsService,
     private appBadgeService: AppBadgeService,
     private authService: AuthService) {
     }
@@ -153,14 +157,66 @@ export class PushRegistarService {
       PushNotifications.addListener('pushNotificationActionPerformed',
         (notification: PushNotificationActionPerformed) => {
           // alert('Push action performed: ' + JSON.stringify(notification));
-          // debug output
-          // if (this.pushDebug) {
-          //   Toast.show({
-          //     text: 'Token registered!'
-          //   });
-          // }
           // notification.actionId
           // notification.notification.data.variable_here
+          const data = notification.notification.data;
+          switch (notification.actionId) {
+            case 'FUNNY_BUNNY':
+              this.router.navigateByUrl(`/alerts/dashboard`);
+              break;
+            case 'VIEW_ALERT':
+              this.router.navigateByUrl(`/alerts/${data.alert_id}`);
+              break;
+            case 'VIEW_PROFILE':
+              this.router.navigateByUrl(`/profiles/${data.profile_id}`);
+              break;
+            case 'VIEW_EVENT':
+              this.router.navigateByUrl(`/profiles/${data.event_id}`);
+              break;
+            case 'VIEW_ARTICLE':
+              this.router.navigateByUrl(`/news/${data.article_id}`);
+              break;
+            case 'VIEW_APPROVAL':
+              this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+              break;
+            case 'APPROVE_APPROVAL':
+              // 4
+              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+                if (!(results instanceof HttpErrorResponse)) {
+                  this.requestService.submit_approval(results.approval_id, 4).subscribe((iResults) => {
+                    if (!(results instanceof HttpErrorResponse)) {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                    } else {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                    }
+                  });
+                } else {
+                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                }
+              });
+              break;
+            case 'DENY_APPROVAL':
+              // 5
+              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+                if (!(results instanceof HttpErrorResponse)) {
+                  this.requestService.submit_approval(results.approval_id, 5).subscribe((iResults) => {
+                    if (!(results instanceof HttpErrorResponse)) {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                    } else {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                    }
+                  });
+                } else {
+                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                }
+              });
+              break;
+            case 'PROFILE_360':
+              this.router.navigateByUrl(`/profiles/${data.profile_id}/application`);
+              break;
+            default:
+              return;
+          }
         }
       );
     }
