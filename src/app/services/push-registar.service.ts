@@ -159,6 +159,16 @@ export class PushRegistarService {
           // alert('Push action performed: ' + JSON.stringify(notification));
           // notification.actionId
           // notification.notification.data.variable_here
+          console.log(notification.actionId);
+
+          // debug
+          if (this.pushDebug) {
+            Toast.show({
+              text: notification.actionId
+            });
+          }
+
+          // handle action
           const data = notification.notification.data;
           switch (notification.actionId) {
             case 'FUNNY_BUNNY':
