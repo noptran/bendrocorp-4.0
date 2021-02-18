@@ -164,7 +164,7 @@ export class PushRegistarService {
           // debug
           if (this.pushDebug) {
             Toast.show({
-              text: notification.actionId
+              text: notification.actionId + ' ' + notification.notification.click_action
             });
           }
 
