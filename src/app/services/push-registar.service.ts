@@ -11,6 +11,8 @@ import {
   PushNotification,
   PushNotificationToken,
   PushNotificationActionPerformed,
+  LocalNotificationActionType,
+  LocalNotificationAction,
 } from '@capacitor/core';
 import { PushTokenReg } from '../models/push-token-reg.model';
 import { pushTokenStorageKey } from 'constants';
@@ -19,7 +21,7 @@ import { debugRole } from 'constants';
 import { RequestsService } from './requests.service';
 import { Router } from '@angular/router';
 
-const { PushNotifications, Storage, Device, Toast, Modals } = Plugins;
+const { PushNotifications, LocalNotifications, Storage, Device, Toast, Modals } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -38,10 +40,37 @@ export class PushRegistarService {
     private authService: AuthService) {
     }
 
+  private registerActionTypes() {
+    // const yoyoSelfTestAction: LocalNotificationAction = {
+    //   id: 'FUNNY_BUNNY',
+    //   title: 'Funny Bunny 🐰',
+    //   foreground: true
+    // };
+
+    const selfTestActionType: LocalNotificationActionType = {
+      id: 'SELF_TEST',
+      actions: [
+        {
+          id: 'FUNNY_BUNNY',
+          title: 'Funny Bunny 🐰',
+          foreground: true
+        } as LocalNotificationAction
+      ]
+    };
+
+    LocalNotifications.registerActionTypes({ types: [
+      selfTestActionType
+    ]});
+  }
+
   /**
    * Attempt to initialize push notifications on devices which are supported by the BendroCorp service.
    */
   async initPushNotifications() {
+    // register the types of actions we can do
+    this.registerActionTypes();
+
+    // see if the user is in the push debug role
     this.pushDebug = await this.authService.hasClaim(debugRole);
 
     if (this.platform.is('capacitor') || this.platform.is('cordova')) {
