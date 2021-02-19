@@ -161,6 +161,13 @@ export class PushRegistarService {
           // notification.notification.data.variable_here
           console.log(notification.actionId);
 
+          if (this.pushDebug) {
+            Toast.show({
+              text: 'pushNotificationActionPerformed fired',
+              duration: 'long'
+            });
+          }
+
           // debug
           if (this.pushDebug) {
             Toast.show({
