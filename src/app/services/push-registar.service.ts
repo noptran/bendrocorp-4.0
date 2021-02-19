@@ -58,8 +58,103 @@ export class PushRegistarService {
       ]
     };
 
+    const alertNoticeActionType: LocalNotificationActionType = {
+      id: 'ALERT_NOTICE',
+      actions: [
+        {
+          id: 'VIEW_ALERT',
+          title: 'View Alert',
+          foreground: true
+        }
+      ]
+    };
+
+    const profileNoticeActionType: LocalNotificationActionType = {
+      id: 'PROFILE_NOTICE',
+      actions: [
+        {
+          id: 'VIEW_PROFILE',
+          title: 'View Profile',
+          foreground: true
+        }
+      ]
+    };
+
+    const calendarActionType: LocalNotificationActionType = {
+      id: 'CALENDAR_EVENT',
+      actions: [
+        {
+          id: 'VIEW_EVENT',
+          title: 'View Event',
+          foreground: true
+        }
+      ]
+    };
+
+    const newsPostedActionType: LocalNotificationActionType = {
+      id: 'NEWS_POSTED',
+      actions: [
+        {
+          id: 'VIEW_ARTICLE',
+          title: 'View Article',
+          foreground: true
+        }
+      ]
+    };
+
+    const approvalChangeActionType: LocalNotificationActionType = {
+      id: 'APPROVAL_CHANGE',
+      actions: [
+        {
+          id: 'VIEW_APPROVAL',
+          title: 'View Approval',
+          foreground: true
+        }
+      ]
+    };
+
+    // for new approvals where the user needs to take some kind of action
+    const approvalActionType: LocalNotificationActionType = {
+      id: 'APPROVAL',
+      actions: [
+        {
+          id: 'VIEW_APPROVAL',
+          title: 'View Approval',
+          foreground: true
+        },
+        {
+          id: 'APPROVE_APPROVAL',
+          title: 'Approve'
+        },
+        {
+          id: 'DENY_APPROVAL',
+          title: 'Deny',
+          destructive: true
+        }
+      ]
+    };
+
+    const viewApplicationActionType: LocalNotificationActionType = {
+      id: 'VIEW_APPLICATION',
+      actions: [
+        {
+          id: 'PROFILE_360',
+          title: 'View Application',
+          foreground: true
+        }
+      ]
+    };
+
+    // register all of the actions
     LocalNotifications.registerActionTypes({ types: [
-      selfTestActionType
+      selfTestActionType,
+      alertNoticeActionType,
+      profileNoticeActionType,
+      calendarActionType,
+      newsPostedActionType,
+      approvalChangeActionType,
+      approvalActionType,
+      viewApplicationActionType
     ]});
   }
 
