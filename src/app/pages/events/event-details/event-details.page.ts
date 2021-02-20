@@ -117,7 +117,6 @@ export class EventDetailsPage implements OnInit {
         Toast.show({
           text: `Provided attendence type ${typeId} out of accepted range!`
         });
-        // this.messageService.alert('Something went wrong. Please try again later!');
       }
     }
   }
