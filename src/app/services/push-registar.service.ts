@@ -40,7 +40,7 @@ export class PushRegistarService {
     private authService: AuthService) {
     }
 
-  private async registerActionTypes() {
+  async registerPushActionTypesAndListeners() {
     // const yoyoSelfTestAction: LocalNotificationAction = {
     //   id: 'FUNNY_BUNNY',
     //   title: 'Funny Bunny 🐰',
@@ -156,6 +156,97 @@ export class PushRegistarService {
       approvalActionType,
       viewApplicationActionType
     ]});
+
+    // Show us the notification payload if the app is open on our device
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        // alert('Push received: ' + JSON.stringify(notification));
+      }
+    );
+
+    // Method called when tapping on a notification
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        // alert('Push action performed: ' + JSON.stringify(notification));
+        // notification.actionId
+        // notification.notification.data.variable_here
+        console.log(notification.actionId);
+
+        if (this.pushDebug) {
+          Toast.show({
+            text: 'pushNotificationActionPerformed fired',
+            duration: 'long'
+          });
+        }
+
+        // debug
+        if (this.pushDebug) {
+          Toast.show({
+            text: notification.actionId + ' ' + notification.notification.click_action
+          });
+        }
+
+        // handle action
+        const data = notification.notification.data;
+        switch (notification.actionId) {
+          case 'FUNNY_BUNNY':
+            this.router.navigateByUrl(`/profiles/${data.profile_id}`);
+            break;
+          case 'VIEW_ALERT':
+            this.router.navigateByUrl(`/alerts/${data.alert_id}`);
+            break;
+          case 'VIEW_PROFILE':
+            this.router.navigateByUrl(`/profiles/${data.profile_id}`);
+            break;
+          case 'VIEW_EVENT':
+            this.router.navigateByUrl(`/profiles/${data.event_id}`);
+            break;
+          case 'VIEW_ARTICLE':
+            this.router.navigateByUrl(`/news/${data.article_id}`);
+            break;
+          case 'VIEW_APPROVAL':
+            this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+            break;
+          case 'APPROVE_APPROVAL':
+            // 4
+            this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+              if (!(results instanceof HttpErrorResponse)) {
+                this.requestService.submit_approval(results.approval_id, 4).subscribe((iResults) => {
+                  if (!(results instanceof HttpErrorResponse)) {
+                    this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  } else {
+                    this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  }
+                });
+              } else {
+                this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+              }
+            });
+            break;
+          case 'DENY_APPROVAL':
+            // 5
+            this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+              if (!(results instanceof HttpErrorResponse)) {
+                this.requestService.submit_approval(results.approval_id, 5).subscribe((iResults) => {
+                  if (!(results instanceof HttpErrorResponse)) {
+                    this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  } else {
+                    this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  }
+                });
+              } else {
+                this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+              }
+            });
+            break;
+          case 'PROFILE_360':
+            this.router.navigateByUrl(`/profiles/${data.profile_id}/application`);
+            break;
+          default:
+            return;
+        }
+      }
+    );
   }
 
   /**
@@ -163,7 +254,7 @@ export class PushRegistarService {
    */
   async initPushNotifications() {
     // register the types of actions we can do
-    await this.registerActionTypes();
+    // await this.registerPushActionTypesAndListeners();
 
     // see if the user is in the push debug role
     this.pushDebug = await this.authService.hasClaim(debugRole);
@@ -267,97 +358,6 @@ export class PushRegistarService {
           });
 
           await Storage.remove({ key: pushTokenStorageKey });
-        }
-      );
-
-      // Show us the notification payload if the app is open on our device
-      PushNotifications.addListener('pushNotificationReceived',
-        (notification: PushNotification) => {
-          // alert('Push received: ' + JSON.stringify(notification));
-        }
-      );
-
-      // Method called when tapping on a notification
-      PushNotifications.addListener('pushNotificationActionPerformed',
-        (notification: PushNotificationActionPerformed) => {
-          // alert('Push action performed: ' + JSON.stringify(notification));
-          // notification.actionId
-          // notification.notification.data.variable_here
-          console.log(notification.actionId);
-
-          if (this.pushDebug) {
-            Toast.show({
-              text: 'pushNotificationActionPerformed fired',
-              duration: 'long'
-            });
-          }
-
-          // debug
-          if (this.pushDebug) {
-            Toast.show({
-              text: notification.actionId + ' ' + notification.notification.click_action
-            });
-          }
-
-          // handle action
-          const data = notification.notification.data;
-          switch (notification.actionId) {
-            case 'FUNNY_BUNNY':
-              this.router.navigateByUrl(`/profiles/${data.profile_id}`);
-              break;
-            case 'VIEW_ALERT':
-              this.router.navigateByUrl(`/alerts/${data.alert_id}`);
-              break;
-            case 'VIEW_PROFILE':
-              this.router.navigateByUrl(`/profiles/${data.profile_id}`);
-              break;
-            case 'VIEW_EVENT':
-              this.router.navigateByUrl(`/profiles/${data.event_id}`);
-              break;
-            case 'VIEW_ARTICLE':
-              this.router.navigateByUrl(`/news/${data.article_id}`);
-              break;
-            case 'VIEW_APPROVAL':
-              this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-              break;
-            case 'APPROVE_APPROVAL':
-              // 4
-              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
-                if (!(results instanceof HttpErrorResponse)) {
-                  this.requestService.submit_approval(results.approval_id, 4).subscribe((iResults) => {
-                    if (!(results instanceof HttpErrorResponse)) {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    } else {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    }
-                  });
-                } else {
-                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                }
-              });
-              break;
-            case 'DENY_APPROVAL':
-              // 5
-              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
-                if (!(results instanceof HttpErrorResponse)) {
-                  this.requestService.submit_approval(results.approval_id, 5).subscribe((iResults) => {
-                    if (!(results instanceof HttpErrorResponse)) {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    } else {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    }
-                  });
-                } else {
-                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                }
-              });
-              break;
-            case 'PROFILE_360':
-              this.router.navigateByUrl(`/profiles/${data.profile_id}/application`);
-              break;
-            default:
-              return;
-          }
         }
       );
     }

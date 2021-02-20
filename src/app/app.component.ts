@@ -178,6 +178,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.statusBar.styleDefault();
       // this.splashScreen.hide();
       SplashScreen.hide();
+
+      await this.push.registerPushActionTypesAndListeners();
     });
   }
 
