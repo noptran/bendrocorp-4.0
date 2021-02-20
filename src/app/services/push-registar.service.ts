@@ -40,7 +40,7 @@ export class PushRegistarService {
     private authService: AuthService) {
     }
 
-  private registerActionTypes() {
+  private async registerActionTypes() {
     // const yoyoSelfTestAction: LocalNotificationAction = {
     //   id: 'FUNNY_BUNNY',
     //   title: 'Funny Bunny 🐰',
@@ -146,7 +146,7 @@ export class PushRegistarService {
     };
 
     // register all of the actions
-    LocalNotifications.registerActionTypes({ types: [
+    await LocalNotifications.registerActionTypes({ types: [
       selfTestActionType,
       alertNoticeActionType,
       profileNoticeActionType,
@@ -163,7 +163,7 @@ export class PushRegistarService {
    */
   async initPushNotifications() {
     // register the types of actions we can do
-    this.registerActionTypes();
+    await this.registerActionTypes();
 
     // see if the user is in the push debug role
     this.pushDebug = await this.authService.hasClaim(debugRole);
