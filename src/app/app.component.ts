@@ -105,6 +105,9 @@ export class AppComponent implements OnInit, OnDestroy {
       // intialize settings
       await this.settings.intializeSettingsConfig();
 
+      // register listeners and action types
+      await this.push.registerPushActionTypes();
+
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
         this.fetchApprovals();
@@ -178,8 +181,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.statusBar.styleDefault();
       // this.splashScreen.hide();
       SplashScreen.hide();
-
-      await this.push.registerPushActionTypesAndListeners();
     });
   }
 
