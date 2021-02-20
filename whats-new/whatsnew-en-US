@@ -1,2 +1,3 @@
-- Removed some very un-needed permissions
-- Various bug fixes and performance improvements
+- Removed un-needed Android permissions
+- Added rich push notifications
+- Several performance and bug fixes
