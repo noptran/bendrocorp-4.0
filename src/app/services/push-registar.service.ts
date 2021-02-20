@@ -327,33 +327,65 @@ export class PushRegistarService {
               break;
             case 'APPROVE_APPROVAL':
               // 4
-              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+              this.requestService.fetch_approval(data.approver_id).subscribe(async (results) => {
                 if (!(results instanceof HttpErrorResponse)) {
-                  this.requestService.submit_approval(results.approval_id, 4).subscribe((iResults) => {
-                    if (!(results instanceof HttpErrorResponse)) {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    } else {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  this.requestService.submit_approval(results.approval_id, 4).subscribe(async (iResults) => {
+                    if (results instanceof HttpErrorResponse) {
+                      const notifs = await LocalNotifications.schedule({
+                        notifications: [
+                          {
+                            title: 'Action error',
+                            body: `Could not complete your approval because: ${results.error.message}`,
+                            id: 1,
+                            schedule: { at: new Date() },
+                          }
+                        ]
+                      });
                     }
                   });
                 } else {
-                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  const notifs = await LocalNotifications.schedule({
+                    notifications: [
+                      {
+                        title: 'Action error',
+                        body: `Could not complete your approval because: The approval does not exist!`,
+                        id: 1,
+                        schedule: { at: new Date() },
+                      }
+                    ]
+                  });
                 }
               });
               break;
             case 'DENY_APPROVAL':
               // 5
-              this.requestService.fetch_approval(data.approver_id).subscribe((results) => {
+              this.requestService.fetch_approval(data.approver_id).subscribe(async (results) => {
                 if (!(results instanceof HttpErrorResponse)) {
-                  this.requestService.submit_approval(results.approval_id, 5).subscribe((iResults) => {
-                    if (!(results instanceof HttpErrorResponse)) {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
-                    } else {
-                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  this.requestService.submit_approval(results.approval_id, 5).subscribe(async (iResults) => {
+                    if (results instanceof HttpErrorResponse) {
+                      const notifs = await LocalNotifications.schedule({
+                        notifications: [
+                          {
+                            title: 'Action error',
+                            body: `Could not complete your approval because: ${results.error.message}`,
+                            id: 1,
+                            schedule: { at: new Date() },
+                          }
+                        ]
+                      });
                     }
                   });
                 } else {
-                  this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
+                  const notifs = await LocalNotifications.schedule({
+                    notifications: [
+                      {
+                        title: 'Action error',
+                        body: `Could not complete your approval because: The approval does not exist!`,
+                        id: 1,
+                        schedule: { at: new Date() },
+                      }
+                    ]
+                  });
                 }
               });
               break;
