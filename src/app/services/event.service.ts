@@ -177,6 +177,11 @@ export class EventService {
     );
   }
 
+  /**
+   * Allow the current user to show they want to attend an event
+   * @param event_id The id of the event you want to set attendance for
+   * @param attendence_type_id Attending = 1, Not-Attending = 2
+   */
   setAttendence(event_id: number, attendence_type_id: number): Observable<EventAttendence> {
     return this.http.post<EventAttendence>(`${environment.baseUrl}/events/attend`, { event_id, attendence_type_id }).pipe(
       retryWithBackoff(),

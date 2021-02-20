@@ -61,6 +61,11 @@
             (click)="setAttendance(2)">Not Attending</ion-button>
         </ion-col>
       </ion-row>
+      <ion-row *ngIf="isExpired()">
+        <ion-col>
+          <ion-button (click)="certifyEvent()" expand="block">Certify Event</ion-button>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </ion-card>  
 </ion-content>

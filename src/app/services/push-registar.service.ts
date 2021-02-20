@@ -20,6 +20,7 @@ import { AuthService } from '../auth.service';
 import { debugRole } from 'constants';
 import { RequestsService } from './requests.service';
 import { Router } from '@angular/router';
+import { EventService } from './event.service';
 
 const { PushNotifications, LocalNotifications, Storage, Device, Toast, Modals } = Plugins;
 
@@ -36,6 +37,7 @@ export class PushRegistarService {
     // private push: Push,
     private userService: UserService,
     private requestService: RequestsService,
+    private eventService: EventService,
     private appBadgeService: AppBadgeService,
     private authService: AuthService) {
     }
@@ -77,6 +79,28 @@ export class PushRegistarService {
             id: 'VIEW_PROFILE',
             title: 'View Profile',
             foreground: true
+          }
+        ]
+      };
+
+      const newCalendarActionType: LocalNotificationActionType = {
+        id: 'NEW_CALENDAR_EVENT',
+        actions: [
+          {
+            id: 'VIEW_EVENT',
+            title: 'View Event',
+            foreground: true
+          },
+          {
+            id: 'JOIN_EVENT',
+            title: 'Attending',
+            foreground: true
+          },
+          {
+            id: 'DECLINE_EVENT',
+            title: 'Not Attending',
+            foreground: true,
+            destructive: true
           }
         ]
       };
@@ -154,6 +178,7 @@ export class PushRegistarService {
         alertNoticeActionType,
         profileNoticeActionType,
         calendarActionType,
+        newCalendarActionType,
         newsPostedActionType,
         approvalChangeActionType,
         approvalActionType,
@@ -319,7 +344,29 @@ export class PushRegistarService {
               this.router.navigateByUrl(`/profiles/${data.profile_id}`);
               break;
             case 'VIEW_EVENT':
-              this.router.navigateByUrl(`/profiles/${data.event_id}`);
+              this.router.navigateByUrl(`/events/${data.event_id}`);
+              break;
+            case 'JOIN_EVENT':
+              this.eventService.setAttendence(data.event_id, 1).subscribe((results) => {
+                if (!(results instanceof HttpErrorResponse)) {
+                  Toast.show({
+                    text: 'Marked as attending'
+                  });
+                }
+
+                this.router.navigateByUrl(`/events/${data.event_id}`);
+              });
+              break;
+            case 'DECLINE_EVENT':
+              this.eventService.setAttendence(data.event_id, 2).subscribe((results) => {
+                if (!(results instanceof HttpErrorResponse)) {
+                  Toast.show({
+                    text: 'Marked as not attending'
+                  });
+                }
+
+                this.router.navigateByUrl(`/events/${data.event_id}`);
+              });
               break;
             case 'VIEW_ARTICLE':
               this.router.navigateByUrl(`/news/${data.article_id}`);

@@ -5,6 +5,7 @@ import { Toast } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
 import { AuthService } from 'src/app/auth.service';
+import { CertifyEventComponent } from 'src/app/components/events/certify-event/certify-event.component';
 import { EventAddUpdateComponent } from 'src/app/components/events/event-add-update/event-add-update.component';
 import { Event } from 'src/app/models/event.model';
 import { EventService } from 'src/app/services/event.service';
@@ -19,6 +20,7 @@ export class EventDetailsPage implements OnInit {
   eventId: number;
   userId: number;
   openedAsModal = false;
+  isAdmin: boolean;
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
@@ -120,6 +122,18 @@ export class EventDetailsPage implements OnInit {
     }
   }
 
+  async certifyEvent() {
+    if (this.isAdmin) {
+      const modal = await this.modalController.create({
+        component: CertifyEventComponent,
+        componentProps: {
+          event: this.event
+        }
+      });
+      return await modal.present();
+    }
+  }
+
   getEvent(event?: any) {
     if (this.eventId) {
       this.eventService.fetch(this.eventId).subscribe((results) => {
@@ -141,6 +155,7 @@ export class EventDetailsPage implements OnInit {
   async ngOnInit() {
     this.eventId = parseInt(this.route.snapshot.paramMap.get('id'), null);
     this.userId = (await this.authService.retrieveUserSession()).id;
+    this.isAdmin = await this.authService.hasClaim(19);
 
     // if the event is not loaded (ie we came to this page directly) then load it
     if (!this.event) {

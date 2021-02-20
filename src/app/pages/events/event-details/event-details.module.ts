@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EventDetailsPageRoutingModule } from './event-details-routing.module';
 
 import { EventDetailsPage } from './event-details.page';
+import { CertifyEventComponentModule } from 'src/app/components/events/certify-event/certify-event.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EventDetailsPageRoutingModule
+    EventDetailsPageRoutingModule,
+    CertifyEventComponentModule
   ],
   declarations: [EventDetailsPage]
 })

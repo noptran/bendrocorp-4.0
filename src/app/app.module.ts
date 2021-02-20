@@ -54,7 +54,7 @@ import { SelectAvatarComponentModule } from './components/misc/select-avatar/sel
     UpdateAvatarComponent,
     SettingsComponent,
     EventAddUpdateComponent,
-    CertifyEventComponent,
+    // CertifyEventComponent,
     EventAddUpdateComponent,
     CompleteJobComponent,
     AddUpdateJobComponent,
