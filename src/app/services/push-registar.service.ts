@@ -125,11 +125,13 @@ export class PushRegistarService {
           },
           {
             id: 'APPROVE_APPROVAL',
-            title: 'Approve'
+            title: 'Approve',
+            foreground: true
           },
           {
             id: 'DENY_APPROVAL',
             title: 'Deny',
+            foreground: true,
             destructive: true
           }
         ]
@@ -341,6 +343,8 @@ export class PushRegistarService {
                           }
                         ]
                       });
+                    } else {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
                     }
                   });
                 } else {
@@ -373,6 +377,8 @@ export class PushRegistarService {
                           }
                         ]
                       });
+                    } else {
+                      this.router.navigateByUrl(`approvals/details/${data.approver_id}`);
                     }
                   });
                 } else {
