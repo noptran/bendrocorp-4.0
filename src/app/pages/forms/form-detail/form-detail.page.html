@@ -39,20 +39,20 @@
                 <ion-text *ngIf="report.draft && field.required" color="danger">&nbsp; *</ion-text>
               </ion-label>
               <!-- display text 1 -->
-              <ion-input debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 1" [required]="field.required" placeholder="Add Text" [(ngModel)]="field.field_value.value"
+              <ion-input debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 1 && !field.hidden" [required]="field.required" placeholder="Add Text" [(ngModel)]="field.field_value.value"
               autocapitalize
               name="star_object_title"></ion-input>
               <!-- display long text (Text area) 2 -->
-              <ion-textarea debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 2" [required]="field.required" [(ngModel)]="field.field_value.value" placeholder="Add text"
+              <ion-textarea debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 2 && !field.hidden" [required]="field.required" [(ngModel)]="field.field_value.value" placeholder="Add text"
                 autoGrow autocapitalize name="star_object_description"></ion-textarea>
               <!-- Display number 3 -->
-              <ion-input debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 3" [required]="field.required" placeholder="Add Text" [(ngModel)]="field.field_value.value"
+              <ion-input debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 3 && !field.hidden" [required]="field.required" placeholder="Add Text" [(ngModel)]="field.field_value.value"
                 autocapitalize
                 name="star_object_title"></ion-input>
               <!-- Display date 4 -->
-              <ion-datetime debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 4" [required]="field.required" placeholder="Add Date" displayFormat="D MMM YYYY H:mm" [(ngModel)]="field.field_value.value"></ion-datetime>
+              <ion-datetime debounce="700" (ionChange)="updateValues()" *ngIf="report.draft && field.field_presentation_type_id == 4 && !field.hidden" [required]="field.required" placeholder="Add Date" displayFormat="D MMM YYYY H:mm" [(ngModel)]="field.field_value.value"></ion-datetime>
               <!-- display field 5 -->
-              <ionic-selectable *ngIf="report.draft && field.field_presentation_type_id == 5"
+              <ionic-selectable *ngIf="report.draft && field.field_presentation_type_id == 5 && !field.hidden"
                 [(ngModel)]="field.field_value.descriptor_value"
                 [items]="field.field.descriptors"
                 itemValueField="id"
