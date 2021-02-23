@@ -61,7 +61,8 @@
             (click)="setAttendance(2)">Not Attending</ion-button>
         </ion-col>
       </ion-row>
-      <ion-row *ngIf="isExpired()">
+      <!-- keep this at the bottom -->
+      <ion-row *ngIf="isExpired() && (!event.certified && !event.submitted_for_certification)">
         <ion-col>
           <ion-button (click)="certifyEvent()" expand="block">Certify Event</ion-button>
         </ion-col>
