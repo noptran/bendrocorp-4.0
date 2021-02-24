@@ -15,9 +15,9 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: bendrocorp-app-v1-deployment
-        image: ghcr.io/bendrocorp/bendrocorp/bendrocorp-app-v4:VERSION_HERE #VERSION_HERE
+        image: ghcr.io/bendrocorp/bendrocorp-app-v4:latest #VERSION_HERE
         imagePullPolicy: Always
         ports:
           - containerPort: 80
       imagePullSecrets:
-      - name: dockerconfigjson-github-com
+      - name: github-docker-secret
