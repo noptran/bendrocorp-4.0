@@ -15,7 +15,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: bendrocorp-app-v1-deployment
-        image: docker.pkg.github.com/bendrocorp/bendrocorp-4.0/bendrocorp-app-v4:VERSION_HERE #VERSION_HERE
+        image: ghcr.io/bendrocorp/bendrocorp/bendrocorp-app-v4:VERSION_HERE #VERSION_HERE
         imagePullPolicy: Always
         ports:
           - containerPort: 80
