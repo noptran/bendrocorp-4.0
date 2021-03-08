@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TimeSpan } from 'ng-timespan';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 import { CertifyEventComponent } from 'src/app/components/events/certify-event/certify-event.component';
 import { EventAddUpdateComponent } from 'src/app/components/events/event-add-update/event-add-update.component';
@@ -15,7 +16,7 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './event-details.page.html',
   styleUrls: ['./event-details.page.scss'],
 })
-export class EventDetailsPage implements OnInit {
+export class EventDetailsPage implements OnInit, OnDestroy {
   @Input() event: Event;
   eventId: number;
   userId: number;
@@ -24,6 +25,9 @@ export class EventDetailsPage implements OnInit {
 
   // loading indicator
   loadingIndicator: HTMLIonLoadingElement;
+
+  // update subscription
+  updateSubscription: Subscription;
 
   constructor(
     private eventService: EventService,
@@ -38,6 +42,11 @@ export class EventDetailsPage implements OnInit {
       console.log('details transferred');
       console.log(this.event);
     }
+
+    this.updateSubscription = this.eventService.dataRefreshAnnounced$.subscribe(() => {
+      // go get the event again
+      this.getEvent();
+    });
   }
 
   openEventDetailsPage()
@@ -164,6 +173,12 @@ export class EventDetailsPage implements OnInit {
       await this.loadingIndicator.present();
 
       this.getEvent();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
     }
   }
 
