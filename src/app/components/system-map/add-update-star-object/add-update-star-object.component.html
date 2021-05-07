@@ -63,7 +63,7 @@
         [(ngModel)]="starObject.parent"
         [items]="parentFilteredStarObjects"
         itemValueField="id"
-        itemTextField="id"
+        itemTextField="title"
         [canSearch]="true"
         (onChange)="parentChange($event)">
       </ionic-selectable>

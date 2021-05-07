@@ -191,7 +191,7 @@ export class ProfileDetailsPage implements OnInit, OnDestroy {
 
     this.ceoRights = await this.authService.hasClaim(9);
     console.log(`ceo rights ${this.ceoRights}`);
-    
+
     this.hrRights = (await this.authService.hasClaim(12) || await this.authService.hasClaim(9));
     console.log(`hr rights ${this.hrRights}`);
 

@@ -209,6 +209,7 @@ export class AddUpdateStarObjectComponent implements OnInit, OnDestroy {
   clearParentSelection() {
     if (this.starObject) {
       this.starObject.parent_id = null;
+      this.starObject.parent = null;
     }
   }
 

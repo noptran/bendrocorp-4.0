@@ -8,13 +8,15 @@ import { ProfileDetailsPageRoutingModule } from './profile-details-routing.modul
 
 import { ProfileDetailsPage } from './profile-details.page';
 import { SelectAvatarComponent } from 'src/app/components/misc/select-avatar/select-avatar.component';
+import { UpdateAvatarComponentModule } from 'src/app/components/update-avatar/update-avatar.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfileDetailsPageRoutingModule
+    ProfileDetailsPageRoutingModule,
+    UpdateAvatarComponentModule
   ],
   declarations: [
     ProfileDetailsPage,
