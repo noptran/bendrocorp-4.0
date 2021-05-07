@@ -1,1 +1,3 @@
-- We fixed a few annoying bugs some of you had mentioned
+- Fixed a bug where in System Map a form was showing IDs rather than titles
+- Fixed an issue where when trying to update an avatar the modal would sometimes be blank
+- Various other minor fixes

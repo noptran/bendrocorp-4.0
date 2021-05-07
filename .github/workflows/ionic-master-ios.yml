@@ -4,8 +4,9 @@ on:
     branches: [ master ]
 
     # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+    # this does not need to run on tags
+    # tags:
+    #   - v*
 
 jobs:
   build-ios: # make sure build/ci work properly
