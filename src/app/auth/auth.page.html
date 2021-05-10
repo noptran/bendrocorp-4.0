@@ -15,14 +15,14 @@
           <img src="../../assets/bendrocorp-final.png" style="max-height: 90%; margin: 8px auto 8px auto;" alt="">
         </div>
         <ion-card-header>
-          <ion-card-title>BendroCorp<span *ngIf="isWeb"> Portal</span> Login</ion-card-title>
+          <ion-card-title style="user-select: none;" longPress (press)="showDebug()">BendroCorp<span *ngIf="isWeb"> Portal</span> Login</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div>
             <ion-list lines="full" class="ion-no-margin">
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
-                <ion-input name="username" autocomplete="email" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
+                <ion-input #email name="username" autocomplete="email" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
               </ion-item>
         
               <ion-item>
@@ -53,6 +53,7 @@
               </ion-col>
             </ion-row>
           </ion-grid>
+          <p *ngIf="showLoginDebug">{{login | json}}</p>
         </ion-card-content>
       </ion-card>
     </ion-col>

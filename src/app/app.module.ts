@@ -35,6 +35,7 @@ import { JoinSupporterComponent } from './components/donations/join-supporter/jo
 import { PasswordComponentModule } from './components/misc/password/password.module';
 import { ViewSystemImageComponent } from './components/system-map/view-system-image/view-system-image.component';
 import { FieldValueEditorModule } from './components/misc/field-value-editor/field-value-editor.module';
+import { LongPressDirective } from './directives/long-press.directive';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { FieldValueEditorModule } from './components/misc/field-value-editor/fie
     JoinSupporterComponent,
     // AddUpdateSystemImageComponent,
     ViewSystemImageComponent,
+    // LongPressDirective,
     // SystemMapListTagsComponent,
   ],
   entryComponents: [

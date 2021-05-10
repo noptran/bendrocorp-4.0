@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AuthPageRoutingModule } from './auth-routing.module';
 
 import { AuthPage } from './auth.page';
+import { LongPressDirective } from '../directives/long-press.directive';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { AuthPage } from './auth.page';
     IonicModule,
     AuthPageRoutingModule
   ],
-  declarations: [AuthPage]
+  declarations: [AuthPage, LongPressDirective]
 })
 export class AuthPageModule {}

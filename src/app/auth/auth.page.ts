@@ -1,25 +1,36 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { GestureController, Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { LoginRequest } from '../models/user.model';
 import { Plugins } from '@capacitor/core';
 import { environment } from 'src/environments/environment';
+import { LongPressDirective } from '../directives/long-press.directive';
 const { Toast, Device } = Plugins;
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
+  viewProviders: [LongPressDirective]
 })
 export class AuthPage implements OnInit {
-  login: LoginRequest = {} as LoginRequest;
+  @ViewChild('email') emailElement: ElementRef;
+  login: LoginRequest = {
+    email: '',
+    password: ''
+  } as LoginRequest;
+
+  // vars
   isWeb: boolean;
+  showLoginDebug = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private platform: Platform
+    private platform: Platform,
+    private gestureCtrl: GestureController
   ) { }
 
   /**
@@ -50,8 +61,17 @@ export class AuthPage implements OnInit {
     });
   }
 
+  showDebug() {
+    console.log('show debug test');
+    
+    this.showLoginDebug = !this.showLoginDebug;
+  }
+
   ionViewWillEnter() {
-    this.login = {} as LoginRequest;
+    this.login = {
+      email: '',
+      password: ''
+    } as LoginRequest;
   }
 
   async ngOnInit() {
@@ -61,5 +81,4 @@ export class AuthPage implements OnInit {
       console.log(uuid);
     }
   }
-
 }
