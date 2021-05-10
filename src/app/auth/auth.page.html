@@ -22,13 +22,12 @@
             <ion-list lines="full" class="ion-no-margin">
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
-                <ion-input #email name="username" autocomplete="email" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
+                <ion-input #email name="email" autocomplete="email" [(ngModel)]="login.email" placeholder="Enter your email" type="email"></ion-input>
               </ion-item>
         
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input *ngIf="!isiOS" name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
-                <ion-input *ngIf="isiOS" name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password"></ion-input>
+                <ion-input name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
               </ion-item>
         
               <ion-item>
