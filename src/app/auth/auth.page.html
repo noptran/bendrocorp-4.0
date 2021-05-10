@@ -27,7 +27,8 @@
         
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
+                <ion-input *ngIf="!isiOS" name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password" type="password"></ion-input>
+                <ion-input *ngIf="isiOS" name="password" autocomplete="current-password" [(ngModel)]="login.password" placeholder="Enter your password"></ion-input>
               </ion-item>
         
               <ion-item>

@@ -24,6 +24,7 @@ export class AuthPage implements OnInit {
 
   // vars
   isWeb: boolean;
+  isiOS: boolean;
   showLoginDebug = false;
 
   constructor(
@@ -65,7 +66,6 @@ export class AuthPage implements OnInit {
 
   showDebug() {
     console.log('show debug test');
-    
     this.showLoginDebug = !this.showLoginDebug;
   }
 
@@ -78,6 +78,8 @@ export class AuthPage implements OnInit {
 
   async ngOnInit() {
     this.isWeb = this.platform.is('desktop');
+    this.isiOS = this.platform.is('ios');
+
     const { uuid } = await Device.getInfo();
     if (!environment.production) {
       console.log(uuid);
