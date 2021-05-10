@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GestureController, Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
@@ -30,7 +30,8 @@ export class AuthPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private platform: Platform,
-    private gestureCtrl: GestureController
+    private gestureCtrl: GestureController,
+    private ref: ChangeDetectorRef
   ) { }
 
   /**
@@ -39,6 +40,7 @@ export class AuthPage implements OnInit {
   async doLogin()
   {
     const { uuid, operatingSystem, platform } = await Device.getInfo();
+    this.ref.detectChanges();
     this.authService.login(
       {
         email: this.login.email,
