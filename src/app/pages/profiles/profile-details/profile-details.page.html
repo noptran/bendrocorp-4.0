@@ -27,7 +27,7 @@
 
               <!-- no edit page -->
               <div *ngIf="!canEdit">
-                <img style="border-radius: 50%; max-height: 200px;" src="{{character.avatar_url}}">
+                <img style="border-radius: 50%; max-height: 200px;" src="{{character.avatar_url}}" onerror="this.src='../../../../assets/imgs/missing-avatar.png'">
               </div>
             </div>
             <ion-card-title>{{character.full_name}}</ion-card-title>
