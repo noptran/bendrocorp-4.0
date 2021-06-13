@@ -1,3 +1,2 @@
-- Fixed a bug where in System Map a form was showing IDs rather than titles
-- Fixed an issue where when trying to update an avatar the modal would sometimes be blank
-- Various other minor fixes
+- Fixed an issue with user avatars in application comments might not load
+- Other various fixes

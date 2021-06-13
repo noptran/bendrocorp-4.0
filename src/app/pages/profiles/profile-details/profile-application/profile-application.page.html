@@ -37,7 +37,7 @@
     <ion-item *ngIf="character.application.comments.length == 0">No application comments</ion-item>
     <ion-item *ngFor="let comment of character.application.comments">
       <ion-avatar slot="start">
-        <img src="{{comment.avatar_url}}" alt="">
+        <img src="{{comment.avatar_url}}" onerror="this.src='../../../../../assets/imgs/missing-avatar.png'" alt="">
       </ion-avatar>
       <ion-label>
         <h2>{{comment.commenter_name}}</h2>
