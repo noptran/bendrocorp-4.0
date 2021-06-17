@@ -47,7 +47,7 @@ import { LongPressDirective } from './directives/long-press.directive';
     CompleteJobComponent,
     AddUpdateJobComponent,
     AddUpdateFlightLogComponent,
-    AddUpdateOffenderReportComponent,
+    // AddUpdateOffenderReportComponent,
     NewsDetailComponent,
     // SelectAvatarComponent,
     // PasswordComponent, // ??

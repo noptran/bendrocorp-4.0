@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="dismissWithData()" [disabled]="!formValid()">Add</ion-button>
+    </ion-buttons>
+    <ion-title>Add Tag</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="floating">Tag</ion-label>
+    <!--  [pattern]="[A-Za-z0-9 ]" -->
+    <ion-input (keydown.enter)="tryEnterSend($event)" required placeholder="Enter a tag" [(ngModel)]="tagText"></ion-input>
+    <p><small>Only enter alphanumeric characters and spaces. Note that spaces will be transformed into dashes.</small></p>
+  </ion-item>
+</ion-content>

@@ -8,6 +8,9 @@ import { AddUpdateOffenderReportComponent } from 'src/app/components/offender-re
 import { Offender, OffenderReport } from 'src/app/models/offender.model';
 import { OffenderService } from 'src/app/services/offender.service';
 import { Plugins } from '@capacitor/core';
+import { BendroSafeService } from 'src/app/services/bendro-safe.service';
+import { BendroSafeSearchResult } from 'src/app/models/safe-search-result';
+import { BendroSafeSearchResultComponent } from 'src/app/components/bendro-safe/bendro-safe-search-result/bendro-safe-search-result.component';
 
 const { Modals, Toast } = Plugins;
 
@@ -28,6 +31,11 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
   loadingIndicator: any;
   isAdmin: boolean;
 
+  // safe search
+  searchHandle: string;
+  bendroSearchRunning = false;
+  bendroSearchResult: BendroSafeSearchResult;
+
   constructor(
     private offenderService: OffenderService,
     private authService: AuthService,
@@ -35,7 +43,8 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
     private nav: NavController,
     private modalController: ModalController,
     private loading: LoadingController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private bendroSafe: BendroSafeService,
   ) { }
 
   openOffenderDetails(offender: Offender) {
@@ -78,68 +87,105 @@ export class OffenderReportsPage implements OnInit, OnDestroy {
     this.router.navigate(['reports'], navigationExtras);
   }
 
-  doRefresh(event: any) {
-    this.fetchOffenders(event);
-  }
+  // doRefresh(event: any) {
+  //   this.fetchOffenders(event);
+  // }
 
-  async fetchOffenders(event?: any) {
-    this.offenderService.list().subscribe(async (results) => {
-      if (!(results instanceof HttpErrorResponse)) {
-        this.offenders = results.sort((a, b) => a.offender_handle.localeCompare(b.offender_handle));
-        console.log(this.offenders);
-      }
+  async goSearch(event?: any) {
+    console.log(event);
 
-      if (!this.initialDataLoaded) {
-        this.initialDataLoaded = true;
-        await this.loading.dismiss();
-      }
-
-      if (event) {
-        event.target.complete();
-      }
-    });
-  }
-
-  async fetchOffenderReports() {
-
-    if (this.isAdmin) {
-      // then get all of the reports
-      this.offenderService.list_admin().subscribe((results) => {
-        if (!(results instanceof HttpErrorResponse)) {
-          this.adminReports = results;
-          this.unAnsweredReports = results.filter(x => !x.report_approved && x.submitted_for_approval);
-          this.myReports = results.filter(x => x.created_by_id === this.userId);
-        }
+    if (this.searchHandle) {
+      // show the ticker
+      this.loadingIndicator = await this.loading.create({
+        message: 'Searching'
       });
-    } else {
-      this.offenderService.list_mine().subscribe((results) => {
-        if (!(results instanceof HttpErrorResponse)) {
-          this.myReports = results;
+      await this.loadingIndicator.present();
+
+      //
+      this.bendroSearchRunning = true;
+      this.bendroSafe.search(this.searchHandle).subscribe(async (result) => {
+        if (!(result instanceof HttpErrorResponse)) {
+          console.log(result);
+          this.bendroSearchResult = result;
+
+          if (result && result.rsi_data.rsi_code == 200) {
+            const modal = await this.modalController.create({
+              component: BendroSafeSearchResultComponent,
+              componentProps: {
+                searchResult: result
+              }
+            });
+            await modal.present();
+          } else {
+            await Toast.show({text: `No data found for ${this.searchHandle}`});
+          }
         }
+
+        this.bendroSearchRunning = false;
+        await this.loadingIndicator.dismiss();
       });
     }
   }
 
-  async addOffenderReport(event?: Event) {
-    const modal = await this.modalController.create({
-      component: AddUpdateOffenderReportComponent
-    });
-    return await modal.present();
-  }
+  // async fetchOffenders(event?: any) {
+  //   this.offenderService.list().subscribe(async (results) => {
+  //     if (!(results instanceof HttpErrorResponse)) {
+  //       this.offenders = results.sort((a, b) => a.offender_handle.localeCompare(b.offender_handle));
+  //       console.log(this.offenders);
+  //     }
+
+  //     if (!this.initialDataLoaded) {
+  //       this.initialDataLoaded = true;
+  //       await this.loading.dismiss();
+  //     }
+
+  //     if (event) {
+  //       event.target.complete();
+  //     }
+  //   });
+  // }
+
+  // async fetchOffenderReports() {
+
+  //   if (this.isAdmin) {
+  //     // then get all of the reports
+  //     this.offenderService.list_admin().subscribe((results) => {
+  //       if (!(results instanceof HttpErrorResponse)) {
+  //         this.adminReports = results;
+  //         this.unAnsweredReports = results.filter(x => !x.report_approved && x.submitted_for_approval);
+  //         this.myReports = results.filter(x => x.created_by_id === this.userId);
+  //       }
+  //     });
+  //   } else {
+  //     this.offenderService.list_mine().subscribe((results) => {
+  //       if (!(results instanceof HttpErrorResponse)) {
+  //         this.myReports = results;
+  //       }
+  //     });
+  //   }
+  // }
+
+  // async addOffenderReport(event?: Event) {
+  //   const modal = await this.modalController.create({
+  //     component: AddUpdateOffenderReportComponent
+  //   });
+  //   return await modal.present();
+  // }
 
   async ngOnInit() {
     // get required user data
     this.userId = (await this.authService.retrieveUserSession()).id;
     this.isAdmin = await this.authService.hasClaim(16);
 
-    this.loadingIndicator = await this.loading.create({
-      message: 'Loading'
-    });
-    await this.loadingIndicator.present();
+    // this.loadingIndicator = await this.loading.create({
+    //   message: 'Loading'
+    // });
+    // await this.loadingIndicator.present();
 
     // fetch the data
-    this.fetchOffenders();
-    this.fetchOffenderReports();
+    // this.fetchOffenders();
+    // this.fetchOffenderReports();
+    this.initialDataLoaded = true;
   }
 
   ngOnDestroy() {

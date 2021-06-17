@@ -1,0 +1,10 @@
+<ion-item (click)="openIncidentReport()" detail>
+  <ion-avatar slot="start">
+    <img src="{{incidentReport.rsi_avatar_link}}" onerror="this.src='../../../../assets/imgs/missing-avatar.png'">
+  </ion-avatar>
+  <ion-label>
+    <h2>{{incidentReport.rsi_handle}}</h2>
+    <p>{{incidentReport.created_at | date: 'MM/dd/yyyy hh:mm a (Z)'}}</p>
+  </ion-label>
+  <ion-label slot="end" style="text-align: right; margin-right: 10px;"><ion-badge [color]="itemColor">{{incidentReport.approval_status.title | uppercase}}</ion-badge></ion-label>      
+</ion-item>

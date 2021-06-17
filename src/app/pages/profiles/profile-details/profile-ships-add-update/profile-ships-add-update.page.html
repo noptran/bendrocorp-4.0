@@ -20,7 +20,7 @@
   <ion-item>
     <ion-label>Ship Type {{ownedShip.ship_id}}</ion-label>
     <ion-select okText="Select" cancelText="Cancel" [(ngModel)]="ownedShip.ship_id">
-      <ion-select-option *ngFor="let ship of shipTypes" [value]="ship.id">{{ship.name}}</ion-select-option>
+      <ion-select-option *ngFor="let ship of shipTypes" [value]="ship.id">{{ship.title}}</ion-select-option>
     </ion-select>
   </ion-item>
 </ion-content>

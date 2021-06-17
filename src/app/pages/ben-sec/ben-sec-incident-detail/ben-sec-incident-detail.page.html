@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button *ngIf="initialDataLoaded" defaultHref="{{defaultReturnPath}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Incident Report</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-incident-report-detail-content [(initialDataLoaded)]="initialDataLoaded" [(defaultReturnPath)]="defaultReturnPath"></app-incident-report-detail-content>
+</ion-content>

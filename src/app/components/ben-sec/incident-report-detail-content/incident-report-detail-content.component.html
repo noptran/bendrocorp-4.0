@@ -1,0 +1,159 @@
+<div *ngIf="initialDataLoaded">
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- top info -->
+  <ion-card>
+    <app-bendro-safe-search-result-top [searchResult]="searchResult"></app-bendro-safe-search-result-top>
+  </ion-card>
+
+  <!-- case details -->
+  <ion-list>
+    <ion-list-header>
+      Case Data
+    </ion-list-header>
+    <!-- bec sec case id -->
+    <ion-item>
+      <ion-label>
+        <h3>BecSec Case Id #</h3>
+        <p>{{incidentReport.intelligence_case_id.split('-')[0]}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- BenSec Case Officer -->
+    <ion-item>
+      <ion-label>
+        <h3>BecSec Case Officer</h3>
+        <p>{{incidentReport.intelligence_case?.assigned_to?.main_character_full_name || "No assigned officer"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- created by -->
+    <ion-item>
+      <ion-label>
+        <h3>Created By</h3>
+        <p>{{incidentReport.created_by?.main_character_full_name}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- disposition -->
+    <ion-item>
+      <ion-label>
+        <h3>Report Disposition</h3>
+        <p><ion-badge [color]="approvalColor">{{incidentReport.approval_status?.title || "No data"}}</ion-badge></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- buttons or break -->
+  <div>
+    <!-- buttons -->
+    <div *ngIf="(isSecurity && pendingState)">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="approveReport()" [disabled]="dispositionActionInProgress" color="success" expand="block">Approve</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button (click)="declineReport()" [disabled]="dispositionActionInProgress" color="danger" expand="block">Decline</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <!-- break -->
+    <br *ngIf="!(isSecurity && pendingState)" />
+  </div>
+
+  <!-- report details -->
+  <ion-list>
+    <ion-list-header>
+      Incident Report
+    </ion-list-header>
+    <!-- when it happened -->
+    <ion-item>
+      <ion-label>
+        <h3>Occured</h3>
+        <p>{{incidentReport.occured_when | date: 'MM/dd/yyyy hh:mm a (Z)' || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- handle -->
+    <ion-item>
+      <ion-label>
+        <h3>Spectrum Handle</h3>
+        <p>{{incidentReport.rsi_handle}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- description -->
+    <ion-item>
+      <ion-label>
+        <h3>Incident Description</h3>
+        <p>{{incidentReport.description || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- where -->
+    <ion-item>
+      <ion-label>
+        <h3>Where</h3>
+        <p>{{incidentReport.star_object?.title || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- force used -->
+    <ion-item>
+      <ion-label>
+        <h3>Force Used by Employee</h3>
+        <p>{{incidentReport.force_used?.title || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- infractions -->
+    <ion-item>
+      <ion-label>
+        <h3>Infractions</h3>
+        <p>{{mappedInfractions() || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- ship used -->
+    <ion-item>
+      <ion-label>
+        <h3>Ship Used by {{incidentReport.rsi_handle}}</h3>
+        <p>{{incidentReport.ship_used?.title || "No data"}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <br />
+
+  <ion-list>
+    <ion-list-header>
+      Report Comments
+    </ion-list-header>
+    <ion-item *ngIf="!incidentReport.comments || incidentReport.comments?.length == 0">No comments for this report.</ion-item>
+    <ion-item *ngFor="let comment of incidentReport.comments">
+      <ion-avatar style="margin-right: 8px;">
+        <img class="avatar" src="{{comment.created_by.main_character_avatar_url}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'" alt="">
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <p>{{comment.created_at | date: 'MM/dd/yyyy hh:mm a (Z)'}}</p>
+        <h2>{{comment.created_by.main_character_full_name}}</h2>
+        <p>{{comment.comment}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- action buttons -->
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button *ngIf="isBenSecAdmin" color="danger">
+        <ion-icon name="archive-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button *ngIf="(isSecurity || isCreator) && writeAbleState" (click)="updateIncidentReport()" color="light">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button *ngIf="isSecurity" (click)="createIncidentComment()" color="primary">
+        <ion-icon name="chatbubble-outline" alt="Create Comment"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</div>

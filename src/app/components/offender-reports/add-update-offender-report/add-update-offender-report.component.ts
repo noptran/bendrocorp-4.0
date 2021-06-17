@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ModalController, PickerController, LoadingController } from '@ionic/angular';
 import { OffenderReport, ViolenceRating, Infraction, ForceLevel, Offender } from 'src/app/models/offender.model';
 import { Ship } from 'src/app/models/ship.models';
@@ -19,7 +19,7 @@ const { Modals } = Plugins;
   styleUrls: ['./add-update-offender-report.component.scss'],
 })
 export class AddUpdateOffenderReportComponent implements OnInit {
-
+  @Input() passedHandle: string;
   offenderReport: OffenderReport;
   formAction: string;
   dataSubmitted: boolean = false;
@@ -405,14 +405,14 @@ export class AddUpdateOffenderReportComponent implements OnInit {
     // Violence rating must exist,
     // Force level applied must exist,
     // Offender offender handle can't be blank
-    console.log(this.offenderReport);
-    console.log('');
-    console.log(`Offender: ${(!this.offenderReport.offender_attributes || (this.offenderReport.offender_attributes.offender_handle && this.offenderReport.offender_attributes.offender_handle.length > 1))}`);
-    console.log(`Description ${this.offenderReport.description && this.offenderReport.description.length > 20}`);
-    console.log(`Occured ${this.offenderReport.occured_when_ms}`);
-    console.log(`infractions ${this.formInfractionIds && this.formInfractionIds.length > 0}`);
-    console.log(`violence_rating_id ${this.offenderReport.violence_rating_id}`);
-    console.log(`force_level_applied_id ${this.offenderReport.force_level_applied_id}`);
+    // console.log(this.offenderReport);
+    // console.log('');
+    // console.log(`Offender: ${(!this.offenderReport.offender_attributes || (this.offenderReport.offender_attributes.offender_handle && this.offenderReport.offender_attributes.offender_handle.length > 1))}`);
+    // console.log(`Description ${this.offenderReport.description && this.offenderReport.description.length > 20}`);
+    // console.log(`Occured ${this.offenderReport.occured_when_ms}`);
+    // console.log(`infractions ${this.formInfractionIds && this.formInfractionIds.length > 0}`);
+    // console.log(`violence_rating_id ${this.offenderReport.violence_rating_id}`);
+    // console.log(`force_level_applied_id ${this.offenderReport.force_level_applied_id}`);
 
 
     // temp for debug
@@ -520,7 +520,7 @@ export class AddUpdateOffenderReportComponent implements OnInit {
       // this.offenderReport.original_infractions = this.offenderReport.infractions;
       this.formAction = 'Update';
     } else {
-      this.offenderReport = { offender_attributes: { } as Offender, infractions: [] } as OffenderReport;
+      this.offenderReport = { offender_attributes: { offender_handle: this.passedHandle } as Offender, infractions: [] } as OffenderReport;
       console.log(this.offenderReport);
       this.formAction = 'Create';
     }

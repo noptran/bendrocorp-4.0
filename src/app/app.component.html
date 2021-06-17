@@ -1,4 +1,5 @@
 <ion-app>
+  <!-- standard split pane view -->
   <ion-split-pane *ngIf="isAuthorized" contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
@@ -12,6 +13,7 @@
             <p>Expanding the frontier...</p>
           </div>
         </ion-label>
+        <!-- this is the side menu container -->
         <ion-list id="inbox-list">
           <!-- top of menu -->
           <ion-item *ngIf="user">
@@ -51,7 +53,8 @@
             </ion-row>
           </ion-grid>
 
-          <!-- Actual Menu -->
+          <!-- Actual Side Menu -->
+          <!-- TODO: Make a seperate iOS menu -->
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.link]" lines="none" detail="false" [class.selected]="selectedIndex == i">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
@@ -74,5 +77,22 @@
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 
+  <!-- experiment -->
+  <!-- tabs view -->
+  <!-- <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button *ngFor="let p of appPages.slice(0, 4)" tab="{{p.link.replace('/', '')}}">
+        <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+        <ion-label>{{ p.title }} {{p.link}}</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tag="menu-sort">
+        <ion-icon ios="list-outline" md="list-sharp"></ion-icon>
+        <ion-label>More</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs> -->
+
   <ion-router-outlet *ngIf="!isAuthorized" id="main-content"></ion-router-outlet>
+
+  
 </ion-app>

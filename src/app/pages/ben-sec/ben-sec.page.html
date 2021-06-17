@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>BenSec Portal</ion-title>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="initialDataLoaded">
+    <ion-searchbar (keyup)="onSearchKeyUp()" (ionCancel)="clearSearch()" (ionClear)="clearSearch()" [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<!-- header banner -->
+<ion-content *ngIf="initialDataLoaded">
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card style="user-select:none;" *ngIf="!searchFilter || searchFilter.length == 0">
+    <div class="bensec-topper"></div>
+    <ion-card-header>
+      <ion-card-title>BenSec Portal</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      BenSec. This investigation system is a dedicated tool for BenSec. YOUR EYES ONLY.
+    </ion-card-content>
+  </ion-card>
+
+  <!-- case content -->
+  <ion-list>
+    <!-- <ion-item>
+      <ionic-selectable
+        [(ngModel)]="selectedFilters"
+        [items]="filterDescriptors"
+        [isMultiple]="true"
+        itemValueField="id"
+        itemTextField="title"
+        (onChange)="filtersSelected($event)">
+        <ng-template ionicSelectableValueTemplate let-port="value">
+          <span *ngFor="let filt of selectedFilters">
+            <ion-badge style="margin-right: 2px; font-size: 1.1em;">{{filt.title | lowercase}}</ion-badge>
+          </span>
+        </ng-template>
+      </ionic-selectable>
+    </ion-item> -->
+    <ion-item *ngIf="initialDataLoaded && filteredItems.length == 0" style="border: none;">There are currently no open cases.</ion-item>
+
+    <!-- interate through objects and display -->
+    <ion-item style="user-select:none;" (click)="openItem(item)" *ngFor="let item of filteredItems" class="case-item" detail>
+      <ion-avatar slot="start">
+        <img src="{{item.avatar}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{item.handle}} <ion-badge *ngIf="item.pendingCount" color="danger">{{item.pendingCount}}</ion-badge></h2>
+        <p>{{item.type | titlecase}}</p>
+        <p>
+          <app-ben-sec-tags [tags]="item.tags"></app-ben-sec-tags>
+        </p>
+      </ion-label>
+      <!-- end -->
+      <ion-label style="text-align: right; padding-right: 10px;" slot="end">
+        <p *ngIf="item.reportCount != null">Incidents: {{item.reportCount}}</p>
+        <p *ngIf="item.activeWarrantCount != null">Open Warrants: {{item.activeWarrantCount}}</p>
+        <p *ngIf="item.warrantCount != null">Total Warrants: {{item.warrantCount}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- System Map Form FAB '-->
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="createIntelCase()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

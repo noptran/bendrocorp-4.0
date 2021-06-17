@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="medium" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Search Results</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="searchResult">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h3 style="padding-bottom: 0; margin-bottom: 0;">Spectrum Data</h3>
+      </ion-col>
+    </ion-row>
+    <app-bendro-safe-search-result-top [searchResult]="searchResult"></app-bendro-safe-search-result-top>
+
+    <!-- safe summary -->
+    <ion-row>
+      <ion-col [ngClass]="{'redacted-danger': searchResult.summary_level == 'danger', 'redacted-warning': searchResult.summary_level == 'warning', 'redacted-green': searchResult.summary_level == 'green'}">
+        <div class="title">
+          <h3>SAFE Summary</h3>
+        </div>
+        <div class="message">{{searchResult.message}}</div>
+      </ion-col>
+    </ion-row>
+
+    <!-- action buttons -->
+    <ion-row *ngIf="!isIntelWriter">
+      <ion-col>
+        <ion-button (click)="createOffenderReport()" [disabled]="searchResult.summary_level == 'green'" expand="block">Open Incident</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="isIntelWriter">
+      <ion-col>
+        <ion-button (click)="createOffenderReport()" [disabled]="searchResult.summary_level == 'green'" expand="block">Open Incident</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="createIntelCase()" [disabled]="searchResult.summary_level == 'green'" expand="block">Open Case</ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- individual data points -->
+    <!-- rsi search -->
+    <ion-row>
+      <ion-col [ngClass]="{'redacted-danger': searchResult.rsi_data.safe_level == 'danger', 'redacted-warning': searchResult.rsi_data.safe_level == 'warning', 'redacted-green': searchResult.rsi_data.safe_level == 'green', 'redacted-neutral': searchResult.rsi_data.safe_level == 'neutral'}">
+        <div class="title">
+          <h3>Spectrum Search Summary</h3>
+        </div>
+        <div class="message">{{searchResult.rsi_data.threat_message}}</div>
+      </ion-col>
+    </ion-row>
+    <!-- offender data -->
+    <ion-row>
+      <ion-col [ngClass]="{'redacted-danger': searchResult.offender_data.safe_level == 'danger', 'redacted-warning': searchResult.offender_data.safe_level == 'warning', 'redacted-green': searchResult.offender_data.safe_level == 'green', 'redacted-neutral': searchResult.offender_data.safe_level == 'neutral'}">
+        <div class="title">
+          <h3>Incident Search Summary</h3>
+        </div>
+        <div class="message">{{searchResult.offender_data.threat_message}}</div>
+      </ion-col>
+    </ion-row>
+    <!-- intel cases -->
+    <ion-row>
+      <ion-col [ngClass]="{'redacted-danger': searchResult.intel_data.safe_level == 'danger', 'redacted-warning': searchResult.intel_data.safe_level == 'warning', 'redacted-green': searchResult.intel_data.safe_level == 'green', 'redacted-neutral': searchResult.intel_data.safe_level == 'neutral'}">
+        <div class="title">
+          <h3>BenSec Search Summary</h3>
+        </div>
+        <div class="message">{{searchResult.intel_data.threat_message}}</div>
+      </ion-col>
+    </ion-row>
+    <!-- overrides -->
+    <ion-row>
+      <ion-col [ngClass]="{'redacted-danger': searchResult.override_data.safe_level == 'danger', 'redacted-warning': searchResult.override_data.safe_level == 'warning', 'redacted-green': searchResult.override_data.safe_level == 'green', 'redacted-neutral': searchResult.override_data.safe_level == 'neutral'}">
+        <div class="title">
+          <h3>Override Summary</h3>
+        </div>
+        <div class="message">{{searchResult.override_data.threat_message}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

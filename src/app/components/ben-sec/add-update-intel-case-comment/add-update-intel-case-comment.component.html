@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitting">Close</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="addUpdateComment()" [disabled]="dataSubmitting || !formValid()">{{formAction}}</ion-button>
+    </ion-buttons>
+    <ion-title>Add Case Comment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item style="height: 100%;">
+    <ion-label>Comment <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-textarea required rows="2" autoGrow="true" (change)="formValid()" [(ngModel)]="comment.comment" placeholder="Enter your comment..."
+    autocapitalize name="comment"></ion-textarea>
+  </ion-item>
+</ion-content>

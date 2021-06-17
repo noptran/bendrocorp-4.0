@@ -1,3 +1,14 @@
-- Fixed an issue where a default avatar is not properly displayed for profile details
-- Fixed an issue with user avatars in application comments might not load
-- Other various fixes
+New Features & Changes
+- BendroSAFE!
+  - The Offender Reports system has been re-branded as BendroSAFE and comes with a whole host of changes. See an officer on Discord for details.
+  - The system allows you not only to file offender reports like before but also to search for fellow Star Citizens by handle.
+- Loading indicator when you login now - so you know that something is actually happening...
+- Added icons for all menu items
+- Added Discord logo to Discord buttons
+
+Bug Fixes
+- Fixed an issue on the dashboard where if no events were posted the Discord button was oddly placed on larger screens
+- Fixed an issue where menu items could sometimes became duplicated
+- Fixed a bug where images were not correctly uploading for objects in System Map
+- Fixed that super annoying menu flicker
+- Other misc fixes and optimizations

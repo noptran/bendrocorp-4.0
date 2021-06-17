@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitting">Close</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="addUpdateIntelCase()" [disabled]="dataSubmitting || !formValid() || searchInvalid || caseExists">{{formAction}}</ion-button>
+    </ion-buttons>
+    <ion-title>Create Case</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- content -->
+<ion-content>
+  <!-- Case Summary -->
+  <ion-item>
+    <ion-label>Case Summary <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-textarea required rows="6" [(ngModel)]="intelligenceCase.case_summary" placeholder="Enter a case summary and/or reason for opening the case"
+    autocapitalize name="case_summary"></ion-textarea>
+  </ion-item>
+  <!-- Handle -->
+  <ion-item>
+    <ion-label position="floating">Handle <ion-text color="danger">*</ion-text>
+    </ion-label>
+    <ion-input [disabled]="intelligenceCase.id" required (keyup)="onSearchKeyUp()" placeholder="Enter a valid RSI handle..." [(ngModel)]="intelligenceCase.rsi_handle"
+      autocapitalize
+      name="rsi_handle"></ion-input>
+  </ion-item>
+  <!-- search result container -->
+  <div *ngIf="searchResult">
+    <app-bendro-safe-search-result-top *ngIf="!searchInvalid" [searchResult]="searchResult"></app-bendro-safe-search-result-top>
+    <div *ngIf="searchInvalid" class="no-data">No data found for handle, please check your input!</div>
+  </div>
+  <!-- if case exists -->
+  <div *ngIf="caseExists">
+    <ion-button (click)="openExistingCase()" expand="block">Open Existing Case</ion-button>
+  </div>
+</ion-content>

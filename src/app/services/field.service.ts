@@ -45,8 +45,17 @@ export class FieldService {
    * Fetch all the descriptors for a given field.
    * @param fieldId Field GUID you want to fetch descriptors for.
    */
-  getField(fieldId: string): Observable<FieldDescriptor[]> {
+  getField(fieldId: string|string[]): Observable<FieldDescriptor[]> {
     return this.http.get<FieldDescriptor[]>(`${environment.baseUrl}/fields/${fieldId}`).pipe(
+      retryWithBackoff(),
+      tap(results => console.log(results)),
+      catchError(this.errorService.handleError<any>('Fetch Field'))
+    );
+  }
+
+  getFieldMulti(fieldId: string|string[]): Observable<FieldDescriptor[]> {
+    const field_id = fieldId;
+    return this.http.post<FieldDescriptor[]>(`${environment.baseUrl}/fields/multi`, { field_id }).pipe(
       retryWithBackoff(),
       tap(results => console.log(results)),
       catchError(this.errorService.handleError<any>('Fetch Field'))

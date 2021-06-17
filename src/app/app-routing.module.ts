@@ -100,6 +100,16 @@ const routes: Routes = [
     path: 'application',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/member-application/member-application.module').then( m => m.MemberApplicationPageModule)
+  },
+  {
+    path: 'ben-sec',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/ben-sec/ben-sec.module').then( m => m.BenSecPageModule)
+  },
+  {
+    path: 'bendro-safe',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/bendro-safe/bendro-safe.module').then( m => m.BendroSafePageModule)
   }
 ];
 

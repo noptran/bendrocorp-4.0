@@ -3,50 +3,76 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Offender Reports</ion-title>
+    <ion-title>BendroSAFE</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="initialDataLoaded">
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingText="Pull to refresh"
       refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  
+   -->
   <ion-card>
     <div class="offender-topper"></div>
     <ion-card-header>
-      <ion-card-title>Offenders</ion-card-title>
+      <ion-card-title>BendroSAFE System</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
-      Offenders are those who have committed violations of UEE law directed at BendroCorp and its employees. Offenders are permanently barred from direct association with BendroCorp and should be treated with caution.
+      The BendroSAFE system is designed to give BendroCorp employees and affiliates access to critical citizen data to give them insight into the risk of their current surroundings.
     </ion-card-content>
   </ion-card>
 
   <ion-card>
-    <ion-item (click)="openReportList(unAnsweredReports, 'unanswered')" *ngIf="isAdmin" detail>Unapproved Reports (Admin) &nbsp;<ion-badge color="danger">{{unAnsweredReports.length}}</ion-badge></ion-item>
-    <ion-item (click)="openReportList(adminReports, 'admin')" *ngIf="isAdmin" detail>All Reports (Admin)&nbsp;<ion-badge color="primary">{{adminReports.length}}</ion-badge></ion-item>
-    <ion-item (click)="openReportList(myReports, 'mine')" detail>My Reports&nbsp;<ion-badge color="primary">{{myReports.length}}</ion-badge></ion-item>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>BendroSAFE Search</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col size-md=11 size-xs=10 size-sm=10>
+              <ion-input (keydown.enter)="goSearch($event)" [(ngModel)]="searchHandle" placeholder="Search for a handle..."></ion-input>
+            </ion-col>
+            <ion-col size-md=1 size-xs=2 size-sm=2>
+              <ion-button (click)="goSearch()" [disabled]="!searchHandle || searchHandle.length == 0 || bendroSearchRunning">Go</ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <small>* RSI Handles are case insensitive and should not contain any spaces.</small>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
   </ion-card>
 
-  <ion-list>
+  <!-- <ion-card *ngIf="myReports.length > 0 || isAdmin">
+    <ion-item (click)="openReportList(unAnsweredReports, 'unanswered')" *ngIf="isAdmin" detail>Unapproved Reports (Admin) &nbsp;<ion-badge color="danger">{{unAnsweredReports.length}}</ion-badge></ion-item>
+    <ion-item (click)="openReportList(adminReports, 'admin')" *ngIf="isAdmin" detail>All Reports (Admin)&nbsp;<ion-badge color="primary">{{adminReports.length}}</ion-badge></ion-item>
+    <ion-item (click)="openReportList(myReports, 'mine')" *ngIf="myReports.length > 0" detail>My Reports&nbsp;<ion-badge color="primary">{{myReports.length}}</ion-badge></ion-item>
+  </ion-card> -->
+
+  <!-- <ion-list>
     <ion-list-header>
-      <ion-label>Offenders</ion-label>
+      <ion-label>Current Offenders</ion-label>
     </ion-list-header>
+    <ion-item *ngIf="offenders.length == 0">There are currently no listed offenders in the BendroSAFE system.</ion-item>
     <ion-item detail *ngFor="let offender of offenders" (click)="openOffenderDetails(offender)">
       <ion-avatar slot="start">
         <img src="{{offender.offender_rsi_avatar}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'" alt="">
       </ion-avatar>
       <ion-label>{{offender.offender_handle}}<p>{{offender.offender_rating.title}}</p></ion-label>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addOffenderReport()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>

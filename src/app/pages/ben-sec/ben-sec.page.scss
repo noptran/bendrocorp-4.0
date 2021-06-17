@@ -1,0 +1,24 @@
+.bensec-topper {
+  background: url('../../../assets/backgrounds/bensec.jpg');
+  background-size: cover;
+  background-position: 50% 33%;
+  height: 150px;
+}
+
+.case-item {
+  cursor: pointer;
+}
+
+.case-item ion-badge {
+  margin-right: 4px;
+}
+
+.ionic-selectable-value-item {
+  display: inline-block !important;
+  background: blue;
+}
+
+ion-avatar { 
+  width: 100px;  
+  height: 100px;  
+}
