@@ -1,1 +1,3 @@
 - Fixed an issue where a default avatar is not properly displayed for profile details
+- Fixed an issue with user avatars in application comments might not load
+- Other various fixes
