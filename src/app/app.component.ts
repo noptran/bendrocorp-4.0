@@ -244,10 +244,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async fetchMenu() {
-    this.appPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
+    let fetchedPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
 
     if (this.isNativeiOS) {
-      this.appPages = this.appPages.filter(x => !x.skip_ios);
+      fetchedPages = this.appPages.filter(x => !x.skip_ios);
+    }
+
+    // check to see if anything has actually changed - otherwise do not actually update anything
+    if (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages)) {
+      this.appPages = fetchedPages;
     }
   }
 

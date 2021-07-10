@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-button color="medium" (click)="dismiss()" [disabled]="dataSubmitted">Close</ion-button>
     </ion-buttons>
-    <ion-title>{{formAction}} Offender Report</ion-title>    
+    <ion-title>{{formAction}} Incident Report</ion-title>    
     <ion-buttons slot="end">
       <ion-button color="primary" (click)="addUpdateOffenderReport()" [disabled]="dataSubmitted || !offenderReportFormInvalid()">{{formAction}}</ion-button>
     </ion-buttons>
@@ -60,5 +60,5 @@
   <ion-item>
     <ion-label>Submit For Approval</ion-label>
     <ion-toggle [(ngModel)]="submitForApproval"></ion-toggle>
-    </ion-item>
+  </ion-item>
 </ion-content>

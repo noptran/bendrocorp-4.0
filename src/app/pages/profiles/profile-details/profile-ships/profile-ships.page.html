@@ -16,14 +16,14 @@
   <!--  -->
   <ion-list *ngIf="!canEdit">
     <ion-item *ngFor="let ship of character.owned_ships">
-      {{ship.title}} ({{ship.ship.name}})
+      {{ship.title}} ({{ship.ship.title}})
     </ion-item>
   </ion-list>
 
   <ion-list *ngIf="canEdit">
     <ion-item-sliding *ngFor="let ship of character.owned_ships" #slidingItem>
       <ion-item>
-        {{ship.title}} ({{ship.ship.name}})
+        {{ship.title}} ({{ship.ship.title}})
       </ion-item>
       <ion-item-options side="end">
         <!-- <ion-item-option color="medium" (click)="addUpdateShip(ship)"><ion-icon name="create"></ion-icon></ion-item-option> -->

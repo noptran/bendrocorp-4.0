@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { GestureController, Platform } from '@ionic/angular';
+import { GestureController, LoadingController, Platform } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { LoginRequest } from '../models/user.model';
 import { Plugins } from '@capacitor/core';
@@ -23,6 +23,8 @@ export class AuthPage implements OnInit {
   } as LoginRequest;
 
   // vars
+  authInProgress = false;
+  loadingIndicator: any;
   isWeb: boolean;
   isiOS: boolean;
   showLoginDebug = false;
@@ -32,7 +34,8 @@ export class AuthPage implements OnInit {
     private router: Router,
     private platform: Platform,
     private gestureCtrl: GestureController,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    private loading: LoadingController
   ) { }
 
   /**
@@ -42,6 +45,16 @@ export class AuthPage implements OnInit {
   {
     const { uuid, operatingSystem, platform } = await Device.getInfo();
     this.ref.detectChanges();
+
+    // show ticker
+    this.loadingIndicator = await this.loading.create({
+      message: 'Authorizing'
+    });
+    await this.loadingIndicator.present();
+
+    // set loading state
+    this.authInProgress = true;
+
     this.authService.login(
       {
         email: this.login.email,
@@ -61,6 +74,10 @@ export class AuthPage implements OnInit {
           duration: 'long'
         });
       }
+
+      // reset loading state
+      this.authInProgress = false;
+      this.loadingIndicator.dismiss();
     });
   }
 

@@ -15,6 +15,7 @@ export class FieldDescriptor {
   ordinal?: number;
   read_only?: boolean;
   fields?: Field[]; // fiele descriptors used as types may have an array of fields
+  field_id: string;
 }
 
 export class FieldDescriptorClass {

@@ -37,7 +37,7 @@
             </ion-list>
         
             <section>
-              <ion-button expand="block" color="primary" (click)="doLogin()">Login</ion-button>
+              <ion-button expand="block" color="primary" (click)="doLogin()" [disabled]="authInProgress">Login</ion-button>
             </section>
             <section>
               <p><small>By using this service and application you agree to our <a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>, <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a> and <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a>.</small></p>

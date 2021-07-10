@@ -52,11 +52,17 @@
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size-md="6" size-sm="12" size-xs="12">
-                <ion-button *ngIf="nextEvent" color="dark" expand="block" (click)="openEventModal(nextEvent)">Open Event</ion-button>
+              <!-- open event button -->
+              <ion-col *ngIf="nextEvent" size-md="6" size-sm="12" size-xs="12">
+                <ion-button color="dark" expand="block" (click)="openEventModal(nextEvent)">Open Event</ion-button>
               </ion-col>
-              <ion-col size-md="6" size-sm="12" size-xs="12">
-                <ion-button (click)="openDiscord()" color="tertiary" expand="block">Open Discord</ion-button>
+              <!-- open Discord if there is a next event -->
+              <ion-col *ngIf="nextEvent" size-md="6" size-sm="12" size-xs="12">
+                <ion-button (click)="openDiscord()" color="tertiary" expand="block"><ion-icon name="logo-discord"></ion-icon>&nbsp;Open Discord</ion-button>
+              </ion-col>
+              <!-- open Discord if there is NOT a next event -->
+              <ion-col *ngIf="!nextEvent" size-md="12" size-sm="12" size-xs="12">
+                <ion-button (click)="openDiscord()" color="tertiary" expand="block"><ion-icon name="logo-discord"></ion-icon>&nbsp;Open Discord</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>

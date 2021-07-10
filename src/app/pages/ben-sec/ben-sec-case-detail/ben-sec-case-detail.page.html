@@ -1,0 +1,180 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="ben-sec"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Case Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="initialDataLoaded">
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- content start -->
+  <ion-card>
+    <ion-grid>
+      <!-- search result -->
+      <app-bendro-safe-search-result-top [searchResult]="searchResult"></app-bendro-safe-search-result-top>
+      <!-- rsi search -->
+      <ion-row>
+        <ion-col [ngClass]="{'redacted-danger': searchResult.rsi_data.safe_level == 'danger', 'redacted-warning': searchResult.rsi_data.safe_level == 'warning', 'redacted-green': searchResult.rsi_data.safe_level == 'green', 'redacted-neutral': searchResult.rsi_data.safe_level == 'neutral'}">
+          <div class="title">
+            <h3>Spectrum Search Summary</h3>
+          </div>
+          <div class="message">{{searchResult.rsi_data.threat_message}}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- holder of other things -->
+  <div class="other-things">
+    <ion-grid>
+      <!-- case summary -->
+      <ion-row>
+        <ion-col>
+          <h4>Case Summary</h4>
+          <p>{{intelligenceCase.case_summary}}</p>
+        </ion-col>
+      </ion-row>
+      <!-- tags -->
+      <ion-row>
+        <ion-col>
+          <app-ben-sec-tags [showInItem]="true" [(tags)]="intelligenceCase.tags" [editable]="isAssignee || hasAdminRights" (update)="updateCurrentCase()"></app-ben-sec-tags>
+        </ion-col>
+      </ion-row>
+      <!-- assigned to -->
+      <ion-row>
+        <ion-col>
+          <ion-item *ngIf="hasAdminRights">
+            <!-- if we can edit -->
+            <ionic-selectable
+              [(ngModel)]="intelligenceCase.assigned_to"
+              [items]="availableOfficers"
+              itemValueField="id"
+              itemTextField="main_character_full_name"
+              [canSearch]="true"
+              (onChange)="selectedAssignedTo($event)">
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                <ion-label>
+                  Case Officer
+                  <p>{{intelligenceCase.assigned_to?.main_character_full_name}}</p>
+                </ion-label>
+              </ng-template>
+            </ionic-selectable>           
+          </ion-item>
+          <!-- if we can't edit the case officer -->
+          <ion-item *ngIf="!hasAdminRights">
+            <ion-label>
+              Case Officer
+              <p>{{intelligenceCase.assigned_to?.main_character_full_name}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- assigned by -->
+      <ion-row>
+        <!-- danger rating -->
+        <ion-col size-md="6" size-sm="6" size-xs="12">
+          <ion-label>Threat Level</ion-label>
+          <ionic-selectable *ngIf="threatLevels.length > 0"
+            [(ngModel)]="intelligenceCase.threat_level"
+            [items]="threatLevels"
+            itemValueField="id"
+            itemTextField="title"
+            [disabled]="!(isAssignee || hasAdminRights)"
+            (onChange)="selectedThreatLevel($event)">
+          </ionic-selectable>
+        </ion-col>
+        <!-- classification -->
+        <ion-col size-md="6" size-sm="6" size-xs="12">
+          <ion-label>Classification Level</ion-label>
+          <ionic-selectable *ngIf="classifications.length > 0"
+            [(ngModel)]="intelligenceCase.classification_level"
+            [items]="classifications"
+            itemValueField="id"
+            itemTextField="title"
+            [canSearch]="true"
+            [disabled]="!hasAdminRights"
+            (onChange)="selectedClassificationLevel($event)">
+          </ionic-selectable>
+        </ion-col>
+      </ion-row>
+
+      <!-- Show in safe -->
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Show in BendroSAFE Search</ion-label>
+            <ion-toggle slot="end" [disabled]="!hasAdminRights" (ionChange)="updateCurrentCase()" [(ngModel)]="intelligenceCase.show_in_safe"></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Incident Reports > -->
+      <ion-row>
+        <ion-col>
+          <ion-item *ngIf="intelligenceCase.incident_reports.length == 0">No incidents reported</ion-item>
+          <ion-item *ngIf="intelligenceCase.incident_reports.length > 0" style="cursor: pointer;" (click)="openIncidentList()" detail>View Incident Reports&nbsp; <ion-badge *ngIf="intelligenceCase.pending_incident_report_count" color="danger">{{intelligenceCase.pending_incident_report_count}}</ion-badge></ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- action buttons -->
+      <ion-row>
+        <!-- add incident -->
+        <ion-col>
+          <ion-button (click)="addIncidentReport()" expand="block">Add Incident</ion-button>
+        </ion-col>
+        <!-- request warrant -->
+        <ion-col>
+          <ion-button [disabled]="true" expand="block">Request Warrant</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- comments -->
+      <ion-row *ngIf="intelligenceCase.comments.length == 0">
+        <ion-col>
+          <h4>No comments on this case!</h4>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="intelligenceCase.comments.length > 0">
+        <ion-col>
+          <h4>Comments</h4>
+          <ion-item *ngFor="let comment of intelligenceCase.comments">
+            <ion-card style="width: 100%;">
+              <div style="float:left; padding: 8px;">
+                <img class="avatar" src="{{comment.created_by.main_character_avatar_url}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'" alt="">
+                <p>{{comment.created_by.main_character_full_name}}</p>
+              </div>
+              <p>{{comment.created_at | date: 'MM/dd/yyyy hh:mm a (Z)'}}</p>
+              <p>{{comment.comment}}</p>
+            </ion-card>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- action buttons -->
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="danger">
+        <ion-icon name="archive-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="updateIntelCase()" color="light">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="createIntelCaseComment()" color="primary">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

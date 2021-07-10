@@ -1,0 +1,38 @@
+<ion-item *ngIf="showInItem">
+  <span *ngFor="let tag of tagArray; let i = index" style="margin-right: 2px;">
+    <!-- if it cannot be edited -->
+    <!-- <ion-badge *ngIf="!editable" [color]="tagColor(tag)" style="margin-right: 2px;">#{{cleanTag(tag)}}</ion-badge> -->
+    <!-- if it can be edited -->
+    <ion-chip [color]="tagColor(tag)">
+      <ion-label style="padding: 2px;">#{{cleanTag(tag)}}</ion-label>
+      <ion-icon *ngIf="editable && tag !== noTagsText" (click)="removeTag(i)" name="close-circle"></ion-icon>
+    </ion-chip>
+  </span>
+  
+  <ion-button *ngIf="editable" slot="end" (click)="openAddTag()">
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-button>
+</ion-item>
+
+<span *ngIf="!showInItem">
+  <span *ngFor="let tag of tagArray; let i = index" style="margin-right: 2px;">
+    <!-- if it cannot be edited -->
+    <!-- <ion-badge *ngIf="!editable" [color]="tagColor(tag)" style="margin-right: 2px;">#{{cleanTag(tag)}}</ion-badge> -->
+    <!-- if it can be edited -->
+    <ion-chip [color]="tagColor(tag)">
+      <ion-label style="padding: 2px;">#{{cleanTag(tag)}}</ion-label>
+      <!-- <ion-icon *ngIf="editable && tag !== noTagsText" (click)="removeTag(i)" name="close-circle"></ion-icon> -->
+    </ion-chip>
+  </span>
+  <!-- <ion-chip *ngFor="let tag of tagArray; let i = index" style="margin-right: 2px;" [color]="tagColor(tag)">
+    <ion-label style="padding: 2px;">#{{cleanTag(tag)}}</ion-label>
+    <ion-icon *ngIf="editable && tag !== noTagsText" (click)="removeTag(i)" name="close-circle"></ion-icon>
+  </ion-chip> -->
+  <!-- <span *ngFor="let tag of tagArray" style="margin-right: 2px;">
+    <ion-badge [color]="tagColor(tag)" style="margin-right: 2px;">#{{cleanTag(tag)}}</ion-badge>
+  </span>
+  
+  <span *ngIf="editable" slot="end">
+    <ion-button (click)="openAddTag()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+  </span> -->
+</span>
