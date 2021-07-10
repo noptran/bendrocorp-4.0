@@ -8,7 +8,7 @@ New Features & Changes
 
 Bug Fixes
 - Fixed an issue on the dashboard where if no events were posted the Discord button was oddly placed on larger screens
-- Fixed an issue where menu items could sometimes became duplicated
+- Fixed an issue where menu items could sometimes become duplicated
 - Fixed a bug where images were not correctly uploading for objects in System Map
 - Fixed that super annoying menu flicker
 - Other misc fixes and optimizations
