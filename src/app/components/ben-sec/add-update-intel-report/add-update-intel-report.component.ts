@@ -63,7 +63,7 @@ export class AddUpdateIntelReportComponent implements OnInit, OnDestroy {
     await this.loadingIndicator.present();
 
     // if we are updating an old one
-    if (this.intelligenceCase.id) {
+    if (this.intelligenceCase && this.intelligenceCase.id) {
       this.intelService.updateCase(this.intelligenceCase).subscribe(async (result) => {
         if (!(result instanceof HttpErrorResponse)) {
           this.intelService.refreshData();
@@ -146,7 +146,7 @@ export class AddUpdateIntelReportComponent implements OnInit, OnDestroy {
       this.goSearch();
     });
 
-    if (this.intelligenceCase) {
+    if (this.intelligenceCase && this.intelligenceCase.id) {
       this.formAction = 'Update';
       this.tickerAction = 'Updating';
     } else {
