@@ -6,7 +6,8 @@
     <ion-title>BenSec Portal</ion-title>
   </ion-toolbar>
   <ion-toolbar *ngIf="initialDataLoaded">
-    <ion-searchbar (keyup)="onSearchKeyUp()" (ionCancel)="clearSearch()" (ionClear)="clearSearch()" [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+    <ion-searchbar (keyup)="onSearchKeyUp()" (ionFocus)="searchFocus()" (ionBlur)="searchBlur()" (ionCancel)="clearSearch()" (ionClear)="clearSearch()" [(ngModel)]="searchFilter" showCancelButton="focus"></ion-searchbar>
+    <ion-text style="padding-left: 8px;" *ngIf="searchHasFocus" color="medium"><small>** Remember you can search by handle or tag</small></ion-text>
   </ion-toolbar>
 </ion-header>
 

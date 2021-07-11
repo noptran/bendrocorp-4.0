@@ -11,6 +11,7 @@ import { BenSecListItem, IntelligenceCase } from 'src/app/models/intel.model';
 import { FieldService } from 'src/app/services/field.service';
 import { IntelService } from 'src/app/services/intel-service.service';
 import { Plugins } from '@capacitor/core';
+import { AddUpdateIncidentReportComponent } from 'src/app/components/ben-sec/add-update-incident-report/add-update-incident-report.component';
 const { Toast } = Plugins;
 
 @Component({
@@ -34,6 +35,7 @@ export class BenSecPage implements OnInit, OnDestroy {
   searchFilter: string;
   private searchSubject: Subject<string> = new Subject();
   searchSubscription: Subscription;
+  searchHasFocus = false;
 
   // data subscription
   caseSubscription: Subscription;
@@ -132,6 +134,24 @@ export class BenSecPage implements OnInit, OnDestroy {
         this.initialDataLoaded = true;
       }
     });
+  }
+
+  searchFocus() {
+    this.searchHasFocus = true;
+  }
+
+  searchBlur() {
+    this.searchHasFocus = false;
+  }
+
+  async addIncidentReport() {
+    const modal = await this.modalController.create({
+      component: AddUpdateIncidentReportComponent,
+      componentProps: {
+        // passedHandle: this.intelligenceCase.rsi_handle
+      }
+    });
+    await modal.present();
   }
 
   openItem(item: BenSecListItem) {
