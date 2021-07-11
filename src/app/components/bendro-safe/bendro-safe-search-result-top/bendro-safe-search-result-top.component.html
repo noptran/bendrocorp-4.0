@@ -1,7 +1,7 @@
 <ion-row *ngIf="searchResult">
   <ion-col size-xs="12" size-sm="6" size-md="6">
     <h5>Profile</h5>
-    <img style="float: left;" class="avatar" src="{{searchResult.rsi_data.rsi_avatar}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'">
+    <a href="https://robertsspaceindustries.com/citizens/{{searchResult.rsi_data.handle}}" target="_blank"><img style="float: left;" class="avatar" src="{{searchResult.rsi_data.rsi_avatar}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'"></a>
     <div>
       <p style="padding-left: 8px;">Handle: {{searchResult.rsi_data.handle | titlecase}}</p>
       <p style="padding-left: 8px;">&nbsp;&nbsp;Joined: {{searchResult.rsi_data.joined_date}}</p>
@@ -9,12 +9,12 @@
   </ion-col>
   <ion-col size-xs="12" size-sm="6" size-md="6">
     <h5 style="text-align: right;">Organization</h5>
-    <div *ngIf="!searchResult.rsi_data.org_redacted">
+    <div style="text-align: right;" *ngIf="!searchResult.rsi_data.org_redacted">
       <a href="{{searchResult.rsi_data.org_link}}" target="_blank"><img *ngIf="searchResult.rsi_data.org_title" style="float: right;" class="avatar" src="{{searchResult.rsi_data.org_logo}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'"></a>
       <!-- <img *ngIf="searchResult.rsi_data.org_title" style="float: right;" class="avatar" src="{{searchResult.rsi_data.org_logo}}" onerror="this.src='../../../assets/imgs/missing-avatar.png'"> -->
       <div>
-        <p>{{searchResult.rsi_data.org_title}}</p>
-        <p>{{searchResult.rsi_data.focus_one}}<br />{{searchResult.rsi_data.focus_two}}</p>
+        <p style="margin-right: 8px;">{{searchResult.rsi_data.org_title}}</p>
+        <p style="margin-right: 8px;">{{searchResult.rsi_data.focus_one}}<br />{{searchResult.rsi_data.focus_two}}</p>
       </div>
     </div>
 

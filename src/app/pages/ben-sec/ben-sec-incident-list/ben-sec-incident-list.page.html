@@ -9,5 +9,10 @@
 </ion-header>
 
 <ion-content *ngIf="initialDataLoaded">
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <app-incident-report-list-item *ngFor="let item of incidentReports" [incidentReport]="item"></app-incident-report-list-item>
 </ion-content>

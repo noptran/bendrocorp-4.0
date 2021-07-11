@@ -251,7 +251,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     // check to see if anything has actually changed - otherwise do not actually update anything
-    if (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages)) {
+    if (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages) || !this.appPages || this.appPages.length === 0) {
       this.appPages = fetchedPages;
     }
   }

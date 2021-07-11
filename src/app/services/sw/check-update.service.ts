@@ -11,7 +11,7 @@ export class CheckUpdateService {
     if (updates.isEnabled) {
       console.log('Service worker updates enabled. The application will automatically check for updates and ensure they are loaded into the cache.');
       interval(1000 * 15).subscribe(() => {
-        // console.log('Service worker checking for updates');
+        console.log('Service worker checking for updates');
         updates.checkForUpdate();
       }); // check about every 15 seconds
     } else {

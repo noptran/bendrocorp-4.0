@@ -103,7 +103,7 @@ export class BenSecTagsComponent implements OnInit {
   }
 
   cleanTag(tag: string): string {
-    return tag.trim().replace(/\s\s+/g, ' ').replace(/\s+/g, '-');
+    return tag.trim().replace(/\s\s+/g, ' ').replace(/\s+/g, '-').toLowerCase();
   }
 
   parseTags() {
