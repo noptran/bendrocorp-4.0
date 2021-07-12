@@ -17,7 +17,7 @@ export class EmptyPage implements OnInit {
   async ngOnInit() {
     const member = await this.authService.hasClaim(0);
     if (member) {
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/dashboard', { replaceUrl: true });
     }
   }
 
