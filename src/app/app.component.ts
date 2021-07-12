@@ -281,7 +281,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if ((!this.appPages || this.appPages.length === 0) || (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages))) {
       this.appPages = fetchedPages;
     } else {
-      if (this.showSideMenuDebug) {
+      if (this.sideMenuDebugVisible) {
         await Toast.show({ text: 'Side menu loading skipped' });
       }
     }
