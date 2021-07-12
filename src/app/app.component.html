@@ -70,7 +70,14 @@
           <small style="font-size: .5em;"><a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a></small>
         </p>
 
-        <div *ngIf="sideMenuDebugVisible">Debug({{debugMenuFetchCount}}|{{filteredByiOS}}|{{appPages.length}}): {{appPages | json}} </div>
+        <div *ngIf="sideMenuDebugVisible">
+          <div>
+            <ion-button (click)="debugForceFetchMenu()">Refresh Menu</ion-button>
+          </div>
+          <div>
+            Debug({{debugMenuFetchCount}}|{{filteredByiOS}}|{{appPages.length}}): {{appPages | json}} 
+          </div>
+        </div>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>

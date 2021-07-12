@@ -261,6 +261,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  async debugForceFetchMenu() {
+    await Toast.show({ text: 'Forcing menu refresh' });
+
+    this.fetchMenu();
+  }
+
   async fetchMenu() {
     let fetchedPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
 
