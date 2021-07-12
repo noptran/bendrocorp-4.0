@@ -268,7 +268,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async fetchMenu() {
-    let fetchedPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
+    const fetchedPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
 
     this.debugMenuFetchCount = fetchedPages.length;
 
@@ -281,6 +281,9 @@ export class AppComponent implements OnInit, OnDestroy {
     // check to see if anything has actually changed - otherwise do not actually update anything
     if ((!this.appPages || this.appPages.length === 0) || (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages))) {
       this.appPages = fetchedPages;
+      if (this.sideMenuDebugVisible) {
+        await Toast.show({ text: 'Reloading menu' });
+      }
     } else {
       if (this.sideMenuDebugVisible) {
         await Toast.show({ text: 'Side menu loading skipped' });
