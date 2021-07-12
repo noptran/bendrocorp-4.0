@@ -11,4 +11,5 @@ Bug Fixes
 - Fixed an issue where menu items could sometimes become duplicated
 - Fixed a bug where images were not correctly uploading for objects in System Map
 - Fixed that super annoying menu flicker
+- Fixed an issue where a side menu item would not always be selected
 - Other misc fixes and optimizations
