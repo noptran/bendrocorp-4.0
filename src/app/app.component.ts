@@ -272,10 +272,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.debugMenuFetchCount = fetchedPages.length;
 
-    if (this.isNativeiOS) {
-      fetchedPages = this.appPages.filter(x => x.skip_ios === false);
-      this.filteredByiOS = this.appPages.filter(x => x.skip_ios).length;
-    }
+    // temp removal for debug...
+    // if (this.isNativeiOS) {
+    //   fetchedPages = this.appPages.filter(x => x.skip_ios === false);
+    //   this.filteredByiOS = this.appPages.filter(x => x.skip_ios).length;
+    // }
 
     // check to see if anything has actually changed - otherwise do not actually update anything
     if ((!this.appPages || this.appPages.length === 0) || (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages))) {
