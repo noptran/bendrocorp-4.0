@@ -17,7 +17,7 @@ import { CheckUpdateService } from './services/sw/check-update.service';
 import { LogUpdateService } from './services/sw/log-update.service';
 import { SwUpdate } from '@angular/service-worker';
 import { PromptUpdateService } from './services/sw/prompt-update.service';
-import { Plugins } from '@capacitor/core';
+import { Plugins, Toast } from '@capacitor/core';
 import { PushRegistarService } from './services/push-registar.service';
 import { AlertService } from './services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -48,8 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   alertCount = 0;
 
+  // debug vars
   sideMenuDebugVisible = false;
   debugMenuFetchCount = 0;
+  filteredByiOS = 0;
   hasDebugRights = false;
 
   // updates
@@ -266,11 +268,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.isNativeiOS) {
       fetchedPages = this.appPages.filter(x => x.skip_ios === false);
+      this.filteredByiOS = this.appPages.filter(x => x.skip_ios).length;
     }
 
     // check to see if anything has actually changed - otherwise do not actually update anything
-    if (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages) || !this.appPages || this.appPages.length === 0) {
+    if ((!this.appPages || this.appPages.length === 0) || (JSON.stringify(fetchedPages) !== JSON.stringify(this.appPages))) {
       this.appPages = fetchedPages;
+    } else {
+      if (this.showSideMenuDebug) {
+        await Toast.show({ text: 'Side menu loading skipped' });
+      }
     }
   }
 
