@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
   alertCount = 0;
 
   sideMenuDebugVisible = false;
+  hasDebugRights = false;
 
   // updates
   updateAvailable: boolean;
@@ -109,6 +110,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
       // register listeners and action types
       await this.push.registerPushActionTypes();
+
+      this.hasDebugRights = await this.authService.hasClaim(-99);
+
+      if (this.hasDebugRights) {
+        this.sideMenuDebugVisible = true;
+      }
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
