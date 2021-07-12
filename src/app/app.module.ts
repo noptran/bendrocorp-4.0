@@ -22,20 +22,16 @@ import { EventAddUpdateComponent } from './components/events/event-add-update/ev
 import { CompleteJobComponent } from './components/jobs/complete-job/complete-job.component';
 import { AddUpdateJobComponent } from './components/jobs/add-update-job/add-update-job.component';
 import { AddUpdateFlightLogComponent } from './components/flight-logs/add-update-flight-log/add-update-flight-log.component';
-import { AddUpdateOffenderReportComponent } from './components/offender-reports/add-update-offender-report/add-update-offender-report.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
-// tslint:disable-next-line:max-line-length
-// import { AddSystemMapGravityWellComponent } from './components/system-map/add-system-map-gravity-well/add-system-map-gravity-well.component';
-// import { AddSystemMapJumpPointComponent } from './components/system-map/add-system-map-jump-point/add-system-map-jump-point.component';
 import { MakeDonationComponent } from './components/donations/make-donation/make-donation.component';
 import { AppUpdateDonationGoalComponent } from './components/donations/app-update-donation-goal/app-update-donation-goal.component';
 import { JoinSupporterComponent } from './components/donations/join-supporter/join-supporter.component';
 import { PasswordComponentModule } from './components/misc/password/password.module';
 import { ViewSystemImageComponent } from './components/system-map/view-system-image/view-system-image.component';
 import { FieldValueEditorModule } from './components/misc/field-value-editor/field-value-editor.module';
-import { LongPressDirective } from './directives/long-press.directive';
+import { LongPressDirectiveModule } from './directives/long-press-directive.module';
 
 @NgModule({
   declarations: [
@@ -59,7 +55,7 @@ import { LongPressDirective } from './directives/long-press.directive';
     ViewSystemImageComponent,
     // LongPressDirective,
     // SystemMapListTagsComponent,
-    LongPressDirective
+    // LongPressDirective
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig
@@ -83,6 +79,7 @@ import { LongPressDirective } from './directives/long-press.directive';
     FormsModule,
     PasswordComponentModule,
     FieldValueEditorModule,
+    LongPressDirectiveModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [
