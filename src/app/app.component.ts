@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
   alertCount = 0;
 
   sideMenuDebugVisible = false;
+  debugMenuFetchCount = 0;
   hasDebugRights = false;
 
   // updates
@@ -261,8 +262,10 @@ export class AppComponent implements OnInit, OnDestroy {
   async fetchMenu() {
     let fetchedPages = (await this.menuService.list()).filter(x => x.nested_under_id == null).sort((a, b) => a.ordinal - b.ordinal);
 
+    this.debugMenuFetchCount = fetchedPages.length;
+
     if (this.isNativeiOS) {
-      fetchedPages = this.appPages.filter(x => !x.skip_ios);
+      fetchedPages = this.appPages.filter(x => x.skip_ios === false);
     }
 
     // check to see if anything has actually changed - otherwise do not actually update anything
