@@ -59,6 +59,7 @@ import { LongPressDirective } from './directives/long-press.directive';
     ViewSystemImageComponent,
     // LongPressDirective,
     // SystemMapListTagsComponent,
+    LongPressDirective
   ],
   entryComponents: [
     // note: These are here because we are not using the Ivy compiler dues to prod build issues. See tsconfig

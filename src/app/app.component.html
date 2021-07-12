@@ -66,12 +66,14 @@
           <a href="https://apps.apple.com/us/app/bendrocorp/id1476900583" target="_blank" rel="noopener noreferrer"><img style="max-height: 40px" src="../assets/store-badges/ios-light.svg" alt=""></a>&nbsp;
           <a href="https://play.google.com/store/apps/details?id=com.bendrocorp.app" target="_blank" rel="noopener noreferrer"><img style="max-height: 50px" src="../assets/store-badges/google-play2.png" alt=""></a>
         </p>
-        <p *ngIf="!isCapacitor" style="text-align: left;"><small>Copyright &copy; {{copyrightYear}} BendroCorp</small><br />
+        <p longPress (press)="showSideMenuDebug()" style="user-select: none;" *ngIf="!isCapacitor" style="text-align: left;"><small>Copyright &copy; {{copyrightYear}} BendroCorp</small><br />
           <small style="font-size: .5em;"><a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a></small>
         </p>
-        <p *ngIf="isCapacitor" style="text-align: right;"><small>Copyright &copy; {{copyrightYear}} BendroCorp</small><br />
+        <p longPress (press)="showSideMenuDebug()" style="user-select: none;" *ngIf="isCapacitor" style="text-align: right;"><small>Copyright &copy; {{copyrightYear}} BendroCorp</small><br />
           <small style="font-size: .5em;"><a href="https://github.com/BendroCorp/community-guidelines/blob/master/standards-of-conduct.md" target="_blank">Standards of Conduct</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/privacy-policy.md" target="_blank">Privacy Policy</a>  |  <a href="https://github.com/BendroCorp/community-guidelines/blob/master/terms-of-service.md" target="_blank">Terms of Service</a></small>
         </p>
+
+        <div *ngIf="sideMenuDebugVisible">Debug({{appPages.length}}): {{appPages | json}} </div>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>

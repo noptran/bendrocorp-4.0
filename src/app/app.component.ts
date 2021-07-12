@@ -48,6 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   alertCount = 0;
 
+  sideMenuDebugVisible = false;
+
   // updates
   updateAvailable: boolean;
   // check every 60 seconds for menu updates
@@ -182,6 +184,11 @@ export class AppComponent implements OnInit, OnDestroy {
       // this.splashScreen.hide();
       SplashScreen.hide();
     });
+  }
+
+  showSideMenuDebug() {
+    console.log('show debug test');
+    this.sideMenuDebugVisible = !this.sideMenuDebugVisible;
   }
 
   private selectMenuItem() {
