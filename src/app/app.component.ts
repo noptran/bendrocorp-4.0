@@ -116,9 +116,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
       this.hasDebugRights = await this.authService.hasClaim(-99);
 
-      if (this.hasDebugRights) {
-        this.sideMenuDebugVisible = true;
-      }
+      // if (this.hasDebugRights) {
+      //   this.sideMenuDebugVisible = true;
+      // }
 
       // create user sub
       this.userServiceSubscription = this.userService.approvalsDataRefreshAnnounced$.subscribe(() => {
