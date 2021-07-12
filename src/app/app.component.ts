@@ -187,7 +187,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private selectMenuItem() {
     const path = window.location.pathname.split('/')[1];
     if (path !== undefined && path !== '') {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.replace(' ', '-').toLowerCase() === path.toLowerCase());
+      const index = this.appPages.findIndex(page => page.link.replace(' ', '-').toLowerCase().includes(path.toLowerCase()));
+      this.selectedIndex = index;
     } else {
       this.selectedIndex = 0;
       if (this.appPages && this.appPages.length > 0) {
