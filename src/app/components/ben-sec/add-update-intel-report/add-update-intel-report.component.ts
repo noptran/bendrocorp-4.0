@@ -98,7 +98,7 @@ export class AddUpdateIntelReportComponent implements OnInit, OnDestroy {
       await this.loadingIndicator.present();
 
       //
-      this.bendroSafe.search(this.intelligenceCase.rsi_handle).subscribe(async (result) => {
+      this.bendroSafe.search(this.intelligenceCase.rsi_handle.toLowerCase()).subscribe(async (result) => {
         if (!(result instanceof HttpErrorResponse)) {
           console.log(result);
           this.searchResult = result;
